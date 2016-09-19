@@ -55,14 +55,10 @@ class App extends Component {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/" className="navbar-brand">Firebase & Redux boilerplate</Link>
+              <Link to="/" className="navbar-brand">Learn It</Link>
 
             </div>
             <nav className="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-              <ul className="nav navbar-nav">
-                <li><Link to="/"> Home</Link></li>
-                ,
-              </ul>
               <ul className="nav navbar-nav navbar-right">
                 {this.renderUserMenu(this.props.currentUser)}
               </ul>

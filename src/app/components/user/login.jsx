@@ -73,10 +73,15 @@ class UserLogin extends Component {
           <a href="#" className="btn btn-primary bt-social" onClick={()=> {
             this.loginWithProvider("facebook")
           }} data-provider="facebook">Facebook</a>
+         <a href="#" className="btn btn-danger bt-social" onClick={()=> {
+           this.loginWithProvider("google")
+         }} data-provider="google">Google+</a>
+         <a href="#" className="btn btn-info bt-social" onClick={()=> {
+           this.loginWithProvider("twitter")
+         }} data-provider="twitter">Twitter</a>
           {/*
-           <a href="#" className="btn btn-info bt-social" data-provider="twitter">Twitter</a>
 
-           <a href="#" className="btn btn-danger bt-social" data-provider="google">Google+</a>
+
            <a href="#" className="btn btn-default bt-social" data-provider="github">GitHub</a>
            <a href="#" className="btn btn-warning" id="btAnon">Anon</a>
            */}

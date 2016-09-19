@@ -1,26 +1,17 @@
 {
-  "name": "react-redux-firebase-boilerplate",
+  "name": "learnit",
   "version": "1.0.0",
-  "description": "Simple boilerplate for Reactjs with Redux and Firebase",
+  "description": "Connects students to tutors",
   "main": "index.js",
-  "repository": "git@github.com:btomashvili/react-redux-firebase-boilerplate.git",
+  "repository": "https://github.com/shubaan/LearnIt",
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --config ./webpack/webpack-dev.config.js --watch --colors",
     "build": "rm -rf dist && ./node_modules/.bin/webpack --config ./webpack/webpack-prod.config.js --colors",
-    "start": "PORT=8080 pm2 start ./www.js",
+    "start": "PORT=8080 pm2 start ./server.js",
     "test": "./node_modules/.bin/eslint src && ./node_modules/.bin/mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
     "lint": "./node_modules/.bin/eslint src"
   },
-  "author": "Beka Tomashvili",
-  "contributors": [
-    {
-      "name": "Alexander Wong",
-      "email": "admin@alexander-wong.com",
-      "url": "https://www.alexander-wong.com/"
-    }
-  ],
-  "license": "MIT",
   "keywords": [
     "ReactJS",
     "Redux",

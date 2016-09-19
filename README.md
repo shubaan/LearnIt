@@ -1,6 +1,4 @@
-# React, Redux Firebase Boilerplate
-
-[![Build Status](https://travis-ci.org/awwong1/react-redux-firebase-boilerplate.svg?branch=master)](https://travis-ci.org/awwong1/react-redux-firebase-boilerplate)
+# Learn It
 
 > [Firebase](https://www.firebase.com) is a powerful platform for your mobile and web applications that lets you build apps fast without managing servers. Firebase gives you the tools and infrastructure to build better apps and grow successful businesses.
 
@@ -8,8 +6,8 @@
 
 > [Redux](http://redux.js.org/) Redux is a predictable state container for JavaScript apps.
 
-### Boilerplate Introduction
-Boilerplate is designed for quickly spin up your apps with Firebase, using bunch of awesome new front-end technologies includes webpack build system, hot reloading, routing & sass support.
+### Introduction
+Designed to quickly spin up your apps with Firebase, using bunch of awesome new front-end technologies includes webpack build system, hot reloading, routing & sass support.
 
 ## Features
 * [react](https://github.com/facebook/react)
@@ -24,29 +22,12 @@ Quick Start
 -----------
 
 ```shell
-$ git clone https://github.com/btomashvili/react-redux-firebase-boilerplate.git
-$ cd react-redux-firebase-boilerplate
+$ git clone https://github.com/shubaan/LearnIt
+$ cd LearnIt
 $ npm install
 $ npm run dev
 ```
 
-Firebase settings
---------
-First you need to create your firebase application to fetch settings for boilerplate. For more information how to add your web app check this [resource](https://firebase.google.com/docs/web/setup). After it copy your settings from firebase and fill config.js
-
-```javascript
-module.exports = {
-
-    FIREBASE_CONFIG: {
-
-      apiKey: "",
-      authDomain: "",
-      databaseURL: "",
-      storageBucket: "",
-
-    }
-}
-```
 
 Commands
 --------
@@ -58,8 +39,4 @@ Commands
 |`npm start`| Start production ready app with pm2 from `./dist` @ `localhost:8080`|
 |`npm run lint`| Run ESLint on `./src`|
 
-
-What it looks like
---------
-
-![screen](https://www.dropbox.com/s/csufxlitjme8p3q/react_redux_firebase.gif?raw=1 "react_redux_firebase_boilerplate")
+## Live Demo
