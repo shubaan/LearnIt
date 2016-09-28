@@ -38,19 +38,12 @@ var FireBaseTools = {
   loginWithProvider: (p) => {
     let provider = FireBaseTools.getProvider(p);
     return firebaseAuth.signInWithPopup(provider).then(function (result) {
-      let userData = {
-        name: '',
-        isTutor: false
-      };
+      let profileData = {};
       firebaseAuth.currentUser.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: "+profile.providerId);
-        console.log("  Provider-specific UID: "+profile.uid);
-        console.log("  Name: "+profile.displayName);
-        console.log("  Email: "+profile.email);
-        console.log("  Photo URL: "+profile.photoURL);
-        userData.name = profile.displayName;
+        profileData.name = profile.displayName;
+        profileData.photoUrl = profile.photoURL;
       });
-      firebaseDb.ref('/users/' + firebaseAuth.currentUser.uid).set(userData);
+      firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
       return firebaseAuth.currentUser;
     }).catch(function (error) {
       return {
@@ -67,12 +60,12 @@ var FireBaseTools = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   registerUser: (user) => {
-    let userData = {
+    let profile = {
       name: user.name,
       isTutor: user.isTutor
     };
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
-      firebaseDb.ref('/users/' + user.uid).set(userData);
+      firebaseDb.ref('/profiles/' + user.uid).set(profile);
       return user;
     }).catch(error => {
       return {
