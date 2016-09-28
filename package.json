@@ -12,6 +12,8 @@
     "test:watch": "npm run test -- --watch",
     "lint": "./node_modules/.bin/eslint src"
   },
+  "author": "Team Shubaan",
+  "license": "UNLICENSED",
   "keywords": [
     "ReactJS",
     "Redux",
@@ -54,6 +56,7 @@
     "express": "^4.14.0",
     "firebase": "^3.0.5",
     "lodash": "^3.10.1",
+    "pm2": "^2.0.12",
     "react": "^0.14.8",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.0",
