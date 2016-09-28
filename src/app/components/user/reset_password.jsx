@@ -10,7 +10,6 @@ class ResetPassword extends Component {
       message: ''
     }
     this.onFormSubmit = this.onFormSubmit.bind(this);
-
   }
 
   onFormSubmit(event) {
@@ -22,8 +21,6 @@ class ResetPassword extends Component {
         this.setState({message: data.payload.errorMessage})
       else
         this.setState({message: "Please see your email!"})
-
-
     });
 
   }
