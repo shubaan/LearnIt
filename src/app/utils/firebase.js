@@ -38,6 +38,12 @@ var FireBaseTools = {
   loginWithProvider: (p) => {
     let provider = FireBaseTools.getProvider(p);
     return firebaseAuth.signInWithPopup(provider).then(function (result) {
+      let profileData = {};
+      firebaseAuth.currentUser.providerData.forEach(function (profile) {
+        profileData.name = profile.displayName;
+        profileData.photoUrl = profile.photoURL;
+      });
+      firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
       return firebaseAuth.currentUser;
     }).catch(function (error) {
       return {
@@ -54,7 +60,12 @@ var FireBaseTools = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   registerUser: (user) => {
+    let profile = {
+      name: user.name,
+      isTutor: user.isTutor
+    };
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
+      firebaseDb.ref('/profiles/' + user.uid).set(profile);
       return user;
     }).catch(error => {
       return {
@@ -63,6 +74,7 @@ var FireBaseTools = {
       }
     });
   },
+
 
   /**
    * Sign the user out

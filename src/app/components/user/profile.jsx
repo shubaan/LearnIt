@@ -34,6 +34,10 @@ class UserProfile extends Component {
     )
   }
 
+  checkUser() {
+      browserHistory.push('/profile');
+  }
+
   render() {
     if (!this.props.currentUser) {
       return <Loading/>
