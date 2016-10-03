@@ -12,16 +12,16 @@ class Sidebar extends Component {
 
   render() {
     return (
-      <div style="border: 1px solid black; padding: 10px;">
-        <h3 style="display: inline-block; padding: 5px; margin: 10px 0px 0px 5px;">
+      <div>
+        <h3>
           Sidebar
-          <hr style="margin: 3px 0px 5px 0px;"/>
+          <hr/>
         </h3>
-        <ol>
+        <ul>
           {this.props.list.map(function(listValue){
             return <li>{listValue}</li>;
           })}
-        </ol>
+        </ul>
 
       </div>
     );
