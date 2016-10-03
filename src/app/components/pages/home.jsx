@@ -19,7 +19,7 @@ class Home extends Component {
     return (
       <div>
         <Header />
-        <Sidebar />
+        <Sidebar list={["sidebar 1", "sidebar 2", "sidebar3"]} />
         Home Page
         <Student />
         <Tutor />
