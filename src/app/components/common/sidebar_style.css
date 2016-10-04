@@ -1,0 +1,22 @@
+ul.side{
+  list-style:none;
+  display: block;
+}
+
+ul.side li{
+  display: block;
+  padding: 10px 20px;
+  cursor:pointer;
+  background-color:#eee;
+  color:#7B8585;
+  transition:0.3s;
+}
+
+ul.side li:hover{
+  background-color:#beecea;
+}
+
+ul.side li.focused{
+  color:#fff;
+  background-color:#41c7c2;
+}
