@@ -10,6 +10,7 @@ ul.side li{
   background-color:#eee;
   color:#7B8585;
   transition:0.3s;
+  margin-left: 0px;
 }
 
 ul.side li:hover{

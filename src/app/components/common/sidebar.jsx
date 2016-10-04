@@ -28,8 +28,15 @@ class Sidebar extends Component {
 
   render() {
     var self = this;
+
+    var sidebarStyle = {
+      float: "left",
+      width: 150,
+      marginRight: 30,
+      alignment: "left"
+    };
     return (
-      <div>
+      <div style={sidebarStyle}>
         <h3>
           Sidebar
           <hr/>
