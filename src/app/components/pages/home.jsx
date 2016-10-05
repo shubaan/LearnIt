@@ -7,6 +7,7 @@ import Header from '../common/header';
 import Sidebar from '../common/sidebar';
 import Student from './student'
 import Tutor from './tutor'
+import ButtonContainer from './button_container'
 
 class Home extends Component {
 
@@ -21,6 +22,7 @@ class Home extends Component {
         <Header />
         <Sidebar list={["sidebar 1", "sidebar 2", "sidebar3"]} />
         Home Page
+        <ButtonContainer/>
         <Student />
         <Tutor />
       </div>

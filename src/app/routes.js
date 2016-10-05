@@ -8,6 +8,8 @@ import UserLogout from './components/user/logout';
 import UserRegister from './components/user/register';
 import UserProfile from './components/user/profile';
 import ResetPassword from './components/user/reset_password';
+import Tutor from './components/pages/tutor';
+import Student from './components/pages/student';
 
 
 export default (
@@ -18,6 +20,8 @@ export default (
     <Route path="/register" component={UserRegister}/>
     <Route path="/reset" component={ResetPassword}/>
     <Route path="/profile" component={UserProfile}/>
+    <Route path="/tutor" component={Tutor}/>
+    <Route path="/student" component={Student}/>
   </Route>
 
 );
