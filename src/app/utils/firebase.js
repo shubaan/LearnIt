@@ -55,17 +55,23 @@ var FireBaseTools = {
 
   /**
    * Register a user with email and password
-   *
+   *-bio
+   -hourly rate
+   -availability
+   -
    * @param user
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   registerUser: (user) => {
-    let profile = {
+    let bio = "I am an awesome " + ((user.isTutor)? "tutor" : "student");
+    let profileData = {
       name: user.name,
-      isTutor: user.isTutor
+      isTutor: user.isTutor,
+      bio: bio,
     };
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
-      firebaseDb.ref('/profiles/' + user.uid).set(profile);
+      firebaseDb.ref('/profiles/' + user.uid).set(profileData);
+
       return user;
     }).catch(error => {
       return {
@@ -102,6 +108,22 @@ var FireBaseTools = {
       }, error => {
         reject(error);
       })
+    })
+  },
+
+  fetchProfiles: () => {
+    return new Promise((resolve, reject) => {
+      firebaseDb.ref('/').child('profiles').on("value", function(snapshot){
+        let profiles = snapshot.val();
+        console.log(profiles);
+        // log all profile names
+        for (var p in profiles){
+          //console.log(profiles[p].name);
+        }
+        resolve(profiles);
+      });
+    }, error => {
+      reject(error);
     })
   },
 

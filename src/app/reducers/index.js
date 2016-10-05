@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import FireBaseUserReducer from './firebase_user_reducer';
+import FirebaseUserReducer from './firebase_user_reducer';
+import FirebaseProfilesReducer from './firebase_profiles_reducer';
 
 const rootReducer = combineReducers({
-    currentUser: FireBaseUserReducer,
+    currentUser: FirebaseUserReducer,
+    profiles: FirebaseProfilesReducer
 });
 
 export default rootReducer;

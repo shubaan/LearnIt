@@ -78,10 +78,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchUser, logoutUser}, dispatch);
 }
 
-
 function mapStateToProps(state) {
   return {currentUser: state.currentUser};
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
