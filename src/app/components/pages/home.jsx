@@ -19,7 +19,7 @@ class Home extends Component {
 
     return (
       <div>
-        <Header />
+        <Header headerContent={"Fetch Profile and Pass About Me Information Here"}/>
         <Sidebar list={["sidebar 1", "sidebar 2", "sidebar3"]} />
         Home Page
         <ButtonContainer/>
