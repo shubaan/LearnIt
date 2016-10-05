@@ -63,11 +63,11 @@ var FireBaseTools = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   registerUser: (user) => {
-    let bio = "I am an awesome " + ((user.isTutor)? "tutor" : "student");
+    let defaultBio = "I am an awesome " + ((user.isTutor)? "tutor" : "student");
     let profileData = {
       name: user.name,
       isTutor: user.isTutor,
-      bio: bio,
+      bio: defaultBio,
     };
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
