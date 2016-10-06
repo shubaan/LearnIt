@@ -23,8 +23,6 @@ class Home extends Component {
         <Sidebar list={["sidebar 1", "sidebar 2", "sidebar3"]} />
         Home Page
         <ButtonContainer/>
-        <Student />
-        <Tutor />
       </div>
     );
   }

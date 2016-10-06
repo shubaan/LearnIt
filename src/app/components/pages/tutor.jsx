@@ -50,6 +50,7 @@ class Table extends Component{
     return(
       <div>
         <table style={tableStyle}>
+          <tbody>
           <tr>
             <th style={thStyle}>Time</th>
             <th style={thStyle}>Monday</th>
@@ -95,6 +96,7 @@ class Table extends Component{
               <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
         </tr>
+        </tbody>
         </table>
       </div>
     );

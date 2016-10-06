@@ -14,10 +14,6 @@ class Sidebar extends Component {
     };
   }
 
-  getInitialState() {
-    return { focused: 0 };
-  }
-
   clicked(index) {
 
     // The click handler will update the state with
@@ -48,7 +44,7 @@ class Sidebar extends Component {
               style = 'focused';
             }
 
-            return <li className={style} onClick={self.clicked.bind(self, index)}>{listValue}</li>;
+            return <li key={index} className={style} onClick={self.clicked.bind(self, index)}>{listValue}</li>;
           })}
         </ul>
         <p>Selected: {this.props.list[this.state.focused]}</p>

@@ -4,6 +4,25 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
 
+  const imgStyle = {
+    width: '45px',
+    height: '45px',
+    margin: '10px'
+  };
+
+  const listStyle = {
+    listStyle: 'none',
+  };
+
+  const divStyle = {
+    width: "500px",
+    height: "250px",
+    overflowY: "auto",
+    background: "white",
+    margin: "0px auto 0px auto"
+  };
+
+
 class Student extends Component {
 
   constructor(props) {
@@ -16,14 +35,22 @@ class Student extends Component {
     {
       var rows = [];
       for (var p in profiles){
-        if (profiles[p].isTutor) {
-          let item = <li key={p}>{profiles[p].name}</li>;
+        let profile = profiles[p];
+        let image = ((profile.photoUrl)? profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png")
+        if (profile.isTutor) {
+          let item =
+          <li key={p} style={listStyle}>
+            <img src={image} style={imgStyle}/>
+            {profiles[p].name}
+          </li>;
           rows.push(item);
         }
       }
-      return <ul> {rows} </ul>;
+      return <div style={divStyle}>
+                <ul> {rows} </ul>
+             </div>;
     }
-    return <div>no profiles</div>;
+    return <div></div>;
   }
 
   render() {

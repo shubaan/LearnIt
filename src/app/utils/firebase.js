@@ -38,7 +38,12 @@ var FireBaseTools = {
   loginWithProvider: (p) => {
     let provider = FireBaseTools.getProvider(p);
     return firebaseAuth.signInWithPopup(provider).then(function (result) {
-      let profileData = {};
+      let defaultBio = "I am an awesome person";
+      let profileData = {
+        name: "anonymous",
+        isTutor: true,
+        bio: defaultBio,
+      };
       firebaseAuth.currentUser.providerData.forEach(function (profile) {
         profileData.name = profile.displayName;
         profileData.photoUrl = profile.photoURL;
