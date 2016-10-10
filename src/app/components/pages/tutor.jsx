@@ -13,10 +13,8 @@ class Tutor extends Component {
   render() {
     return (
       <div>
-        {/* Tutor Page
-        <h1>This is the tutor page</h1> */}
-        <Header/>
-        <Content/>
+        {/* <Header/>
+        <Content/> */}
         <Table/>
         <Button/>
       </div>
@@ -25,16 +23,28 @@ class Tutor extends Component {
 }
 
 class Button extends Component{
+
+  getInitialState(){
+    return {isClicked: false};
+  }
+
+  handleClick(){
+    // console.log("requested");
+
+  }
+
   render(){
     return(
       <div>
-        <button>Request session</button>
+        <button onClick={this.handleClick.bind(this)}>Request session</button>
+        <h3 className="requestResult">{}</h3>
       </div>
     );
   }
 }
 
 class Table extends Component{
+
   render(){
 
     var tableStyle={
@@ -42,6 +52,7 @@ class Table extends Component{
     };
 
     var thStyle={
+      // "background-color": "green",
       "align":"center",
       "margin": "0",
       "padding": "5px 10px",
@@ -56,7 +67,7 @@ class Table extends Component{
             <th style={thStyle}>Monday</th>
             <th style={thStyle}>Tuesday</th>
             <th style={thStyle}>Wednesday</th>
-            <th style={thStyle}>Thrusday</th>
+            <th style={thStyle}>Thursday</th>
             <th style={thStyle}>Friday</th>
             <th style={thStyle}>Saturday</th>
         </tr>
