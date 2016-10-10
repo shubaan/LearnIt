@@ -8,7 +8,9 @@ import {
   UPDATE_FIREBASE_USER,
   CHANGE_FIREBASE_USER_PASSWORD,
   FIREBASE_PASSWORD_RESET_EMAIL,
-  LOGOUT_FIREBASE_USER
+  LOGOUT_FIREBASE_USER,
+  FETCH_FIREBASE_USER_BIO,
+  SAVE_FIREBASE_USER_BIO
 } from './types';
 
 
@@ -80,6 +82,22 @@ export function logoutUser(user) {
   const request = FireBaseTools.logoutUser(user);
   return {
     type: LOGOUT_FIREBASE_USER,
+    payload: request
+  }
+}
+
+export function fetchBio() {
+  const request = FireBaseTools.fetchBio();
+  return {
+    type: FETCH_FIREBASE_USER_BIO,
+    payload: request
+  }
+}
+
+export function saveBio(bio) {
+  const request = FireBaseTools.saveBio(bio);
+  return {
+    type: SAVE_FIREBASE_USER_BIO,
     payload: request
   }
 }

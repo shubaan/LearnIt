@@ -116,6 +116,11 @@ var FireBaseTools = {
     })
   },
 
+  /**
+   * Fetch all user profiles
+   *
+   * @returns {Promise}
+   */
   fetchProfiles: () => {
     return new Promise((resolve, reject) => {
       firebaseDb.ref('/').child('profiles').on("value", function(snapshot){
@@ -228,6 +233,57 @@ var FireBaseTools = {
    */
   getDatabaseReference: (path) => {
     return firebaseDb.ref(path);
+  },
+
+  /**
+   * Fetch biography info
+   *
+   * @returns {Promise}
+   */
+  fetchBio: () => {
+    return new Promise((resolve, reject) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        console.log('User is signed in');
+        firebaseDb.ref('/profiles/' + user.uid).child('bio').on("value", function(snapshot){
+          let bio = snapshot.val();
+          console.log(bio);
+          resolve(bio);
+        });
+      } else {
+        console.log('User is not signed in');
+      }
+    }, error => {
+      reject(error);
+    })
+  },
+
+  /**
+   * Save biography info
+   -
+   * @param biography
+   * @returns biography
+   */
+  saveBio: (biography) => {
+    var user = firebaseAuth.currentUser;
+    if (user) {
+      console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          console.log('Synchronization failed');
+        } else {
+          console.log('New Bio Submitted');
+        }
+      };
+      //save bio
+      firebaseDb.ref('/profiles/' + user.uid).child('bio').set(biography, onComplete);
+    } else {
+      console.log('User is not signed in');
+    }
+
+    return biography;
+    //firebaseDb.ref('/profiles/' + user.uid).set(profileData);
+    //fredNameRef.set({ first: 'Fred', last: 'Flintstone' }, onComplete);
   }
 };
 

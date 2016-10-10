@@ -2,34 +2,83 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, logoutUser}  from '../../actions/firebase_actions';
+import {fetchUser, logoutUser, fetchBio, saveBio}  from '../../actions/firebase_actions';
 import './header_style.css'
+import Loading  from '../helpers/loading';
 
 class Header extends Component {
 
   constructor(props) {
     super(props);
+    this.props.fetchUser();
+    this.props.fetchBio();
+    super();
+    this.state = {
+      edit: false,
+      editText: "---no edit---",
+    };
+    this.handleEditClick = this.handleEditClick.bind(this);
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  getBio(bio) {
+    if (!bio) {
+      this.props.fetchBio();
+    }
+    return bio ? bio : '';
+  }
+
+  handleEditClick() {
+    this.setState({edit: !this.state.edit});
+  }
+
+  handleSubmitClick() {
+    if (this.state.editText !== "---no edit---") {
+      this.props.saveBio(this.state.editText)
+    }
+    this.setState({edit: !this.state.edit});
+  }
+
+  handleChange(e) {
+    this.setState({editText: e.target.value});
   }
 
   render() {
+    if (!this.props.currentUser) {
+      return <Loading />
+    }
+    var headerBody;
+    if (!this.state.edit) {
+      headerBody = (<div>
+        <p id="header_content">{this.getBio(this.props.bio)}</p>
+        <button onClick={this.handleEditClick}>Edit Bio</button>
+      </div>);
+    } else {
+      headerBody = (<div>
+        <p>
+          <textarea id="header_inputText" defaultValue={this.getBio(this.props.bio)} onChange={this.handleChange} />
+        </p>
+        <button onClick={this.handleSubmitClick}>Submit</button>
+        <button onClick={this.handleEditClick}>Cancel</button>
+      </div>);
+    }
     return (
         <div id="header_div">
-            <h3 id="header_title">About Me:</h3>
-            <p id="header_content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.
-            </p>
+          <h3 id="header_title">About Me:</h3>
+          {headerBody}
         </div>
     );
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchUser, logoutUser}, dispatch);
+  return bindActionCreators({fetchUser, logoutUser, fetchBio, saveBio}, dispatch);
 }
 
 
 function mapStateToProps(state) {
-  return {currentUser: state.currentUser};
+  return {currentUser: state.currentUser, bio: state.bio};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
