@@ -51,23 +51,30 @@ class Header extends Component {
     var headerBody;
     if (!this.state.edit) {
       headerBody = (<div>
-        <p id="header_content">{this.getBio(this.props.bio)}</p>
+        <p id="bio_content">{this.getBio(this.props.bio)}</p>
         <button onClick={this.handleEditClick}>Edit Bio</button>
       </div>);
     } else {
       headerBody = (<div>
         <p>
-          <textarea id="header_inputText" defaultValue={this.getBio(this.props.bio)} onChange={this.handleChange} />
+          <textarea id="bio_inputText" defaultValue={this.getBio(this.props.bio)} onChange={this.handleChange} />
         </p>
         <button onClick={this.handleSubmitClick}>Submit</button>
         <button onClick={this.handleEditClick}>Cancel</button>
       </div>);
     }
     return (
-        <div id="header_div">
-          <h3 id="header_title">About Me:</h3>
+      <div id="header_div">
+        <div id="profile_div">
+          <img id="profile_img" src="http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png" alt="Profile Image" />
+          <h3 class="title">Profile Image</h3>
+          <p>Photo URL:{this.props.currentUser.photoUrl}</p>
+        </div> 
+        <div id="bio_div">
+          <h3 class="title">About Me:</h3>
           {headerBody}
         </div>
+      </div>
     );
   }
 }
