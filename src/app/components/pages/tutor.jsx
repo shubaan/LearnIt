@@ -70,9 +70,11 @@ class Table extends Component{
             <th style={thStyle}>Thursday</th>
             <th style={thStyle}>Friday</th>
             <th style={thStyle}>Saturday</th>
+            <th style={thStyle}>Sunday</th>
         </tr>
         <tr>
-            <th>09:00 - 10:00</th>
+            <th style={thStyle}>09:00 - 10:00</th>
+            <td style={thStyle}>xxxxxx</td>
             <td style={thStyle}>xxxxxx</td>
             <td style={thStyle}>xxxxxx</td>
             <td style={thStyle}>xxxxxx</td>
@@ -81,16 +83,8 @@ class Table extends Component{
             <td style={thStyle}>xxxxxx</td>
         </tr>
         <tr>
-            <th>10:00 - 11:00</th>
+            <th style={thStyle}>10:00 - 11:00</th>
               <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-        </tr>
-        <tr>
-            <th>11:00 - 12:00</th>
               <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
@@ -99,7 +93,88 @@ class Table extends Component{
               <td style={thStyle}>xxxxxx</td>
         </tr>
         <tr>
-            <th>12:00 - 13:00</th>
+            <th style={thStyle}>11:00 - 12:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>12:00 - 13:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>13:00 - 14:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>14:00 - 15:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>15:00 - 16:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>16:00 - 17:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>17:00 - 18:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>18:00 - 19:00</th>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+              <td style={thStyle}>xxxxxx</td>
+        </tr>
+        <tr>
+            <th style={thStyle}>19:00 - 20:00</th>
+              <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
               <td style={thStyle}>xxxxxx</td>
@@ -109,6 +184,7 @@ class Table extends Component{
         </tr>
         </tbody>
         </table>
+        <br></br>
       </div>
     );
   }
