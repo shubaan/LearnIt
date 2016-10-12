@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, logoutUser}  from '../../actions/firebase_actions';
@@ -15,10 +15,10 @@ class Sidebar extends Component {
   }
 
   clicked(index) {
-
     // The click handler will update the state with
     // the index of the focused menu entry
-
+    let section = this.props.list[index].toLowerCase();
+    browserHistory.push("/"+section)
     this.setState({focused: index});
   }
 
@@ -27,10 +27,6 @@ class Sidebar extends Component {
 
     return (
       <div id="sidebarContainer">
-        <h3>
-          Sidebar
-          <hr/>
-        </h3>
         <ul className='side'>
           {this.props.list.map(function(listValue, index){
             var style = '';
