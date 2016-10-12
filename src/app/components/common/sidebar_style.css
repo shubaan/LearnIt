@@ -1,3 +1,13 @@
+div#sidebarContainer{
+    width: 200px;
+    height: calc(100% - 200px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    float: left;
+    background-color: white;
+}
+
 ul.side{
   list-style:none;
   display: block;

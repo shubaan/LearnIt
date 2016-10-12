@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, logoutUser}  from '../../actions/firebase_actions';
-import './sidebar_style.css'
+import './sidebar_style.css';
 
 class Sidebar extends Component {
 
@@ -25,14 +25,8 @@ class Sidebar extends Component {
   render() {
     var self = this;
 
-    var sidebarStyle = {
-      float: "left",
-      width: 150,
-      marginRight: 30,
-      alignment: "left"
-    };
     return (
-      <div style={sidebarStyle}>
+      <div id="sidebarContainer">
         <h3>
           Sidebar
           <hr/>
