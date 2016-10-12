@@ -29,29 +29,59 @@ class Button extends Component{
   }
 
   handleClick(){
-    // console.log("requested");
-
+    console.log("requested");
+    // this.setState({
+    //   isClicked: true
+    // })
   }
 
   render(){
+    var divStyle={
+      "textAlign":"center"
+    }
     return(
-      <div>
-        <button onClick={this.handleClick.bind(this)}>Request session</button>
-        <h3 className="requestResult">{}</h3>
+      <div style={divStyle}>
+        <button  onClick={this.handleClick.bind(this)}>Request session</button>
       </div>
     );
   }
 }
 
+
 class Table extends Component{
 
-  render(){
+  handleTableClick(){
 
+      // // console.log("table clicked");
+      var table = document.getElementById("table");
+      for(var i = 0; i< table.rows.length; i++){
+        for(var j = 0; j< table.rows[i].cells.length; j++){
+          table.rows[i].cells[j].onclick = (function (i, j) {
+                return function () {
+                    alert('R' + (i) + 'C' + (j));
+                };
+            }(i, j));
+        }
+      }
+  }
+
+  render(){
     var tableStyle={
-      "border": "1px solid black"
+      "outline": "1px solid black",
+      "border": "1px solid black",
+      "cursor":"pointer"
     };
 
     var thStyle={
+      // "background-color": "green",
+      "textAlign":"center",
+      "margin": "0",
+      "padding": "5px 10px",
+      "outline": "1px solid black",
+      "backgroundColor":"gray",
+      "width": "150px"
+    }
+    var tdStyle={
       // "background-color": "green",
       "align":"center",
       "margin": "0",
@@ -60,8 +90,8 @@ class Table extends Component{
     }
     return(
       <div>
-        <table style={tableStyle}>
-          <tbody>
+        <table style={tableStyle} id="table" onClick={this.handleTableClick.bind(this)}>
+          <tbody id="tbody">
           <tr>
             <th style={thStyle}>Time</th>
             <th style={thStyle}>Monday</th>
@@ -74,113 +104,113 @@ class Table extends Component{
         </tr>
         <tr>
             <th style={thStyle}>09:00 - 10:00</th>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
-            <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>10:00 - 11:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>11:00 - 12:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>12:00 - 13:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>13:00 - 14:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>14:00 - 15:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>15:00 - 16:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>16:00 - 17:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>17:00 - 18:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>18:00 - 19:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         <tr>
             <th style={thStyle}>19:00 - 20:00</th>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
-              <td style={thStyle}>xxxxxx</td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
+            <td style={tdStyle}></td>
         </tr>
         </tbody>
         </table>
@@ -190,24 +220,6 @@ class Table extends Component{
   }
 }
 
-class Header extends Component{
-  render(){
-    return(
-      <div><h1>Tutor Page</h1></div>
-    );
-  }
-}
-
-class Content extends Component{
-  render(){
-    return(
-      <div>
-        <h2>This is the tutor page</h2>
-        <p>Request session below</p>
-      </div>
-    );
-  }
-}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchUser, logoutUser}, dispatch);
