@@ -51,9 +51,9 @@ class Button extends Component{
 class Table extends Component{
 
   handleTableClick(){
-
-      // // console.log("table clicked");
+      // console.log("table clicked");
       var table = document.getElementById("table");
+      var count = 1;
       for(var i = 0; i< table.rows.length; i++){
         for(var j = 0; j< table.rows[i].cells.length; j++){
           table.rows[i].cells[j].onclick = (function (i, j) {
@@ -66,6 +66,12 @@ class Table extends Component{
   }
 
   render(){
+    var t1={
+      "backgroundColor":"green"
+    }
+    var t2={
+      "backgroundColor":"red"
+    }
     var tableStyle={
       "outline": "1px solid black",
       "border": "1px solid black",
