@@ -46,13 +46,13 @@ class Header extends Component {
 
   render() {
     if (!this.props.currentUser) {
-      return <Loading />
+      return <div id="header_div"> </div>
     }
     var headerBody;
     if (!this.state.edit) {
       headerBody = (<div>
         <p id="bio_content">{this.getBio(this.props.bio)}</p>
-        <button onClick={this.handleEditClick}>Edit Bio</button>
+        <button onClick={this.handleEditClick}>Edit</button>
       </div>);
     } else {
       headerBody = (<div>
@@ -63,15 +63,22 @@ class Header extends Component {
         <button onClick={this.handleEditClick}>Cancel</button>
       </div>);
     }
+    if (this.props.currentUser && this.props.currentUser.profile) {
+      var pic = this.props.currentUser.profile.photoUrl
+      var name = this.props.currentUser.profile.name
+    } else
+    {
+      var pic = ""
+      var name = ""
+    }
     return (
       <div id="header_div">
         <div id="profile_div">
-          <img id="profile_img" src="http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png" alt="Profile Image" />
-          <h3 class="title">Profile Image</h3>
-          <p>Photo URL:{this.props.currentUser.photoUrl}</p>
-        </div> 
+          <img id="profile_img" src={pic} alt="Profile Image" />
+          <h3 className="title">{name}</h3>
+        </div>
         <div id="bio_div">
-          <h3 class="title">About Me:</h3>
+          <h3 className="title">About Me</h3>
           {headerBody}
         </div>
       </div>

@@ -19,7 +19,7 @@ export default (
     <Route path="/logout" component={UserLogout}/>
     <Route path="/register" component={UserRegister}/>
     <Route path="/reset" component={ResetPassword}/>
-    <Route path="/profile" component={UserProfile}/>
+    <Route path="/account" component={UserProfile}/>
     <Route path="/tutor" component={Tutor}/>
     <Route path="/student" component={Student}/>
   </Route>

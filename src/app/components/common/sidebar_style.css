@@ -1,4 +1,15 @@
+div#sidebarContainer{
+    width: 200px;
+    height: calc(100% - 200px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    float: left;
+    background-color: white;
+}
+
 ul.side{
+  width: 100%;
   list-style:none;
   display: block;
 }
@@ -7,10 +18,10 @@ ul.side li{
   display: block;
   padding: 10px 20px;
   cursor:pointer;
-  background-color:#eee;
+  background-color:white;
   color:#7B8585;
   transition:0.3s;
-  margin-left: 0px;
+  margin-left: -50px
 }
 
 ul.side li:hover{

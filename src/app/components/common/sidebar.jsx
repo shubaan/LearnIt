@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, logoutUser}  from '../../actions/firebase_actions';
-import './sidebar_style.css'
+import './sidebar_style.css';
 
 class Sidebar extends Component {
 
@@ -15,28 +15,18 @@ class Sidebar extends Component {
   }
 
   clicked(index) {
-
     // The click handler will update the state with
     // the index of the focused menu entry
-
+    let section = this.props.list[index].toLowerCase();
+    browserHistory.push("/"+section)
     this.setState({focused: index});
   }
 
   render() {
     var self = this;
 
-    var sidebarStyle = {
-      float: "left",
-      width: 150,
-      marginRight: 30,
-      alignment: "left"
-    };
     return (
-      <div style={sidebarStyle}>
-        <h3>
-          Sidebar
-          <hr/>
-        </h3>
+      <div id="sidebarContainer">
         <ul className='side'>
           {this.props.list.map(function(listValue, index){
             var style = '';

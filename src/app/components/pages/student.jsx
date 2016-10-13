@@ -16,10 +16,10 @@ import {fetchProfiles}  from '../../actions/firebase_actions';
 
   const divStyle = {
     width: "500px",
-    height: "250px",
+    height: "500px",
     overflowY: "auto",
     background: "white",
-    margin: "0px auto 0px auto"
+    margin: "0px auto 0px auto",
   };
 
 
@@ -56,7 +56,7 @@ class Student extends Component {
   render() {
     return (
       <div>
-        student page
+        <p>Available Tutors</p>
         {this.renderProfileNames(this.props.profiles)}
       </div>
     );

@@ -4,6 +4,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, logoutUser}  from '../actions/firebase_actions';
 
+import Header from './common/header';
+import Sidebar from './common/sidebar';
+
 class App extends Component {
 
   constructor(props) {
@@ -18,6 +21,7 @@ class App extends Component {
       // reload props from reducer
       this.props.fetchUser();
     });
+    setState();
   }
 
   renderUserMenu(currentUser) {
@@ -44,6 +48,21 @@ class App extends Component {
   }
 
   render() {
+    var childStyle = {
+      marginLeft: '200px',
+      marginTop: '150px',
+    }
+    let loggedInItems;
+    if (this.props.currentUser) {
+        loggedInItems = <div><Header />
+              <Sidebar list={["Account", "Student", "Tutor"]} /></div>;
+    } else {
+      loggedInItems = <div />
+        childStyle = {
+          margin: '0px auto 0px auto'
+        }
+    }
+
     return (
       <div>
         <header className="navbar navbar-static-top navbar-inverse" id="top" role="banner">
@@ -65,8 +84,8 @@ class App extends Component {
             </nav>
           </div>
         </header>
-
-        <div className="container">
+        {loggedInItems}
+        <div className="childcontainer" style={childStyle}>
           {this.props.children}
         </div>
       </div>
