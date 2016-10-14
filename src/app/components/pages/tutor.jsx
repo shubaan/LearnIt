@@ -49,34 +49,39 @@ class Button extends Component{
 
 
 class Table extends Component{
+  getInitialState(){
+    return{
+      value: "select"
+    };
+  }
+
+  change(){
+    this.setState({value: event.target.value});
+  }
 
   handleTableClick(){
       // console.log("table clicked");
       var table = document.getElementById("table");
+      var button = <Button/>
       var count = 1;
       for(var i = 0; i< table.rows.length; i++){
         for(var j = 0; j< table.rows[i].cells.length; j++){
           table.rows[i].cells[j].onclick = (function (i, j) {
                 return function () {
-                    alert('R' + (i) + 'C' + (j));
+                    // alert('R' + (i) + 'C' + (j));
+                    this.style.backgroundColor = "green";
                 };
             }(i, j));
         }
       };
-
-      var changeStyle=function(e){
-        if(e.target.tagName = "td"){
-          e.target.backgroundColor = "green";
-        }
-      };
-      table.addEventListener("click", changeStyle, false);
   }
 
   render(){
     var tableStyle={
       "outline": "1px solid black",
       "border": "1px solid black",
-      "cursor":"pointer"
+      "cursor":"pointer",
+      "backgroundColor":"pink"
     };
 
     var thStyle={
@@ -86,7 +91,7 @@ class Table extends Component{
       "padding": "5px 10px",
       "outline": "1px solid black",
       "backgroundColor":"gray",
-      "width": "150px"
+      "width": "145px"
     }
     var tdStyle={
       // "background-color": "green",
@@ -97,7 +102,7 @@ class Table extends Component{
     }
     return(
       <div>
-        <table style={tableStyle} id="table" onClick={this.handleTableClick.bind(this)}>
+        <table style={tableStyle} id="table" onClick={this.handleTableClick.bind(this)} >
           <tbody id="tbody">
           <tr>
             <th style={thStyle}>Time</th>
