@@ -43,18 +43,32 @@ class UserProfile extends Component {
       return <Loading/>
     }
 
+    var profileDiv = {
+      "text-align": "center",
+      "width": "50%",
+      "margin": "50px auto 30px auto",
+      "padding": "15px",
+    }
+
+    var formGroup = {
+      "text-align": "left",
+      "width": "75%",
+      "margin": "10px auto 10px auto",
+      "padding": "5px",
+    }
+
     return (
-      <div className="col-md-6">
+      <div style={profileDiv}>
         <form id="frmProfile" role="form" onSubmit={this.onFormSubmit}>
           <h2>User Profile Page</h2>
           <p>{this.state.message}</p>
           <br />
-          <div className="form-group">
+          <div style={formGroup}>
             <label htmlFor="email">Email: </label>
             <input type="text" defaultValue={this.props.currentUser.email}
                    className="form-control" id="email" ref="email" placeholder="Email" name="email"/>
           </div>
-          <div className="form-group">
+          <div style={formGroup}>
             <label htmlFor="displayName">Display name: </label>
             <input type="text" defaultValue={this.props.currentUser.displayName}
                    className="form-control" ref="displayName" id="displayName" placeholder="Display name"

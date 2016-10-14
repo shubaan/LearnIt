@@ -5,6 +5,8 @@ import {bindActionCreators} from 'redux';
 import {loginUser, fetchUser, loginWithProvider} from '../../actions/firebase_actions';
 
 
+
+
 class UserLogin extends Component {
 
   constructor(props) {
@@ -48,24 +50,39 @@ class UserLogin extends Component {
   }
 
   render() {
+
+    var loginDiv = {
+      "text-align": "center",
+      "width": "50%",
+      "margin": "50px auto 30px auto",
+      "padding": "15px",
+    }
+
+    var formGroup = {
+      "text-align": "left",
+      "width": "60%",
+      "margin": "10px auto 10px auto",
+      "padding": "5px",
+    }
+
     return (
-      <div className="col-md-4">
+      <div style={loginDiv}>
         <form id="frmLogin" role="form" onSubmit={this.onFormSubmit}>
           <p>
             {this.state.message}
           </p>
           <h2>Login</h2>
-          <div className="form-group">
+          <div style={formGroup}>
             <label htmlFor="txtEmail">Email address</label>
             <input type="email" className="form-control" id="txtEmail" ref="email" placeholder="Enter email"
                    name="email"/>
           </div>
-          <div className="form-group">
+          <div style={formGroup}>
             <label htmlFor="txtPass">Password</label>
             <input type="password" className="form-control" id="txtPass" ref="password" placeholder="Password"
                    name="password"/>
           </div>
-          <button type="submit" className="btn btn-default btn-block">Login</button>
+          <button type="submit" className="btn btn-primary" width="100px">Login</button>
           <br/>
           <h5><Link to="/reset">Forgot password?</Link></h5>
 

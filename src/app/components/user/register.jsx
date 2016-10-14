@@ -40,28 +40,47 @@ class UserRegister extends Component {
   }
 
   render() {
+
+    var registerDiv = {
+      "text-align": "center",
+      "width": "50%",
+      "margin": "50px auto 30px auto",
+      "padding": "15px",
+    }
+
+    var formGroup = {
+      "text-align": "left",
+      "width": "60%",
+      "margin": "10px auto 10px auto",
+      "padding": "5px",
+    }
+
+    var tutor = {
+      "margin-right": "5px",
+    }
+
     return (
-      <div className="col-md-4">
+      <div style={registerDiv}>
         <form id="frmRegister" role="form" onSubmit={this.onFormSubmit}>
           <p>{this.state.message}</p>
           <h2>Register</h2>
-          <div className="form-group">
+          <div style={formGroup} >
             <label>Name</label>
             <input type="text" className="form-control" ref="name" id="txtName" placeholder="Name"/>
           </div>
-          <div className="form-group">
+          <div style={formGroup} >
             <label htmlFor="txtRegEmail">Email</label>
             <input type="email" className="form-control" ref="email" id="txtEmail" placeholder="Email"/>
           </div>
-          <div className="form-group">
+          <div style={formGroup} >
             <label htmlFor="txtRegPass">Password</label>
             <input type="password" className="form-control" ref="password" id="txtPass" placeholder="Password"/>
           </div>
-          <div className="form-group">
-            <label >Are you a tutor?</label>
+          <div style={formGroup} >
+            <label style={tutor}>Are you a tutor?</label>
             <input type="checkbox" ref="tutor" id="chkTutor"/>
           </div>
-          <button type="submit" className="btn btn-default">Register</button>
+          <button type="submit" className="btn btn-primary">Register</button>
         </form>
       </div>
     )

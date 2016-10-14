@@ -34,16 +34,28 @@ class ChangePassword extends Component {
   }
 
   render() {
+
+    var changePassword = {
+      "width": "75%",
+      "margin":"40px auto 0px auto",
+    }
+
+    var formGroup = {
+      "text-align": "left",
+      "margin": "10px auto 10px auto",
+      "padding": "5px",
+    }
+
     return (
-      <form id="ChangePassword" role="form" onSubmit={this.onFormSubmit}>
+      <form style = {changePassword} id="ChangePassword" role="form" onSubmit={this.onFormSubmit}>
         <h4> Change Password </h4>
         <h5> {this.state.message} </h5>
-        <div className="form-group">
+        <div style={formGroup}>
           <label htmlFor="password"> New Password: </label>
           <input type="password" className="form-control"
                  name="password" ref="password" id="password"/>
         </div>
-        <div className="form-group">
+        <div style={formGroup}>
           <label htmlFor="repeatPassword"> Repeat Password: </label>
           <input type="password" className="form-control"
                  name="repeatPassword" ref="repeatPassword" id="repeatPassword"/>
