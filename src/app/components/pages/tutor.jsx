@@ -66,12 +66,6 @@ class Table extends Component{
   }
 
   render(){
-    var t1={
-      "backgroundColor":"green"
-    }
-    var t2={
-      "backgroundColor":"red"
-    }
     var tableStyle={
       "outline": "1px solid black",
       "border": "1px solid black",
