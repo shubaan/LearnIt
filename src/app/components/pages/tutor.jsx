@@ -62,7 +62,14 @@ class Table extends Component{
                 };
             }(i, j));
         }
-      }
+      };
+
+      var changeStyle=function(e){
+        if(e.target.tagName = "td"){
+          e.target.backgroundColor = "green";
+        }
+      };
+      table.addEventListener("click", changeStyle, false);
   }
 
   render(){
