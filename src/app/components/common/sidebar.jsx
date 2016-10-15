@@ -37,7 +37,6 @@ class Sidebar extends Component {
             return <li key={index} className={style} onClick={self.clicked.bind(self, index)}>{listValue}</li>;
           })}
         </ul>
-        <p>Selected: {this.props.list[this.state.focused]}</p>
       </div>
     );
   }

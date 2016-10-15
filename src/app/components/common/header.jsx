@@ -63,19 +63,13 @@ class Header extends Component {
         <button onClick={this.handleEditClick}>Cancel</button>
       </div>);
     }
-    if (this.props.currentUser && this.props.currentUser.profile) {
-      var pic = this.props.currentUser.profile.photoUrl
-      var name = this.props.currentUser.profile.name
-    } else
-    {
-      var pic = ""
-      var name = ""
-    }
+    var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
+    var name = ((this.props.currentUser.displayName)? this.props.currentUser.displayName : "No name");
     return (
       <div id="header_div">
         <div id="profile_div">
           <img id="profile_img" src={pic} alt="Profile Image" />
-          <h3 className="title">{name}</h3>
+          <p><h3 className="title">{name}</h3></p>
         </div>
         <div id="bio_div">
           <h3 className="title">About Me</h3>
