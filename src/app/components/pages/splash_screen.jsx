@@ -19,7 +19,7 @@ class SplashScreen extends Component {
     }
 
     handleClick() {
-        browserHistory.push("/contactus");
+        browserHistory.push("/register");
     }
 
     render() {
@@ -43,7 +43,7 @@ class SplashScreen extends Component {
                         STEM Tutors at the click of a button
                     </h1>
                     <p>
-                        Welcome to LearnIt, where you can learn any science, technology, engineering, or math subject quickly and easily.
+                        Welcome to <b>LearnIt</b>, where you can learn any science, technology, engineering, or math subject quickly and easily.
                     </p>
                     <p>
                         With our experienced tutors, you can get professional help at your convenience.
@@ -61,9 +61,7 @@ class SplashScreen extends Component {
                         Flexible Scheduling
                     </h2>
                     <p>
-                        You make your own schedule! You can browse through a list of tutors to see their availability and schedule a time that is convenient for you.
-                    </p>
-                    <p>
+                        You make your own schedule! You can browse through a list of tutors to see their availability and schedule a time that works for you.
                         Whether you are a morning person or a night owl, there will a tutor for you waiting for you to schedule a session.
                     </p>
                     <h2>
@@ -83,9 +81,9 @@ class SplashScreen extends Component {
                 </div>
                 <div style={buttonStyle}>
                     <p>
-                        Other questions?
+                        Want to get started? Register today!
                     </p>
-                    <button onClick={this.handleClick}>Contact Us</button>
+                    <button onClick={this.handleClick}>Register</button>
                 </div>
             </div>
         );
