@@ -55,7 +55,7 @@ class App extends Component {
     let loggedInItems;
     if (this.props.currentUser) {
         loggedInItems = <div><Header />
-              <Sidebar list={["Account", "Student", "Tutor"]} /></div>;
+              <Sidebar list={["Home", "Account", "Student", "Tutor"]} link={["/", "/account", "/student", "/tutor"]} /></div>;
     } else {
       loggedInItems = <div />
         childStyle = {

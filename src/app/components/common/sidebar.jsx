@@ -10,15 +10,14 @@ class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      focused: 0
+      focused: this.props.link.indexOf(location.pathname)
     };
   }
 
   clicked(index) {
     // The click handler will update the state with
     // the index of the focused menu entry
-    let section = this.props.list[index].toLowerCase();
-    browserHistory.push("/"+section)
+    browserHistory.push(this.props.link[index]);
     this.setState({focused: index});
   }
 
@@ -37,6 +36,7 @@ class Sidebar extends Component {
             return <li key={index} className={style} onClick={self.clicked.bind(self, index)}>{listValue}</li>;
           })}
         </ul>
+        <p>{location.pathname}</p>
       </div>
     );
   }

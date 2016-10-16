@@ -11,7 +11,7 @@
 #profile_div {
 	padding-top: 20px;
 	width: 200px;
-	display: inline-block;
+	display: block;
 	text-align: center;
 	position: fixed;
 }
@@ -19,7 +19,7 @@
 #bio_div {
 	margin-left: 220px;
 	display: inline-block;
-	position: fixed
+	position: fixed;
 }
 
 #profile_img {
