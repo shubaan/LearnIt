@@ -53,7 +53,7 @@ var FireBaseTools = {
       firebaseDb.ref('/').child('profiles/'+firebaseAuth.currentUser.uid).on("value", function(snapshot){
         let profile = snapshot.val();
         if (profile.bio) profileData.bio = profile.bio
-        console.log(profile);
+        //console.log(profile);
       });
       firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
       return firebaseAuth.currentUser;
@@ -118,8 +118,8 @@ var FireBaseTools = {
       const unsub = firebaseAuth.onAuthStateChanged(user => {
         firebaseDb.ref('/').child('profiles/'+user.uid).on("value", function(snapshot){
           let profile = snapshot.val();
-          console.log("print profile now")
-          console.log(profile);
+          //console.log("print profile now")
+          //console.log(profile);
           user.profile = profile
         });
         unsub();
@@ -139,7 +139,7 @@ var FireBaseTools = {
     return new Promise((resolve, reject) => {
       firebaseDb.ref('/').child('profiles').on("value", function(snapshot){
         let profiles = snapshot.val();
-        console.log(profiles);
+        //console.log(profiles);
         // log all profile names
         for (var p in profiles){
           //console.log(profiles[p].name);
@@ -258,14 +258,14 @@ var FireBaseTools = {
     return new Promise((resolve, reject) => {
       var user = firebaseAuth.currentUser;
       if (user) {
-        console.log('User is signed in');
+        //console.log('User is signed in');
         firebaseDb.ref('/profiles/' + user.uid).child('bio').on("value", function(snapshot){
           let bio = snapshot.val();
-          console.log(bio);
+          //console.log(bio);
           resolve(bio);
         });
       } else {
-        console.log('User is not signed in');
+        //console.log('User is not signed in');
       }
     }, error => {
       reject(error);
@@ -281,18 +281,18 @@ var FireBaseTools = {
   saveBio: (biography) => {
     var user = firebaseAuth.currentUser;
     if (user) {
-      console.log('User is signed in');
+      //console.log('User is signed in');
       var onComplete = function(error) {
         if (error) {
-          console.log('Synchronization failed');
+          //console.log('Synchronization failed');
         } else {
-          console.log('New Bio Submitted');
+          //console.log('New Bio Submitted');
         }
       };
       //save bio
       firebaseDb.ref('/profiles/' + user.uid).child('bio').set(biography, onComplete);
     } else {
-      console.log('User is not signed in');
+      //console.log('User is not signed in');
     }
 
     return biography;

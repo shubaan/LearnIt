@@ -12,6 +12,22 @@ class Sidebar extends Component {
     this.state = {
       focused: this.props.link.indexOf(location.pathname)
     };
+
+    //this code is to add a timer to update the component if we can't get global state working
+    this.updateFocus = this.updateFocus.bind(this);
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateFocus, 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  updateFocus() {
+    this.setState({focused: this.props.link.indexOf(location.pathname)});
+
   }
 
   clicked(index) {
@@ -36,7 +52,6 @@ class Sidebar extends Component {
             return <li key={index} className={style} onClick={self.clicked.bind(self, index)}>{listValue}</li>;
           })}
         </ul>
-        <p>{location.pathname}</p>
       </div>
     );
   }

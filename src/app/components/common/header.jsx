@@ -20,6 +20,22 @@ class Header extends Component {
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+
+    //this code is to add a timer to update the component if we can't get global state working
+    this.updateBio = this.updateBio.bind(this);
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateBio, 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  updateBio() {
+    this.forceUpdate();
+
   }
 
   getBio(bio) {
