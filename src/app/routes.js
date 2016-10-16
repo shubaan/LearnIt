@@ -1,5 +1,5 @@
 import React from 'react';
-import  {Route, IndexRoute} from 'react-router';
+import {Route, IndexRoute} from 'react-router';
 import App from './components/app';
 
 import HomeIndex from './components/pages/home';
@@ -10,6 +10,8 @@ import UserProfile from './components/user/profile';
 import ResetPassword from './components/user/reset_password';
 import Tutor from './components/pages/tutor';
 import Student from './components/pages/student';
+import ContactUs from './components/pages/contact_us';
+import FinishedContacting from './components/pages/finished_contacting';
 
 
 export default (
@@ -22,6 +24,8 @@ export default (
     <Route path="/account" component={UserProfile}/>
     <Route path="/tutor" component={Tutor}/>
     <Route path="/student" component={Student}/>
+    <Route path="/contactus" component={ContactUs}/>
+    <Route path="/messagesent" component={FinishedContacting}/>
   </Route>
 
 );
