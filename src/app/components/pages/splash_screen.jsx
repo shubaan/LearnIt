@@ -3,6 +3,7 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
+import RaisedButton from 'material-ui/RaisedButton';
 
   const divStyle = {
     width: "500px",
@@ -23,9 +24,6 @@ class SplashScreen extends Component {
     }
 
     render() {
-        var splashscreenContainer = {
-            "margin": "70px auto 0px auto",
-        } 
         var imageStyle={
           "marginLeft":"69%",
           "width":"30%",
@@ -39,7 +37,7 @@ class SplashScreen extends Component {
           "textAlign":"center"
         }
         return (
-            <div style={splashscreenContainer}>
+            <div>
                 <img style={imageStyle} src="src/app/components/images/logo.png"></img>
                 <div style={textStyle}>
                     <h1>
@@ -86,7 +84,7 @@ class SplashScreen extends Component {
                     <p>
                         Want to get started? Register today!
                     </p>
-                    <button className="btn btn-primary"onClick={this.handleClick}>Register</button>
+                    <RaisedButton label="Register" primary={true} onClick={this.handleClick}/>
                 </div>
             </div>
         );

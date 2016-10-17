@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, logoutUser}  from '../../actions/firebase_actions';
-import Header from '../common/header';
-import Sidebar from '../common/sidebar';
+import {fetchUser}  from '../../actions/firebase_actions';
 import SplashScreen from './splash_screen'
 
 class Home extends Component {
@@ -20,11 +18,11 @@ class Home extends Component {
       margin: "15px 20px 15px 20px",
       borderRadius: "10px",
       padding: "10px 0px 10px 0px",
-    }
+    };
     var sessions_text = {
       display: "inline-block",
       margin: "3px 5px 3px 5px",
-    }
+    };
 
     return (
       <div style={sessions}>
@@ -44,34 +42,38 @@ class Home extends Component {
         <p style={sessions_text}>{cost}</p>
         <br />
       </div>
-    )
+    );
   }
 
   render() {
-    let contents;
     if (this.props.currentUser && this.props.currentUser.uid) {
-      contents = (
-        <div>
-          <h2>Upcoming Sessions:</h2>
+      var homeContainer = {
+        padding: '5px 15px 5px 15px',
+      };
+      var homeTitle = {
+        margin: '0px',
+        padding: '0px',
+      }
+
+      return (
+        <div style={homeContainer}>
+          <h2 style={homeTitle}>Upcoming Sessions:</h2>
           {this.renderSessions('Matt', 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
           {this.renderSessions('Matt', 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
         </div>
       );
     } else {
-      contents = (<SplashScreen/>);
+      return (
+        <div>
+          <SplashScreen/>
+        </div>
+      );
     }
-
-
-    return (
-      <div>
-        {contents}
-      </div>
-    );
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchUser, logoutUser}, dispatch);
+  return bindActionCreators({fetchUser}, dispatch);
 }
 
 function mapStateToProps(state) {

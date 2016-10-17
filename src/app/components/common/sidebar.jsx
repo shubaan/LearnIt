@@ -39,12 +39,9 @@ class Sidebar extends Component {
 
   render() {
     var self = this;
-    var image = ((this.props.currentUser.photoUrl) ? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png")
 
     return (
       <div id="sidebarContainer">
-        <img id="profileImg" src={image} alt="Profile Image" ></img>
-        <h3 id="profileUsername">User's Name</h3>
         <ul className='side'>
           {this.props.list.map(function(listValue, index){
             var style = '';

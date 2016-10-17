@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loginUser, fetchUser, loginWithProvider} from '../../actions/firebase_actions';
+import {loginUser, logoutUser, fetchUser, loginWithProvider} from '../../actions/firebase_actions';
 
 
 
@@ -14,7 +17,10 @@ class UserLogin extends Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.loginWithProvider = this.loginWithProvider.bind(this);
     this.state = {
-      message: ''
+      email: '',
+      emailError: '',
+      password: '',
+      passwordError: ''
     }
   }
 
@@ -26,29 +32,71 @@ class UserLogin extends Component {
       if (data.payload.errorCode)
         this.setState({message: data.payload.errorMessage})
       else
-        browserHistory.push('/account');
+        browserHistory.push('/home');
 
     });
     // alert("login with provider");
   }
 
-  onFormSubmit(event) {
-    event.preventDefault();
+  onFormSubmit() {
+    this.props.loginUser({email: this.state.email, password: this.state.password}).then(data => {
 
-    var email = this.refs.email.value;
-    var password = this.refs.password.value;
-    this.props.loginUser({email: email, password: password}).then(data => {
         if (data.payload.errorCode)
           this.setState({message: data.payload.errorMessage})
         else
-          browserHistory.push('/account');
+          browserHistory.push('/home');
 
       }
     )
 
   }
 
+  isValidEmail(email) {
+    if (email == "") {
+      this.setState({email: email, emailError: "This field is Required"})
+      return false
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      this.setState({email: email, emailError: "Invalid email"})
+      return false
+    }
+    this.setState({email: email, emailError: ""})
+    return true
+  }
+
+  isValidPassword(password) {
+    if (password == "") {
+      this.setState({password: password, passwordError: "This field is Required"})
+      return false
+    }
+    if (password.length < 6) {
+      this.setState({password: password, passwordError: "Must be at least 6 characters"})
+      return false
+    }
+    this.setState({password: password, passwordError: ""})
+    return true
+  }
+
+  handleEmailChange = (event) => {
+    let e = event.target.value
+    console.log(e)
+    this.isValidEmail(e)
+  };
+
+  handlePasswordChange = (event) => {
+    let p = event.target.value
+    console.log(p)
+    this.isValidPassword(p)
+  };
+
   render() {
+
+    if (this.props.currentUser && this.props.currentUser.uid) {
+      this.props.logoutUser().then(data=> {
+        // reload props from reducer
+        this.props.fetchUser();
+      });
+    }
 
     var loginDiv = {
       "text-align": "center",
@@ -66,41 +114,43 @@ class UserLogin extends Component {
 
     return (
       <div style={loginDiv}>
-        <form id="frmLogin" role="form" onSubmit={this.onFormSubmit}>
-          <p>
-            {this.state.message}
-          </p>
+        <form id="frmLogin" >
           <h2>Login</h2>
-          <div style={formGroup}>
-            <label htmlFor="txtEmail">Email address</label>
-            <input type="email" className="form-control" id="txtEmail" ref="email" placeholder="Enter email"
-                   name="email"/>
-          </div>
-          <div style={formGroup}>
-            <label htmlFor="txtPass">Password</label>
-            <input type="password" className="form-control" id="txtPass" ref="password" placeholder="Password"
-                   name="password"/>
-          </div>
-          <button type="submit" className="btn btn-primary" width="100px">Login</button>
-          <br/>
+          <TextField
+            ref="email"
+            onChange={this.handleEmailChange}
+            floatingLabelText="Email"/>
+          <br />
+          <TextField
+            ref="password"
+            onChange={this.handlePasswordChange}
+            floatingLabelText="Password"
+            type="password"/>
+          <br />
+          <br />
+          <RaisedButton label="Login" primary={true} onClick={this.onFormSubmit}/>
+          <br />
           <h5><Link to="/reset">Forgot password?</Link></h5>
-
+          <br/>
+          <br/>
           <h4>Login with</h4>
-          <a href="#" className="btn btn-primary bt-social" onClick={()=> {
-            this.loginWithProvider("facebook")
-          }} data-provider="facebook">Facebook</a>
-         <a href="#" className="btn btn-danger bt-social" onClick={()=> {
-           this.loginWithProvider("google")
-         }} data-provider="google">Google+</a>
-         <a href="#" className="btn btn-info bt-social" onClick={()=> {
-           this.loginWithProvider("twitter")
-         }} data-provider="twitter">Twitter</a>
-          {/*
 
 
-           <a href="#" className="btn btn-default bt-social" data-provider="github">GitHub</a>
-           <a href="#" className="btn btn-warning" id="btAnon">Anon</a>
-           */}
+          <IconButton tooltip="Login with Facebook" onClick={ ()=> {
+            this.loginWithProvider("facebook")} }>
+            <img src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png"
+              width="40px" height="40px"/>
+          </IconButton>
+          <IconButton tooltip="Login with Google" onClick={ ()=> {
+            this.loginWithProvider("google")} }>
+            <img src="https://www.seeklogo.net/wp-content/uploads/2015/09/new-google-favicon-logo-200x200.png"
+              width="40px" height="40px"/>
+          </IconButton>
+          <IconButton tooltip="Login with Twitter" onClick={ ()=> {
+            this.loginWithProvider("twitter")} }>
+            <img src="https://www.seeklogo.net/wp-content/uploads/2011/08/twitter-bird-icon-logo-vector-400x400.png"
+              width="40px" height="40px"/>
+          </IconButton>
 
         </form>
       </div>
@@ -113,6 +163,7 @@ class UserLogin extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     loginUser,
+    logoutUser,
     fetchUser,
     loginWithProvider
   }, dispatch);
