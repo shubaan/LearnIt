@@ -15,6 +15,7 @@ class UserProfile extends Component {
       message: ''
     }
     this.onFormSubmit = this.onFormSubmit.bind(this);
+    setTimeout(function(){this.refs.displayName.value = this.props.currentUser.displayName}.bind(this), 500);
   }
 
   onFormSubmit(event) {

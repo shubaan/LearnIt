@@ -82,8 +82,14 @@ var FireBaseTools = {
       bio: defaultBio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
     };
+    var userName = user.name;
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
+      console.log(userName);
+      firebaseAuth.currentUser.updateProfile({
+        displayName: userName,
+        photoURL: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
+      });
 
       return user;
     }).catch(error => {

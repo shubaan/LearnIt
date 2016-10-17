@@ -33,7 +33,7 @@ class App extends Component {
              aria-haspopup="true" aria-expanded="false">
             {currentUser.email} <span className="caret"></span></a>
           <ul className="dropdown-menu">
-            <li><Link to="/profile">Edit Profile</Link></li>
+            <li><Link to="/account">Edit Profile</Link></li>
             <li role="separator" className="divider"></li>
             <li><Link to="/logout" onClick={this.logOut}>Logout</Link></li>
           </ul>
