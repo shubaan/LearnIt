@@ -38,7 +38,7 @@ class SplashScreen extends Component {
         }
         return (
             <div>
-                <img style={imageStyle} src="src/app/components/images/logo.png"></img>
+                <img style={imageStyle} src="http://i.imgur.com/xLGaGy8.png"></img>
                 <div style={textStyle}>
                     <h1>
                         STEM Tutors at the click of a button
