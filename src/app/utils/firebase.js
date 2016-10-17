@@ -87,10 +87,17 @@ var FireBaseTools = {
       bio: defaultBio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
     };
+    if (user.isTutor) {
+      profileData.math = user.math;
+      profileData.science = user.science;
+      profileData.english = user.english;
+      profileData.spanish = user.spanish;
+      profileData.history = user.history;
+      profileData.payrate = user.payrate;
+    }
     console.log(user);
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
-
       return user;
     }).catch(error => {
       return {
@@ -168,6 +175,12 @@ var FireBaseTools = {
    */
   loginUser: (user) => {
     return firebaseAuth.signInWithEmailAndPassword(user.email, user.password).then(user => {
+      firebaseDb.ref('/').child('profiles/'+user.uid).on("value", function(snapshot){
+        let profile = snapshot.val();
+        //console.log("print profile now")
+        console.log(profile);
+        user.profile = profile
+      })
       return user;
     }).catch(error => {
       return {
@@ -184,14 +197,8 @@ var FireBaseTools = {
    * @returns {!firebase.Promise.<*>|firebase.Thenable<any>|firebase.Promise<any>|!firebase.Thenable.<*>}
    */
   updateUserProfile: (u) => {
-    return firebaseAuth.currentUser.updateProfile(u).then(() => {
-      return firebaseAuth.currentUser;
-    }, error => {
-      return {
-        errorCode: error.code,
-        errorMessage: error.message
-      }
-    })
+    firebaseDb.ref('/profiles/' + u.uid).set(u.profile);
+    return u;
   },
 
   /**

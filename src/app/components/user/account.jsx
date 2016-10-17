@@ -6,7 +6,9 @@ import {bindActionCreators} from 'redux';
 import {fetchUser, updateUser}  from '../../actions/firebase_actions';
 import ChangePassword from './change_password';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
+import TutorForm from './tutor_form';
 
 class UserAccount extends Component {
 
@@ -14,47 +16,91 @@ class UserAccount extends Component {
     super(props);
     this.props.fetchUser();
     this.state = {
-      message: ''
+      message: '',
+      profile: {}
     }
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+
+      console.log(nextProps);
+      var profile = {};
+      if (nextProps.currentUser && nextProps.currentUser.uid) {
+       if (nextProps.currentUser.profile) {
+          console.log(nextProps.currentUser.profile);
+          this.setState({profile: nextProps.currentUser.profile});
+        }
+      }
+  }
+
   onFormSubmit(event) {
     event.preventDefault();
-    var email = this.refs.email.value;
-    var displayName = this.refs.displayName.value;
-    this.props.updateUser({email: email, displayName: displayName}).then(data => {
-
-        if (data.payload.errorCode)
-          this.setState({message: data.payload.errorMessage})
-        else
-          this.setState({
-            message: "Updated successfuly!"
-          })
-
-      }
-    )
+    let user = this.props.currentUser;
+    user.profile = this.state.profile;
+    this.props.updateUser(user);
   }
 
   isTutorChecked()
   {
-    console.log(!this.state.isTutor);
-    if (this.props.currentUser.profile) {
-      this.props.currentUser.profile.istutor = !this.props.currentUser.profile.isTutor
-      this.setState({isTutor: !this.state.isTutor})
-    }
+    console.log(!this.state.profile.isTutor);
+    var profile = this.state.profile;
+    profile.isTutor = !this.state.profile.istutor
+    this.setState({profile: profile})
   }
 
-  render() {
-    var profile = {};
-    if (!this.props.currentUser || !this.props.currentUser.uid) {
-      return <div />;
-    } else if (this.props.currentUser.profile)
-    {
-      console.log(this.props.currentUser.profile);
-      profile = this.props.currentUser.profile;
-    }
+  isMathChecked()
+  {
+    console.log(!this.state.profile.math);
+    var profile = this.state.profile;
+    profile.math = !this.state.profile.math
+    this.setState({profile: profile})
+  }
 
+  isScienceChecked()
+  {
+    console.log(!this.state.profile.science);
+    var profile = this.state.profile;
+    profile.science = !this.state.profile.science
+    this.setState({profile: profile})
+  }
+
+  isEnglishChecked()
+  {
+    console.log(!this.state.profile.english);
+    var profile = this.state.profile;
+    profile.english = !this.state.profile.english
+    this.setState({profile: profile})
+  }
+
+  isSpanishChecked()
+  {
+    console.log(!this.state.profile.spanish);
+    var profile = this.state.profile;
+    profile.spanish = !this.state.profile.spanish
+    this.setState({profile: profile})
+  }
+
+  isHistoryChecked()
+  {
+    console.log(!this.state.profile.history);
+    var profile = this.state.profile;
+    profile.history = !this.state.profile.hisory
+    this.setState({profile: profile})
+  }
+
+  handlePaySlider = (event, value) => {
+    var profile = this.state.profile;
+    profile.payrate = value
+    this.setState({profile: profile})
+   };
+  render() {
+    if (!this.props.currentUser || !this.props.currentUser.uid) {
+      return <div />
+    } else if (this.props.currentUser.profile && this.state.profile == {}) {
+      console.log("update profile state")
+      this.setState({profile: this.props.currentUser.profile});
+    }
     var profileDiv = {
       "text-align": "center",
       "width": "50%",
@@ -82,8 +128,36 @@ class UserAccount extends Component {
       },
     };
 
-    var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
-    var name = ((this.props.currentUser.displayName)? this.props.currentUser.displayName : "No name");
+    var pic = ((this.state.profile.photoUrl)? this.state.profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
+    var name = ((this.state.profile.displayName)? this.state.profile.name : "");
+
+
+    let tutorForm;
+    if (this.state.profile.isTutor) {
+      tutorForm = (
+        <TutorForm
+          isMathChecked={this.isMathChecked.bind(this)}
+          isScienceChecked={this.isScienceChecked.bind(this)}
+          isEnglishChecked={this.isEnglishChecked.bind(this)}
+          isSpanishChecked={this.isSpanishChecked.bind(this)}
+          isHistoryChecked={this.isHistoryChecked.bind(this)}
+          handlePaySlider={this.handlePaySlider.bind(this)}
+          paySlider={this.state.profile.payrate}
+          math={this.state.profile.math}
+          science={this.state.profile.science}
+          english={this.state.profile.english}
+          spanish={this.state.profile.spanish}
+          history={this.state.profile.history}/>
+      )
+    } else tutorForm = (
+          <Checkbox
+            ref="tutor" labelPosition="left"
+            label="Would you like to become a tutor?"
+            style={styles.checkbox}
+            onCheck={this.isTutorChecked.bind(this)}/>
+        )
+
+
     return (
       <div style={profileDiv}>
         <form id="frmProfile">
@@ -94,26 +168,10 @@ class UserAccount extends Component {
               <input type="file" style={styles.exampleImageInput}/>
             </FlatButton>
 
-            <Checkbox
-              ref="tutor" labelPosition="left"
-              label="Math"
-              style={styles.checkbox}
-              onCheck={this.isTutorChecked.bind(this)}/>
+            {tutorForm}
+            <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
 
-          <div style={formGroup}>
-            <label htmlFor="email">Email: </label>
-            <input type="text" defaultValue={this.props.currentUser.email}
-                   className="form-control" id="email" ref="email" placeholder="Email" name="email"/>
-          </div>
-          <div style={formGroup}>
-            <label htmlFor="displayName">Display name: </label>
-            <input type="text" defaultValue={this.props.currentUser.displayName}
-                   className="form-control" ref="displayName" id="displayName" placeholder="Display name"
-                   name="displayName"/>
-          </div>
-          <button type="submit" className="btn btn-primary">Update</button>
         </form>
-        <ChangePassword/>
       </div>
     )
   }

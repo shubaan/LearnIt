@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import Slider from 'material-ui/Slider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import {browserHistory} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerUser} from '../../actions/firebase_actions';
+import {fetchUser, logoutUser, registerUser} from '../../actions/firebase_actions';
+import TutorForm from './tutor_form';
 
 class UserRegister extends Component {
 
@@ -19,7 +21,13 @@ class UserRegister extends Component {
       emailError: '',
       password: '',
       passwordError: '',
-      isTutor: false
+      isTutor: false,
+      paySlider: 50,
+      math: false,
+      science: false,
+      english: false,
+      spanish: false,
+      history: false,
     }
   }
 
@@ -69,12 +77,21 @@ class UserRegister extends Component {
     let isValid = n && e && p;
 
     if (!hasErrors && isValid) {
-        this.props.registerUser({
+        let user = {
           name: this.state.name,
           email: this.state.email,
           password: this.state.password,
           isTutor: this.state.isTutor
-        }).then(data => {
+        }
+        if (user.isTutor) {
+          user.math = this.state.math;
+          user.science = this.state.science;
+          user.english = this.state.english;
+          user.spanish = this.state.spanish;
+          user.history = this.state.history;
+          user.payrate = this.state.paySlider;
+        }
+        this.props.registerUser(user).then(data => {
             if (data.payload.errorCode)
               this.setState({message: data.payload.errorMessage});
             else
@@ -89,6 +106,40 @@ class UserRegister extends Component {
     console.log(!this.state.isTutor);
     this.setState({isTutor: !this.state.isTutor})
   }
+
+  isMathChecked()
+  {
+    console.log(!this.state.math);
+    this.setState({math: !this.state.math})
+  }
+
+  isScienceChecked()
+  {
+    console.log(!this.state.science);
+    this.setState({science: !this.state.science})
+  }
+
+  isEnglishChecked()
+  {
+    console.log(!this.state.english);
+    this.setState({english: !this.state.english})
+  }
+
+  isSpanishChecked()
+  {
+    console.log(!this.state.spanish);
+    this.setState({spanish: !this.state.spanish})
+  }
+
+  isHistoryChecked()
+  {
+    console.log(!this.state.history);
+    this.setState({history: !this.state.history})
+  }
+
+  handlePaySlider = (event, value) => {
+     this.setState({paySlider: value});
+   };
 
   handleNameChange = (event) => {
     let n = event.target.value
@@ -138,10 +189,34 @@ class UserRegister extends Component {
         maxWidth: 250,
       },
       checkbox: {
+        margin: "15px auto 0px auto",
+        maxWidth: 200
+      },
+      submit: {
         margin: "15px auto 15px auto",
         maxWidth: 200
       },
     };
+
+    let tutorForm;
+    if (this.state.isTutor) {
+      tutorForm = (
+        <TutorForm
+          isMathChecked={this.isMathChecked.bind(this)}
+          isScienceChecked={this.isScienceChecked.bind(this)}
+          isEnglishChecked={this.isEnglishChecked.bind(this)}
+          isSpanishChecked={this.isSpanishChecked.bind(this)}
+          isHistoryChecked={this.isHistoryChecked.bind(this)}
+          handlePaySlider={this.handlePaySlider.bind(this)}
+          paySlider={this.state.paySlider}
+          math={this.state.math}
+          science={this.state.science}
+          english={this.state.english}
+          spanish={this.state.spanish}
+          history={this.state.history} />
+      )
+    } else tutorForm = <div />
+
     return (
       <div style={registerDiv}>
         <form id="frmRegister">
@@ -167,7 +242,8 @@ class UserRegister extends Component {
             label="Are you a tutor?"
             style={styles.checkbox}
             onCheck={this.isTutorChecked.bind(this)}/>
-          <RaisedButton label="Register" primary={true} onClick={this.onFormSubmit}/>
+          {tutorForm}
+          <RaisedButton label="Register" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
 
         </form>
       </div>
@@ -178,7 +254,7 @@ class UserRegister extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    registerUser
+    fetchUser, logoutUser, registerUser
   }, dispatch);
 }
 
