@@ -70,8 +70,16 @@ class Logged extends Component {
       marginTop: '15px',
       marginRight: '45px'
     }
+
+    let name;
+    if (this.props.person == "") {
+      name = "Anonymous";
+    } else {
+      name = this.props.person
+    }
     return (
       <div>
+      <FlatButton style={style} label={name} onClick={this.goToAccount.bind(this)}/>
       <IconMenu
         {...this.props}
         iconButtonElement={ <IconButton><MoreVertIcon /></IconButton> }

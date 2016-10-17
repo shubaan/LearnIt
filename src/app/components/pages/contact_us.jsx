@@ -44,8 +44,12 @@ class ContactUs extends Component {
     }
 
     render() {
+        var container = {
+            width: '50%',
+            margin: '20px auto 0px auto',
+        };
         return (
-            <div>
+            <div style={container}>
                 <div>
                     <input type="text"
                         id = "subject"
