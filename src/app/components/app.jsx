@@ -61,8 +61,8 @@ class App extends Component {
       loggedInItems = (
         <div>
           <Sidebar
-            list={["Home", "Account", "Student", "Tutor"]} 
-            link={["/", "/account", "/student", "/tutor"]} />
+            list={["Home", "Find a Tutor", "Notifications", "Past Sessions", "My Account", "Scehdule a Session"]} 
+            link={["/", "/student", "/", "/", "/account", "/tutor"]} />
         </div>
       );
     } else {
