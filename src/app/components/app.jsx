@@ -1,98 +1,188 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, logoutUser}  from '../actions/firebase_actions';
 
-import Header from './common/header';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import AppBar from 'material-ui/AppBar';
+import Avatar from 'material-ui/Avatar';
+
+import Drawer from 'material-ui/Drawer';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+
+
 import Sidebar from './common/sidebar';
 
-class App extends Component {
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
+class Login extends Component {
+  static muiName = 'FlatButton';
+  constructor(props) {
+    super(props);
+  }
+  goToLogin() {
+    browserHistory.push("/login");
+  }
+  goToRegister() {
+    browserHistory.push("/register");
+  }
+  render() {
+    return (
+      <ul>
+      <FlatButton {...this.props} label="Login" onClick={this.goToLogin.bind(this)}/>
+      <FlatButton {...this.props} label="Register" onClick={this.goToRegister.bind(this)}/>
+      </ul>
+    );
+  }
+}
+
+
+class Logged extends Component {
+  static muiName = 'IconMenu';
+  constructor(props) {
+    super(props);
+  }
+  goToAccount() {
+    browserHistory.push("/account");
+  }
+  goToHelp() {
+    browserHistory.push("/help");
+  }
+  goToLogin() {
+    browserHistory.push("/login");
+  }
+  render() {
+    let style = {
+      color: 'white',
+      position: 'absolute',
+      top:0,
+      right:0,
+      marginTop: '15px',
+      marginRight: '45px'
+    }
+    return (
+      <div>
+      <FlatButton style={style} label={this.props.person} onClick={this.goToAccount.bind(this)}/>
+
+      <IconMenu
+        {...this.props}
+        iconButtonElement={ <IconButton><MoreVertIcon /></IconButton> }
+        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
+            <MenuItem primaryText="My Account" onClick={this.goToAccount.bind(this)} />
+            <MenuItem primaryText="Help" onClick={this.goToHelp.bind(this)} />
+            <MenuItem primaryText="Logout" onClick={this.goToLogin.bind(this)} />
+      </IconMenu>
+      </div>
+    );
+  }
+}
+
+
+class App extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {open: false};
     this.props.fetchUser();
-    this.logOut = this.logOut.bind(this);
   }
 
-  logOut() {
-    this.props.logoutUser().then(data=> {
-      // reload props from reducer
-      this.props.fetchUser();
-    });
-    setState();
+  getChildContext() {
+      return { muiTheme: getMuiTheme(baseTheme) };
+  }
+
+  toggleDrawer() {
+    this.setState({open: !this.state.open});
+  }
+
+
+  handleClose = () => this.setState({open: false});
+
+  goToHome() {
+    browserHistory.push("/home")
+    this.setState({open: false});
+  }
+
+  goToTutors() {
+    browserHistory.push("/tutors")
+    this.setState({open: false});
+  }
+
+  goToSessions() {
+    browserHistory.push("/sessions")
+    this.setState({open: false});
+  }
+
+  handleTitleClick() {
+    browserHistory.push("/");
   }
 
   renderUserMenu(currentUser) {
-    // if current user exists and user id exists than make user navigation
-    if (currentUser && currentUser.uid)
+    // if current user exists and user id exists they are logged in
+    if (currentUser && currentUser.uid) {
+      if (currentUser.profile) {
+        return (
+          <Logged person={currentUser.profile.name}/>
+        )
+      }
+    }
+    else {
       return (
-        <li className="dropdown">
-          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false">
-            {currentUser.email} <span className="caret"></span></a>
-          <ul className="dropdown-menu">
-            <li><Link to="/profile">Edit Profile</Link></li>
-            <li role="separator" className="divider"></li>
-            <li><Link to="/logout" onClick={this.logOut}>Logout</Link></li>
-          </ul>
-        </li>
+        <Login />
       )
-    else
-      return [
-        <li key={1}><Link to="/login">Login</Link></li>,
-        <li key={2}><Link to="/register">Register</Link></li>,
-        <li key={3}><Link to="/contactus">Contact Us</Link></li>
-      ]
-
+    }
   }
 
   render() {
-    var childStyle = {
-      marginLeft: '200px',
-      marginTop: '150px',
+    let appbarstyle = {
+      cursor: 'pointer',
+      backgroundColor: 'orange',
+      position: 'fixed',
+      top:0,
+      left:0
+    };
+    let childrenstyle = {
+      marginTop: '80px'
     }
-    let loggedInItems;
-    if (this.props.currentUser) {
-        loggedInItems = <div><Header />
-              <Sidebar list={["Home", "Account", "Student", "Tutor"]} link={["/", "/account", "/student", "/tutor"]} /></div>;
-    } else {
-      loggedInItems = <div />
-        childStyle = {
-          margin: '0px auto 0px auto'
-        }
-    }
-
     return (
       <div>
-        <header className="navbar navbar-static-top navbar-inverse" id="top" role="banner">
-          <div className="container">
-            <div className="navbar-header">
-              <button className="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                      data-target=".bs-navbar-collapse"><span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-              <Link to="/" className="navbar-brand">Learn It</Link>
-
-            </div>
-            <nav className="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-              <ul className="nav navbar-nav navbar-right">
-                {this.renderUserMenu(this.props.currentUser)}
-              </ul>
-            </nav>
-          </div>
-        </header>
-        {loggedInItems}
-        <div className="childcontainer" style={childStyle}>
+        <AppBar
+          style={appbarstyle}
+          title="Learn It"
+          onTitleTouchTap={this.handleTitleClick.bind(this)}
+          onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)}
+          iconElementRight={this.renderUserMenu(this.props.currentUser)}
+        />
+        <Drawer
+          docked={false}
+          width={200}
+          open={this.state.open}
+          onRequestChange={(open) => this.setState({open})} >
+            <MenuItem onTouchTap={this.goToHome.bind(this)}>Home</MenuItem>
+            <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find Tutors</MenuItem>
+            <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
+        </Drawer>
+        <div className="childrenContainer" style={childrenstyle}>
           {this.props.children}
         </div>
       </div>
     );
   }
 }
+
+App.childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired,
+};
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchUser, logoutUser}, dispatch);

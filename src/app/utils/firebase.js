@@ -38,25 +38,30 @@ var FireBaseTools = {
   loginWithProvider: (p) => {
     let provider = FireBaseTools.getProvider(p);
     return firebaseAuth.signInWithPopup(provider).then(function (result) {
-    let defaultBio = "I am an awesome person";
-    let defaultPhoto = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png";
-    let profileData = {
-      name: "anonymous",
-      isTutor: true,
-      bio: defaultBio,
-      photoUrl:defaultPhoto,
-    };
-      firebaseAuth.currentUser.providerData.forEach(function (profile) {
-        profileData.name = profile.displayName;
-        profileData.photoUrl = profile.photoURL;
-      });
+      let user = firebaseAuth.currentUser;
       firebaseDb.ref('/').child('profiles/'+firebaseAuth.currentUser.uid).on("value", function(snapshot){
         let profile = snapshot.val();
-        if (profile.bio) profileData.bio = profile.bio
-        //console.log(profile);
+        if (profile == null) {
+          console.log("first time login")
+          let defaultBio = "I am an awesome person";
+          let defaultPhoto = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png";
+          let profileData = {
+            name: "anonymous",
+            isTutor: false,
+            bio: defaultBio,
+            photoUrl:defaultPhoto,
+          };
+          user.providerData.forEach(function (profile) {
+            profileData.name = profile.displayName;
+            profileData.photoUrl = profile.photoURL;
+          });
+          firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
+        } else {
+          console.log(profile);
+          user.profile = profile;
+        }
       });
-      firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
-      return firebaseAuth.currentUser;
+      return user;
     }).catch(function (error) {
       return {
         errorCode: error.code,
@@ -82,6 +87,7 @@ var FireBaseTools = {
       bio: defaultBio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
     };
+    console.log(user);
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
 
@@ -116,14 +122,17 @@ var FireBaseTools = {
   fetchUser: () => {
     return new Promise((resolve, reject) => {
       const unsub = firebaseAuth.onAuthStateChanged(user => {
+        if (!user) {
+          return
+        }
         firebaseDb.ref('/').child('profiles/'+user.uid).on("value", function(snapshot){
           let profile = snapshot.val();
           //console.log("print profile now")
-          //console.log(profile);
+          console.log(profile);
           user.profile = profile
+          unsub();
+          resolve(user);
         });
-        unsub();
-        resolve(user);
       }, error => {
         reject(error);
       })

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {browserHistory,Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
@@ -23,7 +23,7 @@ import {fetchProfiles}  from '../../actions/firebase_actions';
   };
 
 
-class Student extends Component {
+class FindTutors extends Component {
 
   constructor(props) {
     super(props);
@@ -54,6 +54,9 @@ class Student extends Component {
   }
 
   render() {
+    if (!this.props.currentUser || !this.props.currentUser.uid) {
+      browserHistory.push("/login")
+    }
     return (
       <div>
         <p>Available Tutors</p>
@@ -72,4 +75,4 @@ function mapStateToProps(state) {
   return {currentUser: state.currentUser, profiles: state.profiles};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student);
+export default connect(mapStateToProps, mapDispatchToProps)(FindTutors);

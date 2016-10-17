@@ -2,29 +2,30 @@ import React from 'react';
 import {Route, IndexRoute} from 'react-router';
 import App from './components/app';
 
-import HomeIndex from './components/pages/home';
+import SplashScreen from './components/pages/splash_screen'
+import Home from './components/pages/home';
 import UserLogin from './components/user/login';
-import UserLogout from './components/user/logout';
 import UserRegister from './components/user/register';
-import UserProfile from './components/user/profile';
+import UserAccount from './components/user/account';
 import ResetPassword from './components/user/reset_password';
 import Tutor from './components/pages/tutor';
-import Student from './components/pages/student';
+import FindTutors from './components/pages/find_tutors';
+import Sessions from './components/pages/sessions';
 import ContactUs from './components/pages/contact_us';
 import FinishedContacting from './components/pages/finished_contacting';
 
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={HomeIndex}/>
+    <IndexRoute component={SplashScreen}/>
+    <Route path="/home" component={Home}/>
     <Route path="/login" component={UserLogin}/>
-    <Route path="/logout" component={UserLogout}/>
     <Route path="/register" component={UserRegister}/>
     <Route path="/reset" component={ResetPassword}/>
-    <Route path="/account" component={UserProfile}/>
-    <Route path="/tutor" component={Tutor}/>
-    <Route path="/student" component={Student}/>
-    <Route path="/contactus" component={ContactUs}/>
+    <Route path="/account" component={UserAccount}/>
+    <Route path="/tutors" component={FindTutors}/>
+    <Route path="/sessions" component={Sessions}/>
+    <Route path="/help" component={ContactUs}/>
     <Route path="/messagesent" component={FinishedContacting}/>
   </Route>
 

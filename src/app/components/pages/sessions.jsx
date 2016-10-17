@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 
-class Home extends Component {
+class Sessions extends Component {
 
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ class Home extends Component {
     }
     return (
       <div>
-        Welcome!
+        sessions
       </div>
     );
   }
@@ -31,4 +31,4 @@ function mapStateToProps(state) {
   return {currentUser: state.currentUser};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Sessions);
