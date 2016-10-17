@@ -41,7 +41,7 @@ class Button extends Component{
     }
     return(
       <div style={divStyle}>
-        <button  onClick={this.handleClick.bind(this)}>Request session</button>
+        <button className="btn btn-primary" onClick={this.handleClick.bind(this)}>Request session</button>
       </div>
     );
   }

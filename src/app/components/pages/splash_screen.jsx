@@ -23,6 +23,9 @@ class SplashScreen extends Component {
     }
 
     render() {
+        var splashscreenContainer = {
+            "margin": "70px auto 0px auto",
+        } 
         var imageStyle={
           "marginLeft":"69%",
           "width":"30%",
@@ -36,7 +39,7 @@ class SplashScreen extends Component {
           "textAlign":"center"
         }
         return (
-            <div>
+            <div style={splashscreenContainer}>
                 <img style={imageStyle} src="src/app/components/images/logo.png"></img>
                 <div style={textStyle}>
                     <h1>
@@ -83,7 +86,7 @@ class SplashScreen extends Component {
                     <p>
                         Want to get started? Register today!
                     </p>
-                    <button onClick={this.handleClick}>Register</button>
+                    <button className="btn btn-primary"onClick={this.handleClick}>Register</button>
                 </div>
             </div>
         );

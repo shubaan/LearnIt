@@ -84,8 +84,7 @@ class Header extends Component {
     return (
       <div id="header_div">
         <div id="profile_div">
-          <img id="profile_img" src={pic} alt="Profile Image" />
-          <h3>{name}</h3>
+          
         </div>
         <div id="bio_div">
           <h3 className="title">About Me</h3>

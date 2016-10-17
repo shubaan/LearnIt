@@ -30,34 +30,47 @@ class Student extends Component {
     this.props.fetchProfiles();
   }
 
-  renderProfileNames(profiles) {
-    if (profiles)
-    {
-      var rows = [];
-      for (var p in profiles){
-        let profile = profiles[p];
-        let image = ((profile.photoUrl)? profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png")
-        if (profile.isTutor) {
-          let item =
-          <li key={p} style={listStyle}>
-            <img src={image} style={imgStyle}/>
-            {profiles[p].name}
-          </li>;
-          rows.push(item);
-        }
+  renderProfiles(profile) {
+    if (profile) {
+      var profileContainer = {
+        border: '1px solid black',
+        padding: '15px',
+        margin: '10px 10px 10px 10px',
+        display: 'inline-block',
+        borderRadius: '10px',
       }
-      return <div style={divStyle}>
-                <ul> {rows} </ul>
-             </div>;
+      var img = {
+        display: 'inline-block',
+        width: '100px',
+        height: '100px',
+        borderRadius: '50%',
+        margin: '0px 20px 0px 0px'
+      }
+      var profileName = {
+        display: 'inline-block',
+        width: '150px',
+      }
+      var image = ((profile.photoUrl)? profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
+
+      return (
+        <div style={profileContainer}>
+          <img style={img} src={image} />
+          <h3 style={profileName} >{profile.name}</h3>
+        </div>
+      );
     }
-    return <div></div>;
   }
 
   render() {
+    var tutors = [];
+    for (var p in this.props.profiles) {
+      tutors.push( this.renderProfiles(this.props.profiles[p]) );
+    }
+
     return (
       <div>
-        <p>Available Tutors</p>
-        {this.renderProfileNames(this.props.profiles)}
+        <h2>Available Tutors</h2>
+        {tutors}
       </div>
     );
   }

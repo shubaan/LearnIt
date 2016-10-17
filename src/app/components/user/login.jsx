@@ -38,7 +38,6 @@ class UserLogin extends Component {
     var email = this.refs.email.value;
     var password = this.refs.password.value;
     this.props.loginUser({email: email, password: password}).then(data => {
-
         if (data.payload.errorCode)
           this.setState({message: data.payload.errorMessage})
         else
