@@ -87,6 +87,7 @@ var FireBaseTools = {
       bio: defaultBio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
     };
+<<<<<<< HEAD
     if (user.isTutor) {
       profileData.math = user.math;
       profileData.science = user.science;
@@ -98,6 +99,17 @@ var FireBaseTools = {
     console.log(user);
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
+=======
+    var userName = user.name;
+    return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
+      firebaseDb.ref('/profiles/' + user.uid).set(profileData);
+      console.log(userName);
+      firebaseAuth.currentUser.updateProfile({
+        displayName: userName,
+        photoURL: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
+      });
+
+>>>>>>> ecd1d61f92c7fee2ce25cf9b6b47f5bb57c01185
       return user;
     }).catch(error => {
       return {

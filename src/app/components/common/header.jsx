@@ -26,7 +26,7 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    this.timer = setInterval(this.updateBio, 5000);
+    this.timer = setInterval(this.updateBio, 1000);
   }
 
   componentWillUnmount() {

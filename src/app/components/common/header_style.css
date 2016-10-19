@@ -1,5 +1,5 @@
 #header_div {
-	position: fixed;
+	position: absolute;
 	height: 150px;
 	width: 100%;
 	top: 0;
@@ -13,13 +13,13 @@
 	width: 200px;
 	display: block;
 	text-align: center;
-	position: fixed;
+	position: absolute;
 }
 
 #bio_div {
 	margin-left: 220px;
 	display: inline-block;
-	position: fixed;
+	position: absolute;
 }
 
 #profile_img {

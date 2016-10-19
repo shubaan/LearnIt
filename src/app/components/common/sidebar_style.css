@@ -1,7 +1,7 @@
 div#sidebarContainer{
     width: 200px;
     height: calc(100% - 200px);
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     float: left;
