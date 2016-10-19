@@ -135,7 +135,7 @@ class App extends Component {
   }
 
   goToScheduling() {
-    browserHistory.push("/tutor")
+    browserHistory.push("/schedule")
     this.setState({open: false});
   }
 
@@ -180,11 +180,11 @@ class App extends Component {
         open={this.state.open}
         onRequestChange={(open) => this.setState({open})} >
           <MenuItem onTouchTap={this.goToHome.bind(this)}>Home</MenuItem>
+          <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
           <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find a Tutor</MenuItem>
           <MenuItem onTouchTap={this.goToHome.bind(this)}>Notifications</MenuItem>
+          <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule Sessions</MenuItem>
           <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
-          <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
-          <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule a Sessions</MenuItem>
       </Drawer>
       );
     } else {
