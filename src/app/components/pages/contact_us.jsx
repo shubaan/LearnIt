@@ -3,6 +3,8 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 /* idk what this is, so i'm going to just leave it.
 *  love, Dan
@@ -51,19 +53,20 @@ class ContactUs extends Component {
         return (
             <div style={container}>
                 <div>
-                    <input type="text"
+                    <TextField
                         id = "subject"
-                        value={this.state.subject}
+                        floatingLabelText={"Subject"}
                         onChange={this.subjectChange} />
                 </div>
                 <div>
-                    <textarea id="message" rows="6" cols="50"
-                        value={this.state.message}
+                    <TextField id="message"
+                        floatingLabelText={"Message"}
+                        multiLine={true}
                         onChange={this.messageChange}/>
                 </div>
                 <div>
-                    <button name="submit"
-                        onClick={this.submitClickListener}>Submit</button>
+                    <RaisedButton name="submit"
+                        onClick={this.submitClickListener}>Submit</RaisedButton>
                 </div>
             </div>
         );

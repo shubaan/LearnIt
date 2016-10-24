@@ -3,6 +3,7 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
+import RaisedButton from 'material-ui/RaisedButton';
 
   const divStyle = {
     width: "500px",
@@ -22,10 +23,14 @@ class FinishedContacting extends Component {
     }
     render()
     {
+        var container = {
+            width: '50%',
+            margin: '20px auto 0px auto',
+        };
         return (
             <div>
                 <p>Your message has been submitted!</p>
-                <button onClick={this.returnHome}>Return Home</button>
+                <RaisedButton onClick={this.returnHome}>Return Home</RaisedButton>
             </div>
         );
     }
