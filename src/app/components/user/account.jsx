@@ -144,6 +144,12 @@ class UserAccount extends Component {
       },
     };
 
+    const stylesCheckbox = {
+      cursor: 'pointer',
+      width: '330px',
+      margin: 'auto'
+    };
+
     var pic = ((this.state.profile.photoUrl)? this.state.profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.state.profile.displayName)? this.state.profile.name : "");
 
@@ -186,9 +192,9 @@ class UserAccount extends Component {
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
-                style={styles.checkbox}
+                style={stylesCheckbox}
                 onCheck={this.isTutorChecked.bind(this)}
-                defaultChecked={this.state.profile.isTutor}/>
+                defaultChecked={this.state.profile.isTutor} />
             {tutorForm}
             <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
         </form>

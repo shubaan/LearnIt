@@ -10,7 +10,6 @@ class Sessions extends Component {
     super(props);
   }
 
-
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
       return <div />
@@ -22,6 +21,8 @@ class Sessions extends Component {
     );
   }
 }
+
+
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchUser}, dispatch);

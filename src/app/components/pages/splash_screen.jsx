@@ -90,7 +90,6 @@ class SplashScreen extends Component {
         );
     }
 }
-//        <!--{this.renderProfileNames(this.props.profiles)}-->
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({}, dispatch);

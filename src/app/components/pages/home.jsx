@@ -3,7 +3,8 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
-import SplashScreen from './splash_screen'
+import SplashScreen from '../helpers/splash_screen'
+import SessionCard from '../helpers/session_cards'
 
 class Home extends Component {
 
@@ -11,38 +12,8 @@ class Home extends Component {
     super(props);
   }
 
-  renderSessions(tutor,student,date,time,cost) {
-
-    var sessions = {
-      border: "1px solid black",
-      margin: "15px 20px 15px 20px",
-      borderRadius: "10px",
-      padding: "10px 0px 10px 0px",
-    };
-    var sessions_text = {
-      display: "inline-block",
-      margin: "3px 5px 3px 5px",
-    };
-
-    return (
-      <div style={sessions}>
-        <p style={sessions_text}>Tutor: </p>
-        <p style={sessions_text}>{tutor}</p>
-        <br />
-        <p style={sessions_text}>Student: </p>
-        <p style={sessions_text}>{student}</p>
-        <br />
-        <p style={sessions_text}>Date: </p>
-        <p style={sessions_text}>{date}</p>
-        <br />
-        <p style={sessions_text}>Time: </p>
-        <p style={sessions_text}>{time}</p>
-        <br />
-        <p style={sessions_text}>Cost: </p>
-        <p style={sessions_text}>{cost}</p>
-        <br />
-      </div>
-    );
+  renderSessions(tutor, tutorIMG, student, date, time, cost) {
+    return <SessionCard tutor={tutor} tutorIMG={tutorIMG} student={student} date={date} time={time} cost={cost} />
   }
 
   render() {
@@ -54,12 +25,21 @@ class Home extends Component {
         margin: '0px',
         padding: '0px',
       }
+      var sessionContainer = {
+        justifyContent: 'space-between',
+      }
+
+      var img = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
 
       return (
+        
         <div style={homeContainer}>
           <h2 style={homeTitle}>Upcoming Sessions:</h2>
-          {this.renderSessions('Matt', 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
-          {this.renderSessions('Matt', 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
+          <div style={sessionContainer} >
+            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
+          </div>
         </div>
       );
     } else {

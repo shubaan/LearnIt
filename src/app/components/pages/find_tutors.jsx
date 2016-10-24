@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
+import TutorCard from '../helpers/tutor_cards'
 
   const imgStyle = {
     width: '45px',
@@ -57,8 +58,7 @@ class FindTutors extends Component {
   renderProfileNames(profiles) {
     if (profiles)
     {
-
-      console.log(this.state.search);
+      //console.log(this.state.search);
       var rows = [];
       for (var p in profiles){
         let filter;
@@ -96,19 +96,15 @@ class FindTutors extends Component {
             display: 'inline-block',
             width: '150px',
           }
-
-          let item = (
-          <div style={profileContainer}>
-            <img style={img} src={image} />
-            <h3 style={profileName} >{profile.name}</h3>
-          </div>
-          );
+          let item = (<TutorCard profile={profile} profileIMG={image} id={p}/>)
           rows.push(item);
         }
       }
-      return <div>
-                {rows}
-             </div>;
+      return (
+        <div>
+          {rows}
+        </div>
+      );
     }
     return <div></div>;
   }
