@@ -5,6 +5,10 @@ import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
+import {List, ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import Subheader from 'material-ui/Subheader';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
   const imgStyle = {
     width: '45px',
@@ -38,80 +42,29 @@ class FindTutors extends Component {
     super(props);
     this.props.fetchProfiles();
     this.state = {
-      search: "",
+      searchSubject: "",
+      searchName: "",
+      sortBy: "NAME"
     }
   }
-
-  handleSearchChange = (event) => {
-    let s = event.target.value
-    console.log(s)
-    this.setState({search: s});
-  };
 
   handleUpdateInput = (value) => {
     this.setState({
-      search: value,
+      searchSubject: value,
     });
   };
 
-  renderProfileNames(profiles) {
-    if (profiles)
-    {
+  handleChange = (event) => {
+    this.setState({
+      searchName: event.target.value,
+    });
+  };
 
-      console.log(this.state.search);
-      var rows = [];
-      for (var p in profiles){
-        let filter;
-        let profile = profiles[p];
-        switch(this.state.search.toUpperCase()){
-          case "MATH": filter = profile.math;
-            break;
-          case "SCIENCE": filter = profile.science;
-            break;
-          case "ENGLISH": filter = profile.english;
-            break;
-          case "SPANISH": filter = profile.spanish;
-            break;
-          case "HISTORY": filter = profile.history;
-            break;
-          default : filter = profile.isTutor;
-        }
-        let image = ((profile.photoUrl)? profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png")
-        if (filter) {
-          var profileContainer = {
-            border: '1px solid black',
-            padding: '15px',
-            margin: '10px 10px 10px 10px',
-            display: 'inline-block',
-            borderRadius: '10px',
-          }
-          var img = {
-            display: 'inline-block',
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            margin: '0px 20px 0px 0px'
-          }
-          var profileName = {
-            display: 'inline-block',
-            width: '150px',
-          }
-
-          let item = (
-          <div style={profileContainer}>
-            <img style={img} src={image} />
-            <h3 style={profileName} >{profile.name}</h3>
-          </div>
-          );
-          rows.push(item);
-        }
-      }
-      return <div>
-                {rows}
-             </div>;
-    }
-    return <div></div>;
-  }
+  handleRadioChange = (event, value) => {
+    this.setState({
+      sortBy: value,
+    });
+  };
 
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
@@ -122,9 +75,71 @@ class FindTutors extends Component {
       width: "80%",
       margin: "0px auto 0px auto"
     }
+
+    var obj = this.props.profiles;
+    //wait to get profiles from firebase
+    if (!obj)
+      return <div></div>;
+    var libraries = Object.keys(obj).map(function (key) { return obj[key]; });
+    var searchSubject = this.state.searchSubject.trim().toUpperCase();
+    var searchName = this.state.searchName.trim().toUpperCase();
+
+    // We are searching. Filter the results.
+    libraries = libraries.filter(function(l){
+      if (!l.isTutor)
+        return false;
+      var isSubject = true;
+      var isName = true;
+      if (searchSubject.length > 0) {
+        switch(searchSubject){
+          case "MATH": isSubject = l.math;
+            break;
+          case "SCIENCE": isSubject = l.science;
+            break;
+          case "ENGLISH": isSubject = l.english;
+            break;
+          case "SPANISH": isSubject = l.spanish;
+            break;
+          case "HISTORY": isSubject = l.history;
+            break;
+          default : isSubject = false;
+        }
+      }
+      if (searchName.length > 0)
+        isName = l.name.toUpperCase().match(searchName);
+
+      return (isName && isSubject);
+    });
+
+    //sort the results
+    var comparator;
+    switch(this.state.sortBy){
+      case "NAME": comparator = function(a, b) {
+        return a.name.localeCompare(b.name);
+      };
+        break;
+      case "HOURLY": comparator = function(a, b) {
+        return a.payrate-b.payrate;
+      };
+        break;
+      case "RATING": comparator = function(a, b) {
+        //rating must be implemented
+        return 0;
+      };
+        break;
+      default : comparator = function(a, b) {
+        return 0;
+      };
+    }
+    libraries.sort(comparator);
+
     return (
       <div style={style}>
-        <h2>Available Tutors</h2>
+        <TextField
+          floatingLabelText="Search for tutors by name"
+          onChange={this.handleChange}
+        />
+        <br />
         <AutoComplete
           hintText="Search for tutors by subject"
           filter={AutoComplete.caseInsensitiveFilter}
@@ -132,7 +147,34 @@ class FindTutors extends Component {
           onNewRequest  ={this.handleUpdateInput}
           onUpdateInput={this.handleUpdateInput}
         />
-        {this.renderProfileNames(this.props.profiles)}
+        <RadioButtonGroup
+          name="sortBy"
+          defaultSelected={this.state.sortBy}
+          onChange={this.handleRadioChange}>
+          <RadioButton
+            value="NAME"
+            label="Sort by name"
+          />
+          <RadioButton
+            value="HOURLY"
+            label="Sort by hourly rate"
+          />
+          <RadioButton
+            value="RATE"
+            label="Sort by rating"
+          />
+        </RadioButtonGroup>
+        <div>
+          <List>
+            <Subheader>Available Tutors</Subheader>
+            { libraries.map(function(l){
+              return <ListItem
+                primaryText={l.name}
+                leftAvatar={<Avatar src={l.photoUrl} />}
+              />;
+            }) }
+          </List>
+        </div>
       </div>
     );
   }
