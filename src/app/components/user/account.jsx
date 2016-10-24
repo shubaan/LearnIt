@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import TutorForm from './tutor_form';
+import Snackbar from 'material-ui/Snackbar';
 
 class UserAccount extends Component {
 
@@ -39,13 +40,16 @@ class UserAccount extends Component {
     let user = this.props.currentUser;
     user.profile = this.state.profile;
     this.props.updateUser(user);
+    this.setState({
+        open: true,
+    });
   }
 
   isTutorChecked()
   {
     console.log(!this.state.profile.isTutor);
     var profile = this.state.profile;
-    profile.isTutor = !this.state.profile.istutor
+    profile.isTutor = !this.state.profile.isTutor
     this.setState({profile: profile})
   }
 
@@ -94,6 +98,18 @@ class UserAccount extends Component {
     profile.payrate = value
     this.setState({profile: profile})
    };
+    handleBioEdited = (event, value) =>
+    {
+        var profile = this.state.profile
+        profile.bio = value
+        this.setState({profile: profile})
+    }
+    
+    handleRequestClose = () => {
+        this.setState({
+            open: false,
+        });
+    };
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
       return <div />
@@ -135,26 +151,26 @@ class UserAccount extends Component {
     let tutorForm;
     if (this.state.profile.isTutor) {
       tutorForm = (
-        <TutorForm
-          isMathChecked={this.isMathChecked.bind(this)}
-          isScienceChecked={this.isScienceChecked.bind(this)}
-          isEnglishChecked={this.isEnglishChecked.bind(this)}
-          isSpanishChecked={this.isSpanishChecked.bind(this)}
-          isHistoryChecked={this.isHistoryChecked.bind(this)}
-          handlePaySlider={this.handlePaySlider.bind(this)}
-          paySlider={this.state.profile.payrate}
-          math={this.state.profile.math}
-          science={this.state.profile.science}
-          english={this.state.profile.english}
-          spanish={this.state.profile.spanish}
-          history={this.state.profile.history}/>
+          <div>
+              <TutorForm
+                  isMathChecked={this.isMathChecked.bind(this)}
+                  isScienceChecked={this.isScienceChecked.bind(this)}
+                  isEnglishChecked={this.isEnglishChecked.bind(this)}
+                  isSpanishChecked={this.isSpanishChecked.bind(this)}
+                  isHistoryChecked={this.isHistoryChecked.bind(this)}
+                  handlePaySlider={this.handlePaySlider.bind(this)}
+                  handleBioEdited={this.handleBioEdited.bind(this)}
+                  paySlider={this.state.profile.payrate}
+                  math={this.state.profile.math}
+                  science={this.state.profile.science}
+                  english={this.state.profile.english}
+                  spanish={this.state.profile.spanish}
+                  history={this.state.profile.history}
+                  bio={this.state.profile.bio}/>
+          </div>
       )
     } else tutorForm = (
-          <Checkbox
-            ref="tutor" labelPosition="left"
-            label="Would you like to become a tutor?"
-            style={styles.checkbox}
-            onCheck={this.isTutorChecked.bind(this)}/>
+        <div/>
         )
 
 
@@ -167,11 +183,21 @@ class UserAccount extends Component {
             <FlatButton label="Choose an Image" labelPosition="before">
               <input type="file" style={styles.exampleImageInput}/>
             </FlatButton>
-
+            <Checkbox
+                ref="tutor" labelPosition="left"
+                label="Would you like to become a tutor?"
+                style={styles.checkbox}
+                onCheck={this.isTutorChecked.bind(this)}
+                defaultChecked={this.state.profile.isTutor}/>
             {tutorForm}
             <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
-
         </form>
+        <Snackbar
+            open={this.state.open}
+            message="Your profile has been saved!"
+            autoHideDuration={3000}
+            onRequestClose={this.handleRequestClose}
+        />
       </div>
     )
   }
