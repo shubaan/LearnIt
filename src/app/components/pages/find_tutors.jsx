@@ -105,8 +105,8 @@ class FindTutors extends Component {
           default : isSubject = false;
         }
       }
-      if (searchName.length > 0)
-        isName = l.name.toUpperCase().match(searchName);
+      if (searchName.length > 0 && l.name)
+        isName = l.name.toUpperCase().match(new RegExp(searchName, "i"));
 
       return (isName && isSubject);
     });
@@ -115,11 +115,17 @@ class FindTutors extends Component {
     var comparator;
     switch(this.state.sortBy){
       case "NAME": comparator = function(a, b) {
-        return a.name.localeCompare(b.name);
+        if (a.name && b.name)
+          return a.name.localeCompare(b.name);
+        else
+          return 0;
       };
         break;
       case "HOURLY": comparator = function(a, b) {
-        return a.payrate-b.payrate;
+        if (a.payrate && b.payrate)
+          return a.payrate-b.payrate;
+        else
+          return 0;
       };
         break;
       case "RATING": comparator = function(a, b) {
@@ -146,6 +152,7 @@ class FindTutors extends Component {
           dataSource={subjects}
           onNewRequest  ={this.handleUpdateInput}
           onUpdateInput={this.handleUpdateInput}
+          openOnFocus={true}
         />
         <RadioButtonGroup
           name="sortBy"
@@ -167,8 +174,9 @@ class FindTutors extends Component {
         <div>
           <List>
             <Subheader>Available Tutors</Subheader>
-            { libraries.map(function(l){
+            { libraries.map(function(l, i){
               return <ListItem
+                key = {i}
                 primaryText={l.name}
                 leftAvatar={<Avatar src={l.photoUrl} />}
               />;
