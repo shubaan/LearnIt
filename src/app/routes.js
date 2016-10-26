@@ -27,6 +27,7 @@ export default (
     <Route path="/sessions" component={Sessions}/>
     <Route path="/help" component={ContactUs}/>
     <Route path="/messagesent" component={FinishedContacting}/>
+    <Route path="/tutor" component={Tutor}/>
   </Route>
 
 );
