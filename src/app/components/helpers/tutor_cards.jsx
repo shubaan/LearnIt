@@ -14,6 +14,7 @@ class TutorCards extends Component {
       this.props.profile.name = "Anonymous";
     }
     this.props.profileIMG;
+    this.props.uid;
   }
 
   goToTutorProfile() {

@@ -68,6 +68,14 @@ class FindTutors extends Component {
     });
   };
 
+  renderTutorProfiles (profiles) {
+    tutors = [];
+    for (var p in profiles) {
+      let item = (<TutorCards profile={profiles[p]} profileIMG={profiles[p].photoUrl} uid={p}/>)
+    }
+
+  }
+
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
       browserHistory.push("/login")
@@ -174,16 +182,11 @@ class FindTutors extends Component {
           />
         </RadioButtonGroup>
         <div>
-          <List>
-            <Subheader>Available Tutors</Subheader>
-            { libraries.map(function(l, i){
-              return <ListItem
-                key = {i}
-                primaryText={l.name}
-                leftAvatar={<Avatar src={l.photoUrl} />}
-              />;
-            }) }
-          </List>
+            { libraries.map(function(l, i) {
+              return <TutorCard
+                profile = {l}
+                profileIMG = {l.photoUrl}
+                uid = {i} />} ) }
         </div>
       </div>
     );
