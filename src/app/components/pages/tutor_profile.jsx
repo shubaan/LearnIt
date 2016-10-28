@@ -3,20 +3,25 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
+import {fetchProfiles}  from '../../actions/firebase_actions';
 
-class Sessions extends Component {
+class TutorProfile extends Component {
 
   constructor(props) {
     super(props);
+    //this.props.fetchProfiles();
+  }
+
+  getTutorID () {
+    return window.location.search.substring(4)
   }
 
   render() {
-    if (!this.props.currentUser || !this.props.currentUser.uid) {
-      return <div />
-    }
+    var id = this.getTutorID()
+
     return (
       <div>
-        sessions
+        Tutor Profile {id}
       </div>
     );
   }
@@ -32,4 +37,4 @@ function mapStateToProps(state) {
   return {currentUser: state.currentUser};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sessions);
+export default connect(mapStateToProps, mapDispatchToProps)(TutorProfile);

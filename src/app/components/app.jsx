@@ -18,9 +18,6 @@ import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
-
-import Sidebar from './common/sidebar';
-
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -72,7 +69,7 @@ class Logged extends Component {
     }
 
     let name;
-    if (this.props.person == "") {
+    if (this.props.person == "" || !this.props.person) {
       name = "Anonymous";
     } else {
       name = this.props.person
@@ -115,7 +112,7 @@ class App extends Component {
   handleClose = () => this.setState({open: false});
 
   goToHome() {
-    browserHistory.push("/home")
+    browserHistory.push("/")
     this.setState({open: false});
   }
 
@@ -179,7 +176,6 @@ class App extends Component {
         width={200}
         open={this.state.open}
         onRequestChange={(open) => this.setState({open})} >
-          <MenuItem onTouchTap={this.goToHome.bind(this)}>Home</MenuItem>
           <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find a Tutor</MenuItem>
           <MenuItem onTouchTap={this.goToHome.bind(this)}>Notifications</MenuItem>
           <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
