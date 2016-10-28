@@ -89,7 +89,7 @@ class UserAccount extends Component {
   {
     console.log(!this.state.profile.history);
     var profile = this.state.profile;
-    profile.history = !this.state.profile.hisory
+    profile.history = !this.state.profile.history
     this.setState({profile: profile})
   }
 
@@ -104,7 +104,7 @@ class UserAccount extends Component {
         profile.bio = value
         this.setState({profile: profile})
     }
-    
+
     handleRequestClose = () => {
         this.setState({
             open: false,
