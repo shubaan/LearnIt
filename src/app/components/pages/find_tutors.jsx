@@ -68,14 +68,6 @@ class FindTutors extends Component {
     });
   };
 
-  renderTutorProfiles (profiles) {
-    tutors = [];
-    for (var p in profiles) {
-      let item = (<TutorCards profile={profiles[p]} profileIMG={profiles[p].photoUrl} uid={p}/>)
-    }
-
-  }
-
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
       browserHistory.push("/login")

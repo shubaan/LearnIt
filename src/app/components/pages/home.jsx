@@ -36,9 +36,9 @@ class Home extends Component {
         <div style={homeContainer}>
           <h2 style={homeTitle}>Upcoming Sessions:</h2>
           <div style={sessionContainer} >
-            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', 'Monday Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
           </div>
         </div>
       );
