@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import TutorForm from './tutor_form';
 import Snackbar from 'material-ui/Snackbar';
+import TextField from 'material-ui/TextField';
 
 class UserAccount extends Component {
 
@@ -89,7 +90,7 @@ class UserAccount extends Component {
   {
     console.log(!this.state.profile.history);
     var profile = this.state.profile;
-    profile.history = !this.state.profile.hisory
+    profile.history = !this.state.profile.history
     this.setState({profile: profile})
   }
 
@@ -104,7 +105,13 @@ class UserAccount extends Component {
         profile.bio = value
         this.setState({profile: profile})
     }
-    
+    handleUsernameEdited = (event, value) =>
+    {
+        var profile = this.state.profile
+        profile.name = value
+        this.setState({profile: profile})
+    }
+
     handleRequestClose = () => {
         this.setState({
             open: false,
@@ -144,6 +151,12 @@ class UserAccount extends Component {
       },
     };
 
+    const stylesCheckbox = {
+      cursor: 'pointer',
+      width: '330px',
+      margin: 'auto'
+    };
+
     var pic = ((this.state.profile.photoUrl)? this.state.profile.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.state.profile.displayName)? this.state.profile.name : "");
 
@@ -181,14 +194,21 @@ class UserAccount extends Component {
             <img id="profile_img" src={pic} alt="Profile Image" width="150px" height="150px" />
             <h3>{name}</h3>
             <FlatButton label="Choose an Image" labelPosition="before">
-              <input type="file" style={styles.exampleImageInput}/>
+                <input type="file" style={styles.exampleImageInput}/>
             </FlatButton>
+            <div>
+                <TextField
+                    hintText={this.state.profile.name}
+                    floatingLabelText="Change User name"
+                    onChange={this.handleUsernameEdited}>
+                </TextField>
+            </div>
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
-                style={styles.checkbox}
+                style={stylesCheckbox}
                 onCheck={this.isTutorChecked.bind(this)}
-                defaultChecked={this.state.profile.isTutor}/>
+                defaultChecked={this.state.profile.isTutor} />
             {tutorForm}
             <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
         </form>

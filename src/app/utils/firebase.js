@@ -314,6 +314,55 @@ var FireBaseTools = {
     return biography;
     //firebaseDb.ref('/profiles/' + user.uid).set(profileData);
     //fredNameRef.set({ first: 'Fred', last: 'Flintstone' }, onComplete);
+  },
+
+  /**
+   * Fetch tutor info
+   *
+   * @returns {Promise}
+   */
+  fetchTutorInfo: () => {
+    return new Promise((resolve, reject) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        //console.log('User is signed in');
+        firebaseDb.ref('/profiles/' + user.uid).child('tutorInfo').on("value", function(snapshot){
+          let tutorInfo = snapshot.val();
+          //console.log(tutorInfo);
+          resolve(tutorInfo);
+        });
+      } else {
+        //console.log('User is not signed in');
+      }
+    }, error => {
+      reject(error);
+    })
+  },
+
+  /**
+   * Save tutor info
+   -
+   * @param tutorInfo
+   * @returns tutorInfo
+   */
+  saveTutorInfo: (tutorInfo) => {
+    var user = firebaseAuth.currentUser;
+    if (user) {
+      //console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Synchronization failed');
+        } else {
+          //console.log('New Bio Submitted');
+        }
+      };
+      //save bio
+      firebaseDb.ref('/profiles/' + user.uid).child('tutorInfo').set(tutorInfo, onComplete);
+    } else {
+      //console.log('User is not signed in');
+    }
+
+    return tutorInfo;
   }
 };
 

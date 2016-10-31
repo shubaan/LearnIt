@@ -10,7 +10,9 @@ import {
   FIREBASE_PASSWORD_RESET_EMAIL,
   LOGOUT_FIREBASE_USER,
   FETCH_FIREBASE_USER_BIO,
-  SAVE_FIREBASE_USER_BIO
+  SAVE_FIREBASE_USER_BIO,
+  FETCH_FIREBASE_TUTOR_INFO,
+  SAVE_FIREBASE_TUTOR_INFO
 } from './types';
 
 
@@ -98,6 +100,22 @@ export function saveBio(bio) {
   const request = FireBaseTools.saveBio(bio);
   return {
     type: SAVE_FIREBASE_USER_BIO,
+    payload: request
+  }
+}
+
+export function fetchTutorInfo() {
+  const request = FireBaseTools.fetchTutorInfo();
+  return {
+    type: FETCH_FIREBASE_TUTOR_INFO,
+    payload: request
+  }
+}
+
+export function saveTutorInfo(tutorInfo) {
+  const request = FireBaseTools.saveTutorInfo(tutorInfo);
+  return {
+    type: SAVE_FIREBASE_TUTOR_INFO,
     payload: request
   }
 }
