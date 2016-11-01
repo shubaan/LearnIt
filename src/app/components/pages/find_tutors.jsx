@@ -125,17 +125,15 @@ class FindTutors extends Component {
     var comparator;
     switch(this.state.sortBy){
       case "NAME": comparator = function(a, b) {
-        if (a.name && b.name)
-          return a.name.localeCompare(b.name);
-        else
-          return 0;
+        let aName = (a.name) ? (a.name) : "";
+        let bName = (b.name) ? (b.name) : "";
+        return aName.localeCompare(bName);
       };
         break;
       case "HOURLY": comparator = function(a, b) {
-        if (a.payrate && b.payrate)
-          return a.payrate-b.payrate;
-        else
-          return 0;
+        let aPay = (a.payrate) ? (a.payrate) : 0;
+        let bPay = (b.payrate) ? (b.payrate) : 0;
+        return aPay-bPay;
       };
         break;
       case "RATING": comparator = function(a, b) {
