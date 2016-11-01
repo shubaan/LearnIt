@@ -155,10 +155,10 @@ var FireBaseTools = {
     return new Promise((resolve, reject) => {
       firebaseDb.ref('/').child('profiles').on("value", function(snapshot){
         let profiles = snapshot.val();
-        //console.log(profiles);
+        console.log(snapshot);
         // log all profile names
         for (var p in profiles){
-          //console.log(profiles[p].name);
+          //console.log(profiles[p]);
         }
         resolve(profiles);
       });
