@@ -74,14 +74,6 @@ class FindTutors extends Component {
     });
   };
 
-  renderTutorProfiles (profiles) {
-    tutors = [];
-    for (var p in profiles) {
-      let item = (<TutorCards profile={profiles[p]} profileIMG={profiles[p].photoUrl} uid={p}/>)
-    }
-
-  }
-
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
       browserHistory.push("/login")
@@ -96,7 +88,11 @@ class FindTutors extends Component {
     //wait to get profiles from firebase
     if (!obj)
       return <div></div>;
-    var libraries = Object.keys(obj).map(function (key) { return obj[key]; });
+    var libraries = Object.keys(obj).map(function (key) {
+      var p = obj[key];
+      p.key = key;
+      return p;
+    });
     var searchSubject = this.state.searchSubject.trim().toUpperCase();
     var searchName = this.state.searchName.trim().toUpperCase();
 
@@ -188,6 +184,9 @@ class FindTutors extends Component {
         </RadioButtonGroup>
         <div>
             { libraries.map(function(l, i) {
+              console.log("wtf is l and i?")
+              console.log(l);
+              console.log(i);
               return <TutorCard
                 profile = {l}
                 profileIMG = {l.photoUrl}

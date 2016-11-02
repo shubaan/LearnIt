@@ -23,6 +23,7 @@ export default (
     <Route path="/reset" component={ResetPassword}/>
     <Route path="/account" component={UserAccount}/>
     <Route path="/tutors" component={FindTutors}/>
+    <Route path="/schedule" component={Tutor}/>
     <Route path="/tutor_profile" component={TutorProfile}/>
     <Route path="/sessions" component={Sessions}/>
     <Route path="/help" component={ContactUs}/>

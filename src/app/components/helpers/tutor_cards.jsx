@@ -18,7 +18,9 @@ class TutorCards extends Component {
   }
 
   goToTutorProfile() {
-    browserHistory.push("/tutor_profile")
+    console.log(this.props.profile)
+    let profileId = this.props.profile.key;
+    browserHistory.push("/tutor_profile?id="+profileId)
   }
 
   renderSubjects(profile) {
@@ -76,7 +78,7 @@ class TutorCards extends Component {
     }
 
     return (
-      <Card style={cardStyle} onClick={this.goToTutorProfile}>
+      <Card style={cardStyle} onClick={this.goToTutorProfile.bind(this)}>
         <img style={imgStyle} src={this.props.profileIMG} alt="Profile Image"/>
         <h3><b>{this.props.profile.name}</b></h3>
         <h5>Cost: {this.props.profile.id} </h5>

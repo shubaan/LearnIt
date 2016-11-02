@@ -212,12 +212,13 @@ var FireBaseTools = {
    */
   fetchProfiles: () => {
     return new Promise((resolve, reject) => {
-      firebaseDb.ref('/').child('profiles').on("value", function(snapshot){
+      let profilesRef =firebaseDb.ref('/').child('profiles');
+      profilesRef.on("value", function(snapshot){
         let profiles = snapshot.val();
-        //console.log(profiles);
         // log all profile names
         for (var p in profiles){
-          //console.log(profiles[p].name);
+          //console.log(profiles[p]);
+          //console.log(p);
         }
         resolve(profiles);
       });
