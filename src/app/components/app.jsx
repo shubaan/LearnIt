@@ -56,7 +56,7 @@ class Logged extends Component {
     browserHistory.push("/help");
   }
   goToLogin() {
-    browserHistory.push("/login");
+    this.props.goToLogin();
   }
   render() {
     let style = {
@@ -98,6 +98,14 @@ class App extends Component {
 
     this.state = {open: false};
     this.props.fetchUser();
+  }
+
+  goToLogin() {
+    //console.log("attempting logout");
+    this.props.logoutUser().then(data=> {
+      //console.log("logged out");
+      browserHistory.push("/login");
+    });
   }
 
   getChildContext() {
@@ -142,12 +150,12 @@ class App extends Component {
 
   renderUserMenu(currentUser) {
     // if current user exists and user id exists they are logged in
+    //console.log("current user: "+currentUser);
+    if (currentUser)
+      //console.log("current user id: "+currentUser.uid);
     if (currentUser && currentUser.uid) {
-      if (currentUser.profile) {
-        return (
-          <Logged person={currentUser.profile.name}/>
-        )
-      }
+      //console.log("name: "+currentUser.displayName);
+      return <Logged person={currentUser.displayName} goToLogin={this.goToLogin.bind(this)}/>;
     }
     else {
       return (

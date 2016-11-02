@@ -23,9 +23,9 @@ class TutorCards extends Component {
 
   renderSubjects(profile) {
     var subject = [];
-    if (profile.math) { subject.push("Math"); }
-    if (profile.science) { subject.push("Science"); }
-    if (profile.english) { subject.push("English"); }
+    if (profile.tutorInfo.math) { subject.push("Math"); }
+    if (profile.tutorInfo.science) { subject.push("Science"); }
+    if (profile.tutorInfo.english) { subject.push("English"); }
 
     var list = [];
     for (var index in subject) {
@@ -37,8 +37,8 @@ class TutorCards extends Component {
 
   renderSubjectsR(profile) {
     var subject = [];
-    if (profile.spanish) { subject.push("Spanish"); }
-    if (profile.history) { subject.push("History"); }
+    if (profile.tutorInfo.spanish) { subject.push("Spanish"); }
+    if (profile.tutorInfo.history) { subject.push("History"); }
 
     var list = [];
     for (var index in subject) {
@@ -79,7 +79,7 @@ class TutorCards extends Component {
       <Card style={cardStyle} onClick={this.goToTutorProfile}>
         <img style={imgStyle} src={this.props.profileIMG} alt="Profile Image"/>
         <h3><b>{this.props.profile.name}</b></h3>
-        <h5>Cost: {this.props.profile.payrate} </h5>
+        <h5>Cost: {this.props.profile.tutorInfo.payrate} </h5>
         <CardText style={cardText}>
           <ul style={list}>
             {this.renderSubjects(this.props.profile)}

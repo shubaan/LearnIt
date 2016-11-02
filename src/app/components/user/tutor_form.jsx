@@ -68,7 +68,6 @@ class TutorForm extends Component {
         min={0}
         max={100}
         step={1}
-        defaultValue={50}
         value={this.props.paySlider}
         onChange={this.props.handlePaySlider}
       />

@@ -42,7 +42,7 @@ var FireBaseTools = {
       firebaseDb.ref('/').child('profiles/'+firebaseAuth.currentUser.uid).on("value", function(snapshot){
         let profile = snapshot.val();
         if (profile == null) {
-          console.log("first time login")
+          //console.log("first time login")
           let defaultBio = "I am an awesome person";
           let defaultPhoto = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png";
           let profileData = {
@@ -50,6 +50,22 @@ var FireBaseTools = {
             isTutor: false,
             bio: defaultBio,
             photoUrl:defaultPhoto,
+            tutorInfo: {
+              availability: {
+                weekly: '0',
+                exceptions: '0',
+                appointments: '0'
+              },
+              math: false,
+              science: false,
+              english: false,
+              spanish: false,
+              history: false,
+              resume: 'link',
+              payrate: 0,
+              rating: 0,
+              reviews: {}
+            }
           };
           user.providerData.forEach(function (profile) {
             profileData.name = profile.displayName;
@@ -57,8 +73,17 @@ var FireBaseTools = {
           });
           firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
         } else {
-          console.log(profile);
-          user.profile = profile;
+          //console.log(profile);
+          //user.profile = profile;
+          var profileData = {
+            name: user.displayName,
+            photoUrl: user.photoURL
+          };
+          user.providerData.forEach(function (profile) {
+            profileData.name = profile.displayName;
+            profileData.photoUrl = profile.photoURL;
+          });
+          firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).update(profileData);
         }
       });
       return user;
@@ -85,18 +110,42 @@ var FireBaseTools = {
       name: user.name,
       isTutor: user.isTutor,
       bio: defaultBio,
-      photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
+      photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png",
+      tutorInfo: {
+        availability: {
+          weekly: '0',
+          exceptions: '0',
+          appointments: '0'
+        },
+        math: false,
+        science: false,
+        english: false,
+        spanish: false,
+        history: false,
+        resume: 'link',
+        payrate: 0,
+        rating: 0,
+        reviews: {}
+      }
     };
     if (user.isTutor) {
-      profileData.math = user.math;
-      profileData.science = user.science;
-      profileData.english = user.english;
-      profileData.spanish = user.spanish;
-      profileData.history = user.history;
-      profileData.payrate = user.payrate;
+      profileData.tutorInfo.math = user.math;
+      profileData.tutorInfo.science = user.science;
+      profileData.tutorInfo.english = user.english;
+      profileData.tutorInfo.spanish = user.spanish;
+      profileData.tutorInfo.history = user.history;
+      profileData.tutorInfo.payrate = user.payrate;
     }
-    console.log(user);
+    //console.log(user);
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
+      user.updateProfile({
+        displayName: profileData.name,
+        photoURL: profileData.photoUrl
+      }).then(function() {
+        //console.log("profile updated");
+      }, function(error) {
+        //console.log("authentication profile failed to be updated");
+      });
       firebaseDb.ref('/profiles/' + user.uid).set(profileData);
       return user;
     }).catch(error => {
@@ -114,7 +163,9 @@ var FireBaseTools = {
    * @returns {!firebase.Promise.<*>|firebase.Thenable<any>|firebase.Promise<any>|!firebase.Thenable.<*>}
    */
   logoutUser: () => {
+    //console.log("attempting logout...");
     return firebaseAuth.signOut().then(() => {
+      //console.log("logged out");
       return {
         success: 1,
         message: "logout"
@@ -127,7 +178,7 @@ var FireBaseTools = {
    * @returns {Promise}
    */
   fetchUser: () => {
-    return new Promise((resolve, reject) => {
+    /*return new Promise((resolve, reject) => {
       const unsub = firebaseAuth.onAuthStateChanged(user => {
         if (!user) {
           return
@@ -140,6 +191,14 @@ var FireBaseTools = {
           unsub();
           resolve(user);
         });
+      }, error => {
+        reject(error);
+      })
+    })*/
+    return new Promise((resolve, reject) => {
+      const unsub = firebaseAuth.onAuthStateChanged(user => {
+        unsub();
+        resolve(user);
       }, error => {
         reject(error);
       })
@@ -174,13 +233,15 @@ var FireBaseTools = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
   loginUser: (user) => {
+    //console.log("attempting login...");
     return firebaseAuth.signInWithEmailAndPassword(user.email, user.password).then(user => {
-      firebaseDb.ref('/').child('profiles/'+user.uid).on("value", function(snapshot){
+      /*firebaseDb.ref('/').child('profiles/'+user.uid).on("value", function(snapshot){
         let profile = snapshot.val();
         //console.log("print profile now")
-        console.log(profile);
+        //console.log(profile);
         user.profile = profile
-      })
+      })*/
+      //console.log("user logged in: "+user);
       return user;
     }).catch(error => {
       return {
@@ -197,8 +258,26 @@ var FireBaseTools = {
    * @returns {!firebase.Promise.<*>|firebase.Thenable<any>|firebase.Promise<any>|!firebase.Thenable.<*>}
    */
   updateUserProfile: (u) => {
-    firebaseDb.ref('/profiles/' + u.uid).set(u.profile);
-    return u;
+    var user = firebaseAuth.currentUser;
+    if (!user.photoURL && !u.photoURL) {
+      //console.log("setting new photoUrl");
+      u.photoURL = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png";
+    }
+    return user.updateProfile(u).then(() => {
+      let newName = (u.displayName)? u.displayName : user.displayName;
+      let newPhoto = (u.photoURL)? u.photoURL : user.photoURL;
+      //console.log("name to update: "+newName);
+      //console.log("photoURL to update: "+newPhoto);
+      firebaseDb.ref('/profiles/' + user.uid).update({name: newName, photoUrl: newPhoto});
+      return user;
+    }, error => {
+      return {
+        errorCode: error.code,
+        errorMessage: error.message
+      }
+    })
+    /*firebaseDb.ref('/profiles/' + u.uid).set(u.profile);
+    return u;*/
   },
 
   /**
@@ -353,16 +432,65 @@ var FireBaseTools = {
         if (error) {
           //console.log('Synchronization failed');
         } else {
-          //console.log('New Bio Submitted');
+          //console.log('New info Submitted');
         }
       };
-      //save bio
-      firebaseDb.ref('/profiles/' + user.uid).child('tutorInfo').set(tutorInfo, onComplete);
+      //save tutorInfo
+      firebaseDb.ref('/profiles/' + user.uid).child('tutorInfo').update(tutorInfo, onComplete);
     } else {
       //console.log('User is not signed in');
     }
 
     return tutorInfo;
+  },
+
+  /**
+   * Fetch isTutor
+   *
+   * @returns {Promise}
+   */
+  fetchIsTutor: () => {
+    return new Promise((resolve, reject) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        //console.log('User is signed in');
+        firebaseDb.ref('/profiles/' + user.uid).child('isTutor').on("value", function(snapshot){
+          let isTutor = snapshot.val();
+          //console.log(isTutor);
+          resolve(isTutor);
+        });
+      } else {
+        //console.log('User is not signed in');
+      }
+    }, error => {
+      reject(error);
+    })
+  },
+
+  /**
+   * Save isTutor
+   -
+   * @param isTutor
+   * @returns isTutor
+   */
+  saveIsTutor: (isTutor) => {
+    var user = firebaseAuth.currentUser;
+    if (user) {
+      //console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Synchronization failed');
+        } else {
+          //console.log('New info Submitted');
+        }
+      };
+      //save isTutor
+      firebaseDb.ref('/profiles/' + user.uid).child('isTutor').set(isTutor, onComplete);
+    } else {
+      //console.log('User is not signed in');
+    }
+
+    return isTutor;
   }
 };
 
