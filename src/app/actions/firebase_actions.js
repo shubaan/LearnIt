@@ -12,7 +12,9 @@ import {
   FETCH_FIREBASE_USER_BIO,
   SAVE_FIREBASE_USER_BIO,
   FETCH_FIREBASE_TUTOR_INFO,
-  SAVE_FIREBASE_TUTOR_INFO
+  SAVE_FIREBASE_TUTOR_INFO,
+  FETCH_FIREBASE_IS_TUTOR,
+  SAVE_FIREBASE_IS_TUTOR
 } from './types';
 
 
@@ -116,6 +118,22 @@ export function saveTutorInfo(tutorInfo) {
   const request = FireBaseTools.saveTutorInfo(tutorInfo);
   return {
     type: SAVE_FIREBASE_TUTOR_INFO,
+    payload: request
+  }
+}
+
+export function fetchIsTutor() {
+  const request = FireBaseTools.fetchIsTutor();
+  return {
+    type: FETCH_FIREBASE_IS_TUTOR,
+    payload: request
+  }
+}
+
+export function saveIsTutor(isTutor) {
+  const request = FireBaseTools.saveIsTutor(isTutor);
+  return {
+    type: SAVE_FIREBASE_IS_TUTOR,
     payload: request
   }
 }

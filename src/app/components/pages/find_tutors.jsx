@@ -12,6 +12,12 @@ import Avatar from 'material-ui/Avatar';
 import Subheader from 'material-ui/Subheader';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
+const SORTBY = {
+  NAME: 'name',
+  HOURLY: 'hourly rate',
+  RATING: 'rating'
+};
+
   const imgStyle = {
     width: '45px',
     height: '45px',
@@ -46,7 +52,7 @@ class FindTutors extends Component {
     this.state = {
       searchSubject: "",
       searchName: "",
-      sortBy: "NAME"
+      sortBy: SORTBY.NAME
     }
   }
 
@@ -82,7 +88,11 @@ class FindTutors extends Component {
     //wait to get profiles from firebase
     if (!obj)
       return <div></div>;
-    var libraries = Object.keys(obj).map(function (key) { return obj[key]; });
+    var libraries = Object.keys(obj).map(function (key) {
+      var p = obj[key];
+      p.key = key;
+      return p;
+    });
     var searchSubject = this.state.searchSubject.trim().toUpperCase();
     var searchName = this.state.searchName.trim().toUpperCase();
 
@@ -92,17 +102,17 @@ class FindTutors extends Component {
         return false;
       var isSubject = true;
       var isName = true;
-      if (searchSubject.length > 0) {
+      if (searchSubject.length > 0 && l.tutorInfo) {
         switch(searchSubject){
-          case "MATH": isSubject = l.math;
+          case "MATH": isSubject = l.tutorInfo.math;
             break;
-          case "SCIENCE": isSubject = l.science;
+          case "SCIENCE": isSubject = l.tutorInfo.science;
             break;
-          case "ENGLISH": isSubject = l.english;
+          case "ENGLISH": isSubject = l.tutorInfo.english;
             break;
-          case "SPANISH": isSubject = l.spanish;
+          case "SPANISH": isSubject = l.tutorInfo.spanish;
             break;
-          case "HISTORY": isSubject = l.history;
+          case "HISTORY": isSubject = l.tutorInfo.history;
             break;
           default : isSubject = false;
         }
@@ -116,23 +126,22 @@ class FindTutors extends Component {
     //sort the results
     var comparator;
     switch(this.state.sortBy){
-      case "NAME": comparator = function(a, b) {
-        if (a.name && b.name)
-          return a.name.localeCompare(b.name);
-        else
-          return 0;
+      case SORTBY.NAME: comparator = function(a, b) {
+        let aName = (a.name) ? (a.name) : "";
+        let bName = (b.name) ? (b.name) : "";
+        return aName.localeCompare(bName);
       };
         break;
-      case "HOURLY": comparator = function(a, b) {
-        if (a.payrate && b.payrate)
-          return a.payrate-b.payrate;
-        else
-          return 0;
+      case SORTBY.HOURLY: comparator = function(a, b) {
+        let aPay = (a.tutorInfo.payrate) ? (a.tutorInfo.payrate) : 0;
+        let bPay = (b.tutorInfo.payrate) ? (b.tutorInfo.payrate) : 0;
+        return aPay-bPay;
       };
         break;
-      case "RATING": comparator = function(a, b) {
-        //rating must be implemented
-        return 0;
+      case SORTBY.RATING: comparator = function(a, b) {
+        let aRating = (a.tutorInfo.rating) ? (a.tutorInfo.rating) : 0;
+        let bRating = (b.tutorInfo.rating) ? (b.tutorInfo.rating) : 0;
+        return bRating-aRating;
       };
         break;
       default : comparator = function(a, b) {
@@ -161,20 +170,23 @@ class FindTutors extends Component {
           defaultSelected={this.state.sortBy}
           onChange={this.handleRadioChange}>
           <RadioButton
-            value="NAME"
+            value={SORTBY.NAME}
             label="Sort by name"
           />
           <RadioButton
-            value="HOURLY"
+            value={SORTBY.HOURLY}
             label="Sort by hourly rate"
           />
           <RadioButton
-            value="RATE"
+            value={SORTBY.RATING}
             label="Sort by rating"
           />
         </RadioButtonGroup>
         <div>
             { libraries.map(function(l, i) {
+              console.log("wtf is l and i?")
+              console.log(l);
+              console.log(i);
               return <TutorCard
                 profile = {l}
                 profileIMG = {l.photoUrl}

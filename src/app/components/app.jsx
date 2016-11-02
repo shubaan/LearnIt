@@ -56,7 +56,7 @@ class Logged extends Component {
     browserHistory.push("/help");
   }
   goToLogin() {
-    browserHistory.push("/login");
+    this.props.goToLogin();
   }
   render() {
     let style = {
@@ -100,6 +100,14 @@ class App extends Component {
     this.props.fetchUser();
   }
 
+  goToLogin() {
+    //console.log("attempting logout");
+    this.props.logoutUser().then(data=> {
+      //console.log("logged out");
+      browserHistory.push("/login");
+    });
+  }
+
   getChildContext() {
       return { muiTheme: getMuiTheme(baseTheme) };
   }
@@ -132,7 +140,7 @@ class App extends Component {
   }
 
   goToScheduling() {
-    browserHistory.push("/tutor")
+    browserHistory.push("/schedule")
     this.setState({open: false});
   }
 
@@ -142,12 +150,12 @@ class App extends Component {
 
   renderUserMenu(currentUser) {
     // if current user exists and user id exists they are logged in
+    //console.log("current user: "+currentUser);
+    if (currentUser)
+      //console.log("current user id: "+currentUser.uid);
     if (currentUser && currentUser.uid) {
-      if (currentUser.profile) {
-        return (
-          <Logged person={currentUser.profile.name}/>
-        )
-      }
+      //console.log("name: "+currentUser.displayName);
+      return <Logged person={currentUser.displayName} goToLogin={this.goToLogin.bind(this)}/>;
     }
     else {
       return (
@@ -176,11 +184,12 @@ class App extends Component {
         width={200}
         open={this.state.open}
         onRequestChange={(open) => this.setState({open})} >
+          <MenuItem onTouchTap={this.goToHome.bind(this)}>Home</MenuItem>
+          <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
           <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find a Tutor</MenuItem>
           <MenuItem onTouchTap={this.goToHome.bind(this)}>Notifications</MenuItem>
+          <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule Sessions</MenuItem>
           <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
-          <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
-          <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule a Sessions</MenuItem>
       </Drawer>
       );
     } else {

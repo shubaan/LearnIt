@@ -90,13 +90,15 @@ class UserLogin extends Component {
   };
 
   render() {
-
+    /*console.log("attempting to render login...");
     if (this.props.currentUser && this.props.currentUser.uid) {
+      console.log("uh-oh. logging out for some reason");
       this.props.logoutUser().then(data=> {
         // reload props from reducer
+        console.log("??logged out??");
         this.props.fetchUser();
       });
-    }
+    }*/
 
     var loginDiv = {
       "text-align": "center",
