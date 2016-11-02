@@ -151,8 +151,6 @@ class App extends Component {
   renderUserMenu(currentUser) {
     // if current user exists and user id exists they are logged in
     //console.log("current user: "+currentUser);
-    if (currentUser)
-      //console.log("current user id: "+currentUser.uid);
     if (currentUser && currentUser.uid) {
       //console.log("name: "+currentUser.displayName);
       return <Logged person={currentUser.displayName} goToLogin={this.goToLogin.bind(this)}/>;
