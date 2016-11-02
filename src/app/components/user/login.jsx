@@ -42,7 +42,10 @@ class UserLogin extends Component {
     this.props.loginUser({email: this.state.email, password: this.state.password}).then(data => {
 
         if (data.payload.errorCode)
+        {
           this.setState({message: data.payload.errorMessage})
+          this.setState({message: "Invalid Login"})
+        }
         else
           browserHistory.push('/');
 
@@ -114,10 +117,15 @@ class UserLogin extends Component {
       "padding": "5px",
     }
 
+    var invalidLogin = {
+      "color": "red"
+    }
+
     return (
       <div style={loginDiv}>
         <form id="frmLogin" >
           <h2>Login</h2>
+          <h3 style={invalidLogin}>{this.state.message}</h3>
           <TextField
             ref="email"
             onChange={this.handleEmailChange}
