@@ -29,11 +29,11 @@ class TutorProfile extends Component {
 
   renderSubject(tutor, style) {
     var subjects = [];
-    if (tutor.english) {subjects.push(<li style={style}>English</li>);}
-    if (tutor.history) {subjects.push(<li style={style}>History</li>);}
-    if (tutor.math) {subjects.push(<li style={style}>Math</li>);}
-    if (tutor.science) {subjects.push(<li style={style}>Science</li>);}
-    if (tutor.spanish) {subjects.push(<li style={style}>Spanish</li>);}
+    if (tutor.tutorInfo.english) {subjects.push(<li style={style}>English</li>);}
+    if (tutor.tutorInfo.history) {subjects.push(<li style={style}>History</li>);}
+    if (tutor.tutorInfo.math) {subjects.push(<li style={style}>Math</li>);}
+    if (tutor.tutorInfo.science) {subjects.push(<li style={style}>Science</li>);}
+    if (tutor.tutorInfo.spanish) {subjects.push(<li style={style}>Spanish</li>);}
     return subjects;
   }
 
@@ -100,17 +100,17 @@ class TutorProfile extends Component {
 
     return (
       <div>
-        <Card style={cardStyle}> 
+        <Card style={cardStyle}>
           <img src={tutor.photoUrl} alt="Profile Image" style={tutorImg}/>
           <h1>{tutor.name}</h1>
         </Card>
-        <Card style={cardStyle}> 
+        <Card style={cardStyle}>
           <h3>About me</h3>
           <h4 style={tutorBio}>{tutor.bio}</h4>
         </Card>
-        <Card style={cardStyle}> 
+        <Card style={cardStyle}>
           <h2>Cost</h2>
-          <h4>${tutor.payrate} per hour</h4>
+          <h4>${tutor.tutorInfo.payrate} per hour</h4>
           <h2 style={subjectHeading}>Subject</h2>
           <ul style={list}>
             {this.renderSubject(tutor, subjectStyle)}
