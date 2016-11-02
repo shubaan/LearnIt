@@ -19,7 +19,8 @@ class TutorCards extends Component {
 
   goToTutorProfile() {
     console.log(this.props.profile)
-    browserHistory.push("/tutor_profile")
+    let profileId = this.props.profile.key;
+    browserHistory.push("/tutor_profile?id="+profileId)
   }
 
   renderSubjects(profile) {
