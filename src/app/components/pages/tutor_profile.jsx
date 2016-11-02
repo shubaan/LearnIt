@@ -105,7 +105,7 @@ class TutorProfile extends Component {
           <h1>{tutor.name}</h1>
         </Card>
         <Card style={cardStyle}> 
-          <h3>About me</h3>
+          <h3>About me{tutor}</h3>
           <h4 style={tutorBio}>{tutor.bio}</h4>
         </Card>
         <Card style={cardStyle}> 
