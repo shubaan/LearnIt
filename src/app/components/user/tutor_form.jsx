@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Checkbox from 'material-ui/Checkbox';
 import Slider from 'material-ui/Slider';
-import TextField from 'material-ui/TextField';
 class TutorForm extends Component {
 
   constructor(props) {
@@ -21,13 +20,6 @@ class TutorForm extends Component {
     };
     return (
       <div>
-        <h3>Bio</h3>
-        <TextField
-            hintText="Edit Bio"
-            multiLine={true}
-            defaultValue={this.props.bio}
-            onChange={this.props.handleBioEdited}
-        />
         <h3>Tutor Subjects</h3>
         <Checkbox
           label="Math"
