@@ -27,6 +27,8 @@ class Home extends Component {
       }
       var sessionContainer = {
         justifyContent: 'space-between',
+        width: '100%',
+        textAlign: 'center',
       }
 
       var img = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
@@ -36,9 +38,9 @@ class Home extends Component {
         <div style={homeContainer}>
           <h2 style={homeTitle}>Upcoming Sessions:</h2>
           <div style={sessionContainer} >
-            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', 'Mon, Oct 17, 2016', '18:00 PST', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
+            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
           </div>
         </div>
       );

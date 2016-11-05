@@ -1,0 +1,59 @@
+#tutor_container {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+#tutor_side {
+	float: left;
+	width: 300px;
+	text-align: center;
+	height: 425px;
+}
+
+#tutor_img {
+	width: 250px;
+	height: 250px;
+	border-radius: 50%;
+	margin-top: 30px;
+}
+
+#tutor_info {
+	margin-left: 320px;
+	padding: 0px 0px 20px 10px;
+}
+
+#tutor_bio {
+	margin-bottom: 25px;
+	padding: 5px 15px 10px 15px;
+	height: 150px;
+}
+
+#tutor_bio p {
+	overflow-y: scroll;
+	max-height: 88px;
+}
+
+#tutor_details {
+	padding: 5px 15px 10px 15px;
+	height: 250px;
+}
+
+h3 {
+	margin-top: 10px;
+}
+
+#session_card {
+	padding: 5px 15px 15px 15px;
+}
+
+#input_container {
+	display: flex;
+	overflow: auto;
+    justify-content: space-around;
+    margin-bottom: 8px;
+    margin-top: -12px;
+}
+
+#session_button {
+	text-align: right;
+}

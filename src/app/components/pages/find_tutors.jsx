@@ -24,10 +24,6 @@ const SORTBY = {
     margin: '10px'
   };
 
-  const listStyle = {
-    listStyle: 'none',
-  };
-
   const divStyle = {
     width: "500px",
     height: "500px",
@@ -43,6 +39,8 @@ const SORTBY = {
     'Spanish',
     'History'
   ];
+
+
 
 class FindTutors extends Component {
 
@@ -150,6 +148,15 @@ class FindTutors extends Component {
     }
     libraries.sort(comparator);
 
+    var tutor_container = {
+      maxWidth: "840px",
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "90%",
+      minWidth: "280px",
+      textAlign: "center",
+    }
+
     return (
       <div style={style}>
         <TextField
@@ -182,7 +189,7 @@ class FindTutors extends Component {
             label="Sort by rating"
           />
         </RadioButtonGroup>
-        <div>
+        <div style={tutor_container}>
             { libraries.map(function(l, i) {
               console.log("wtf is l and i?")
               console.log(l);

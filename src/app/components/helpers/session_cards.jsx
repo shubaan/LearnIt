@@ -11,13 +11,16 @@ class SessionCard extends Component {
     super(props);
   }
 
+  goToLive () {
+    browserHistory.push("/live");
+  }
+
   render() {
 
     var cardStyle = {
       display: 'inline-block',
-      width: '400px',
+      width: '375px',
       height: '200px',
-      textAlign: 'center',
       margin: '15px',
     }
 
@@ -25,7 +28,7 @@ class SessionCard extends Component {
     	marginBottom: '5px',
     }
 
-	var imgStyle = {
+	  var imgStyle = {
       width: '100px',
       height: '100px',
       borderRadius: '50%',
@@ -55,7 +58,7 @@ class SessionCard extends Component {
     }
 
 	return (
-		<Card style={cardStyle}>
+		<Card style={cardStyle} onClick={this.goToLive.bind(this)}>
 			<div style={cardHeader}>
 				<img style={imgStyle} src={this.props.tutorIMG} alt="Tutor Profile" />
 				<h4 style={title}>Tutor: {this.props.tutor}</h4>
