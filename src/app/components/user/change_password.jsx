@@ -24,18 +24,21 @@ class ChangePassword extends Component {
     var password = this.state.password
     var repeatPassword = this.state.repeatPassword
     if (password !== repeatPassword) {
+      console.log("a")
       this.setState({
-        message: "Please password must match!",
         errorMessage: "Passwords do not match"
       })
     }
     else {
+      console.log("b")
       this.props.changePassword(password).then(data => {
         if (data.payload.errorCode) {
+          console.log("c")
           this.setState({
-            errorMessage:data.payload.errorMessage})
+            errorMessage: data.payload.errorMessage})
         }
         else {
+          console.log("d")
           this.setState({message: "Password was changed!"})
           console.log(this.state.message)
         }
@@ -118,6 +121,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({changePassword}, dispatch);
 }
 
+
+//TODO I think this part is broken...
 function mapStateToProps(state) {
   return {currentUser: state.currentUser};
 
