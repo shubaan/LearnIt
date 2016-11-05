@@ -274,6 +274,7 @@ class UserAccount extends Component {
               defaultValue={bio}
               onChange={this.handleBioEdited}
             />
+            <ChangePassword/>
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
