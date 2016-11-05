@@ -244,7 +244,7 @@ class UserAccount extends Component {
                   science={this.state.tutorInfo.science}
                   english={this.state.tutorInfo.english}
                   spanish={this.state.tutorInfo.spanish}
-                  history={this.state.tutorInfo.history}/>
+                  history={this.state.tutorInfo.history} />
           </div>
       )
     } else tutorForm = (
@@ -262,18 +262,18 @@ class UserAccount extends Component {
             </FlatButton>
             <div>
               <h3>About Me</h3>
-              <TextField
-                defaultValue={name}
-                floatingLabelText="Change User name"
-                onChange={this.handleUsernameEdited} />
+                <TextField
+                  defaultValue={name}
+                  floatingLabelText="Change User name"
+                  onChange={this.handleUsernameEdited} />
             </div>
-          <TextField
-            floatingLabelText="Edit Bio"
-            style={{textAlign: 'left'}}
-            multiLine={true}
-            defaultValue={this.state.bio}
-            onChange={this.handleBioEdited}/>
-          <ChangePassword/>
+            <TextField
+              floatingLabelText="Edit Bio"
+              style={{textAlign: 'left'}}
+              multiLine={true}
+              defaultValue={bio}
+              onChange={this.handleBioEdited}
+            />
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
