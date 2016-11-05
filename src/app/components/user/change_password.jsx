@@ -86,7 +86,6 @@ class ChangePassword extends Component {
     return (
       <form style = {changePassword} id="ChangePassword" role="form" onSubmit={this.onFormSubmit}>
         <h3> Change Password </h3>
-        <h5> {this.state.message} </h5>
         <div>
           <TextField
             value={this.state.password}
