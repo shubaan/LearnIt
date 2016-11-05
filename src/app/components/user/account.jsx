@@ -75,6 +75,8 @@ class UserAccount extends Component {
       this.props.saveTutorInfo(this.state.tutorInfo);
       this.props.updateUser({displayName: this.state.name});
       this.props.saveBio(this.state.bio);
+      console.log(this.state.bio)
+      console.log(this.state.tutorInfo.bio)
       this.setState({
         open: true,
       });
@@ -166,6 +168,7 @@ class UserAccount extends Component {
     this.setState({
       open: false,
     });
+    browserHistory.push("/account")
   };
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
@@ -225,7 +228,6 @@ class UserAccount extends Component {
                   isSpanishChecked={this.isSpanishChecked}
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
-                  handleBioEdited={this.handleBioEdited}
                   /*paySlider={this.state.profile.payrate}
                   math={this.state.profile.math}
                   science={this.state.profile.science}
@@ -238,14 +240,12 @@ class UserAccount extends Component {
                   science={this.state.tutorInfo.science}
                   english={this.state.tutorInfo.english}
                   spanish={this.state.tutorInfo.spanish}
-                  history={this.state.tutorInfo.history}
-                  bio={bio}/>
+                  history={this.state.tutorInfo.history}/>
           </div>
       )
     } else tutorForm = (
         <div/>
     );
-
 
     return (
       <div style={profileDiv}>
@@ -257,11 +257,19 @@ class UserAccount extends Component {
                 <input type="file" style={styles.exampleImageInput}/>
             </FlatButton>
             <div>
-                <TextField
-                  defaultValue={name}
-                  floatingLabelText="Change User name"
-                  onChange={this.handleUsernameEdited} />
+              <h3>About Me</h3>
+              <TextField
+                defaultValue={name}
+                floatingLabelText="Change User name"
+                onChange={this.handleUsernameEdited} />
             </div>
+          <TextField
+            floatingLabelText="Edit Bio"
+            style={{textAlign: 'left'}}
+            multiLine={true}
+            defaultValue={this.state.bio}
+            onChange={this.handleBioEdited}/>
+          <ChangePassword/>
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
@@ -269,7 +277,11 @@ class UserAccount extends Component {
                 onCheck={this.isTutorChecked}
                 checked={this.state.isTutor} />
             {tutorForm}
-            <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
+            <RaisedButton
+              label="Save"
+              style={styles.submit}
+              primary={true}
+              onClick={this.onFormSubmit}/>
         </form>
         <Snackbar
             open={this.state.open}
