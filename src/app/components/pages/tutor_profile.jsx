@@ -9,8 +9,6 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import TextField from 'material-ui/TextField';
-
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
@@ -87,13 +85,13 @@ class TutorProfile extends Component {
             <h3>Request a Session</h3>
             <div id="input_container">
               <div style={inputs}>
-                <DatePicker hintText="Select A Date" mode="landscape" />
+                <DatePicker hintText="Select A Date" />
               </div>
               <div style={inputs}>
-                <TimePicker style={inputs} hintText="Select A Time" />
+                <TimePicker hintText="Select A Start Time" />
               </div>
               <div style={inputs}>
-                <TextField style={inputs} hintText="Send Some Text" />
+                <TimePicker hintText="Select A End Time" />
               </div>
             </div>
             <div id="session_button">
