@@ -92,9 +92,16 @@ class TutorSession extends Component {
   }
 
   handleSendMessageClick() {
+    if(this.state.message == "")
+    {
+      return;
+    }
+    else
+    {
     let uid = this.getTutorID()
     FireBaseTools.sendMessage(uid, this.state.message)
     this.setState({ message: "" })
+    }
   }
 
 
