@@ -14,7 +14,9 @@ import {
   FETCH_FIREBASE_TUTOR_INFO,
   SAVE_FIREBASE_TUTOR_INFO,
   FETCH_FIREBASE_IS_TUTOR,
-  SAVE_FIREBASE_IS_TUTOR
+  SAVE_FIREBASE_IS_TUTOR,
+  FETCH_MESSAGES,
+  SEND_MESSAGE
 } from './types';
 
 
@@ -134,6 +136,23 @@ export function saveIsTutor(isTutor) {
   const request = FireBaseTools.saveIsTutor(isTutor);
   return {
     type: SAVE_FIREBASE_IS_TUTOR,
+    payload: request
+  }
+}
+
+
+export function fetchMessages(uid) {
+  const request = FireBaseTools.fetchMessages(uid);
+  return {
+    type: FETCH_MESSAGES,
+    payload: request
+  }
+}
+
+export function sendMessage(uid, message) {
+  const request = FireBaseTools.sendMessage(uid, message);
+  return {
+    type: SEND_MESSAGE,
     payload: request
   }
 }

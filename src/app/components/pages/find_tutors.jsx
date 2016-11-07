@@ -191,10 +191,8 @@ class FindTutors extends Component {
         </RadioButtonGroup>
         <div style={tutor_container}>
             { libraries.map(function(l, i) {
-              console.log("wtf is l and i?")
-              console.log(l);
-              console.log(i);
               return <TutorCard
+                key={l.key}
                 profile = {l}
                 profileIMG = {l.photoUrl}
                 uid = {i} />} ) }

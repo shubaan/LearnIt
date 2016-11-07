@@ -492,7 +492,76 @@ var FireBaseTools = {
     }
 
     return isTutor;
-  }
+  },
+
+    /**
+     * Fetch messages
+     *
+     * @returns {Promise}
+     */
+    fetchMessages: (pid) => {
+      return new Promise((resolve, reject) => {
+        let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+        let messagesRef = firebaseDb.ref('/').child(messagePath);
+        messagesRef.on("value", function(snapshot) {
+          let messages = snapshot.val();
+          console.log(messages)
+          resolve(messages);
+        });
+      }, error => {
+        reject(error);
+      })
+    },
+
+    /**
+     * Fetch messages
+     *
+     * @returns {Promise}
+     */
+    fetchMyMessages: (pid, callback) => {
+      let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+      let messagesRef = firebaseDb.ref('/').child(messagePath);
+      messagesRef.on("child_added", function(snapshot) {
+        let message = snapshot.val().text;
+        let time = snapshot.key;
+        callback(message, time);
+      });
+
+    },
+
+    /**
+     * Fetch messages in realtime
+     *
+     * @returns {Promise}
+     */
+    fetchTheirMessages: (pid, callback) => {
+      let messagePath = 'messages/' + pid + '/' + firebaseAuth.currentUser.uid + '/'
+      console.log(messagePath)
+      let messagesRef = firebaseDb.ref('/').child(messagePath);
+      messagesRef.on("child_added", function(snapshot) {
+        let message = snapshot.val().text;
+        let time = snapshot.key;
+        callback(message, time)
+      });
+    },
+
+      /**
+       * send messge
+       *
+       * @returns {Promise}
+       */
+      sendMessage: (pid, message) => {
+        if (!Date.now) {
+            Date.now = function() { return new Date().getTime(); }
+        }
+        let messageData = {
+          text: message
+        }
+        let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+        firebaseDb.ref('/')
+        .child(messagePath + Date.now())
+        .set(messageData);
+      },
 };
 
 export default FireBaseTools;

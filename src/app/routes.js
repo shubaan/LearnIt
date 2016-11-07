@@ -9,6 +9,7 @@ import UserAccount from './components/user/account';
 import ResetPassword from './components/user/reset_password';
 import Tutor from './components/pages/tutor';
 import TutorProfile from './components/pages/tutor_profile';
+import TutorSession from './components/pages/tutor_session';
 import FindTutors from './components/pages/find_tutors';
 import Sessions from './components/pages/sessions';
 import ContactUs from './components/pages/contact_us';
@@ -27,6 +28,7 @@ export default (
     <Route path="/tutors" component={FindTutors}/>
     <Route path="/schedule" component={Tutor}/>
     <Route path="/tutor_profile" component={TutorProfile}/>
+    <Route path="/tutor_session" component={TutorSession}/>
     <Route path="/sessions" component={Sessions}/>
     <Route path="/help" component={ContactUs}/>
     <Route path="/messagesent" component={FinishedContacting}/>

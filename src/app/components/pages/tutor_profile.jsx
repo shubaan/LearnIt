@@ -31,15 +31,20 @@ class TutorProfile extends Component {
     }
   }
 
+  handleSendMessageClick() {
+      browserHistory.push("/tutor_session?id="+this.getTutorID())
+  }
+
   renderSubject(tutor) {
     var subjects = [];
-    if (tutor.tutorInfo.english) {subjects.push(<li >English</li>);}
-    if (tutor.tutorInfo.history) {subjects.push(<li >History</li>);}
-    if (tutor.tutorInfo.math) {subjects.push(<li>Math</li>);}
-    if (tutor.tutorInfo.science) {subjects.push(<li>Science</li>);}
-    if (tutor.tutorInfo.spanish) {subjects.push(<li>Spanish</li>);}
+    if (tutor.tutorInfo.english) {subjects.push(<li key="1">English</li>);}
+    if (tutor.tutorInfo.history) {subjects.push(<li key="2">History</li>);}
+    if (tutor.tutorInfo.math) {subjects.push(<li key="3">Math</li>);}
+    if (tutor.tutorInfo.science) {subjects.push(<li key="4">Science</li>);}
+    if (tutor.tutorInfo.spanish) {subjects.push(<li key="5">Spanish</li>);}
     return subjects;
   }
+
 
   render() {
     var id = this.getTutorID()
@@ -65,14 +70,14 @@ class TutorProfile extends Component {
         <Card id="tutor_side">
           <img src={tutor.photoUrl} alt="Profile Image" id="tutor_img"/>
           <h1>{tutor.name}</h1>
-          <RaisedButton label="Send A Message" style={button}/>
+          <RaisedButton label="Send A Message" style={button} onClick={this.handleSendMessageClick.bind(this)}/>
         </Card>
         <div id="tutor_info">
-          <Card id="tutor_bio"> 
+          <Card id="tutor_bio">
             <h3>About me</h3>
             <p>{tutor.bio}</p>
           </Card>
-          <Card id="tutor_details"> 
+          <Card id="tutor_details">
             <h3>Cost</h3>
             <p>${tutor.tutorInfo.payrate} per hour</p>
             <h3>Subjects</h3>
@@ -81,7 +86,7 @@ class TutorProfile extends Component {
             </ul>
           </Card>
         </div>
-          <Card id="session_card"> 
+          <Card id="session_card">
             <h3>Request a Session</h3>
             <div id="input_container">
               <div style={inputs}>

@@ -28,7 +28,6 @@ export default function (state = null, action) {
       return action.payload;
     case LOGIN_WITH_PROVIDER_FIREBASE:
       return action.payload;
-
   }
   return state;
 }

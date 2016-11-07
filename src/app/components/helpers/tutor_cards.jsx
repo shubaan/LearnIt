@@ -31,7 +31,7 @@ class TutorCards extends Component {
 
     var list = [];
     for (var index in subject) {
-      var item = (<li>{subject[index]}</li>);
+      var item = (<li key={index} >{subject[index]}</li>);
       list.push(item);
     }
     return list;
@@ -44,7 +44,7 @@ class TutorCards extends Component {
 
     var list = [];
     for (var index in subject) {
-      var item = (<li>{subject[index]}</li>);
+      var item = (<li key={index} >{subject[index]}</li>);
       list.push(item);
     }
     return list;

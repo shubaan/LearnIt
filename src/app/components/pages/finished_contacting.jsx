@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {browserHistory, Link} from 'react-router';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {fetchProfiles}  from '../../actions/firebase_actions';
+import React, { Component } from 'react';
+import { browserHistory, Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchProfiles }  from '../../actions/firebase_actions';
 import RaisedButton from 'material-ui/RaisedButton';
 
   const divStyle = {
@@ -41,7 +41,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return {currentUser: state.currentUser};
+  return { currentUser: state.currentUser };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FinishedContacting);
