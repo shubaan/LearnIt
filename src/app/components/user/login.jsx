@@ -6,6 +6,7 @@ import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {loginUser, logoutUser, fetchUser, loginWithProvider} from '../../actions/firebase_actions';
+import Snackbar from 'material-ui/Snackbar';
 
 
 
@@ -20,7 +21,8 @@ class UserLogin extends Component {
       email: '',
       emailError: '',
       password: '',
-      passwordError: ''
+      passwordError: '',
+      open: false
     }
   }
 
@@ -44,7 +46,7 @@ class UserLogin extends Component {
         if (data.payload.errorCode)
         {
           this.setState({message: data.payload.errorMessage})
-          this.setState({message: "Invalid Login"})
+          this.setState({open: true})
         }
         else
           browserHistory.push('/');
@@ -92,6 +94,12 @@ class UserLogin extends Component {
     this.isValidPassword(p)
   };
 
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
   render() {
     /*console.log("attempting to render login...");
     if (this.props.currentUser && this.props.currentUser.uid) {
@@ -125,7 +133,6 @@ class UserLogin extends Component {
       <div style={loginDiv}>
         <form id="frmLogin" >
           <h2>Login</h2>
-          <h3 style={invalidLogin}>{this.state.message}</h3>
           <TextField
             ref="email"
             onChange={this.handleEmailChange}
@@ -139,6 +146,12 @@ class UserLogin extends Component {
           <br />
           <br />
           <RaisedButton label="Login" primary={true} onClick={this.onFormSubmit}/>
+          <Snackbar
+            open={this.state.open}
+            message="Invalid Login"
+            autoHideDuration={3000}
+            onRequestClose={this.handleRequestClose}
+          />
           <br />
           <h5><Link to="/reset">Forgot password?</Link></h5>
           <br/>
