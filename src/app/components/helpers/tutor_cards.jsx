@@ -15,6 +15,16 @@ class TutorCards extends Component {
     }
     this.props.profileIMG;
     this.props.uid;
+    this.state = {shadow: 1};
+  }
+
+  onMouseOver() {
+    //console.log(this.state.shadow);
+    this.setState({shadow: 3});
+  }
+  onMouseOut() {
+    //console.log(this.state.shadow);
+    this.setState({shadow: 1});
   }
 
   goToTutorProfile() {
@@ -78,7 +88,12 @@ class TutorCards extends Component {
     }
 
     return (
-      <Card style={cardStyle} onClick={this.goToTutorProfile.bind(this)}>
+      <Card style={cardStyle}
+            onClick={this.goToTutorProfile.bind(this)}
+            onMouseOver={this.onMouseOver.bind(this)}
+            onMouseOut={this.onMouseOut.bind(this)}
+            zDepth={this.state.shadow}>
+        <p>{this.state.shadow}</p>
         <img style={imgStyle} src={this.props.profileIMG} alt="Profile Image"/>
         <h3><b>{this.props.profile.name}</b></h3>
         <h5>Cost: {this.props.profile.tutorInfo.payrate} </h5>
