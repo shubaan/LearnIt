@@ -9,6 +9,14 @@ class SessionCard extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {shadow: 1};
+  }
+
+  onMouseOver() {
+    this.setState({shadow: 3});
+  }
+  onMouseOut() {
+    this.setState({shadow: 1});
   }
 
   goToLive () {
@@ -58,7 +66,11 @@ class SessionCard extends Component {
     }
 
 	return (
-		<Card style={cardStyle} onClick={this.goToLive.bind(this)}>
+		<Card style={cardStyle}
+          onClick={this.goToLive.bind(this)}
+          onMouseOver={this.onMouseOver.bind(this)}
+          onMouseOut={this.onMouseOut.bind(this)}
+          zDepth={this.state.shadow}>
 			<div style={cardHeader}>
 				<img style={imgStyle} src={this.props.tutorIMG} alt="Tutor Profile" />
 				<h4 style={title}>Tutor: {this.props.tutor}</h4>

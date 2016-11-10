@@ -93,7 +93,6 @@ class TutorCards extends Component {
             onMouseOver={this.onMouseOver.bind(this)}
             onMouseOut={this.onMouseOut.bind(this)}
             zDepth={this.state.shadow}>
-        <p>{this.state.shadow}</p>
         <img style={imgStyle} src={this.props.profileIMG} alt="Profile Image"/>
         <h3><b>{this.props.profile.name}</b></h3>
         <h5>Cost: {this.props.profile.tutorInfo.payrate} </h5>
