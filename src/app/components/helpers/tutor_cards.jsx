@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+import '../../css/react-rater.css'
+//import 'react-rater/lib/react-rater.css'
+import Rater from 'react-rater'
 
 class TutorCards extends Component {
 
@@ -95,7 +97,8 @@ class TutorCards extends Component {
             zDepth={this.state.shadow}>
         <img style={imgStyle} src={this.props.profileIMG} alt="Profile Image"/>
         <h3><b>{this.props.profile.name}</b></h3>
-        <h5>Cost: {this.props.profile.tutorInfo.payrate} </h5>
+        <Rater interactive={false} rating={this.props.profile.tutorInfo.rating}/>
+        <h5>${this.props.profile.tutorInfo.payrate} Hourly</h5>
         <CardText style={cardText}>
           <ul style={list}>
             {this.renderSubjects(this.props.profile)}

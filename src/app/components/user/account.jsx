@@ -226,13 +226,6 @@ class UserAccount extends Component {
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
                   handleBioEdited={this.handleBioEdited}
-                  /*paySlider={this.state.profile.payrate}
-                  math={this.state.profile.math}
-                  science={this.state.profile.science}
-                  english={this.state.profile.english}
-                  spanish={this.state.profile.spanish}
-                  history={this.state.profile.history}
-                  bio={this.state.profile.bio}/>*/
                   paySlider={this.state.tutorInfo.payrate}
                   math={this.state.tutorInfo.math}
                   science={this.state.tutorInfo.science}

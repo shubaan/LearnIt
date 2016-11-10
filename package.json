@@ -60,6 +60,7 @@
     "pm2": "^2.0.12",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-rater": "^0.3.5",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.0-rc5",
     "react-tap-event-plugin": "^1.0.0",

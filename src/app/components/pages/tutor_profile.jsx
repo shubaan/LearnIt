@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
 import '../../css/tutor_profile.css';
+import '../../css/react-rater.css'
+import Rater from 'react-rater'
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -70,6 +72,7 @@ class TutorProfile extends Component {
         <Card id="tutor_side">
           <img src={tutor.photoUrl} alt="Profile Image" id="tutor_img"/>
           <h1>{tutor.name}</h1>
+          <p><Rater interactive={false} rating={tutor.tutorInfo.rating}/></p>
           <RaisedButton label="Send A Message" style={button} onClick={this.handleSendMessageClick.bind(this)}/>
         </Card>
         <div id="tutor_info">
