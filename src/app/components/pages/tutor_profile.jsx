@@ -72,7 +72,7 @@ class TutorProfile extends Component {
         <Card id="tutor_side">
           <img src={tutor.photoUrl} alt="Profile Image" id="tutor_img"/>
           <h1>{tutor.name}</h1>
-          <p><Rater interactive={false} rating={tutor.tutorInfo.rating}/></p>
+          <div><Rater interactive={false} rating={tutor.tutorInfo.rating}/></div>
           <RaisedButton label="Send A Message" style={button} onClick={this.handleSendMessageClick.bind(this)}/>
         </Card>
         <div id="tutor_info">
