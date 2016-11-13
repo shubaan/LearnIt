@@ -9,12 +9,19 @@ import TextField from 'material-ui/TextField';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import WhiteBoard from './whiteboard';
+
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
 class TutorSession extends Component {
 
   constructor(props) {
     super(props);
+
+    if (!this.props.currentUser) {
+      browserHistory.push("/")
+      return
+    }
 
     this.state = {
       messages: [],
@@ -25,14 +32,13 @@ class TutorSession extends Component {
     this.handleSendMessageClick = this.handleSendMessageClick.bind(this);
     this.fetchMyMessages = this.fetchMyMessages.bind(this);
     this.fetchTheirMessages = this.fetchTheirMessages.bind(this);
-
-    FireBaseTools.fetchMyMessages(this.getTutorID(), this.fetchMyMessages);
-    FireBaseTools.fetchTheirMessages(this.getTutorID(), this.fetchTheirMessages);
   }
 
   componentDidMount() {
-    //this.props.fetchMessages(this.getTutorID());
+      FireBaseTools.fetchMyMessages(this.getTutorID(), this.fetchMyMessages);
+      FireBaseTools.fetchTheirMessages(this.getTutorID(), this.fetchTheirMessages);
   }
+
 
   componentDidUpdate(prevProps) {
 
@@ -109,6 +115,29 @@ class TutorSession extends Component {
     let e = event.target.value
     this.setState({ message: e })
   };
+
+  handleCanvasMouseDown = (event) => {
+    this.setState({ isDrawing: true })
+    console.log("mouse down")
+  }
+
+  handleCanvasMouseUp= (event) => {
+    this.setState({ isDrawing: false })
+    console.log("mouse up")
+  }
+
+  handleCanvasMouseMove= (event) => {
+    if (this.state.isDrawing) {
+      let x = event.clientX
+      let y = event.clientY
+      let context = this.refs.canvas.getContext('2d')
+      let size = 10
+      context.fillStyle = "#000000";
+      context.fillRect(x, y, size, size)
+      console.log("draw point at (x, y) = (" + x + ", " + y + ")")
+        this.setState({ isDrawing: true })
+    }
+  }
 
   renderMessages()
   {
@@ -189,6 +218,7 @@ class TutorSession extends Component {
   }
 
   render() {
+
     var id = this.getTutorID()
     var tutor = this.getProfile(this.props.profiles, id);
     if (!tutor) {
@@ -197,7 +227,7 @@ class TutorSession extends Component {
 
     let containerStyle = {
       float: "right",
-      width: "400px",
+      width: "300px",
       height: "100%",
       padding: "10px"
     }
@@ -209,17 +239,35 @@ class TutorSession extends Component {
       margin: "0px auto 0px auto",
     }
 
-    return (
-      <div style={containerStyle}>
-        <div style={messageStyle} id="messageList" >{this.renderMessages()}</div>
-        <TextField
-          hintText="Enter Message"
-          fullWidth={true}
-          value={this.state.message}
-          onChange={this.handleMessageChange}
-        />
+    let whiteBoardCardStyle = {
+        width: "700px",
+        height: "500px",
+        float: "left",
+        margin: "50px"
+    }
 
-      <RaisedButton label="Send" onClick={this.handleSendMessageClick} />
+    let canvasStyle = {
+      width: "700px",
+      height: "500px",
+    }
+
+
+    return (
+      <div>
+        <div style={containerStyle}>
+          <div style={messageStyle} id="messageList" >{this.renderMessages()}</div>
+          <TextField
+            hintText="Enter Message"
+            fullWidth={true}
+            value={this.state.message}
+            onChange={this.handleMessageChange}
+          />
+          <RaisedButton label="Send" onClick={this.handleSendMessageClick} />
+        </div>
+        <Card style={whiteBoardCardStyle}>
+          <WhiteBoard canvasStyle={canvasStyle} sid="1" />
+        </Card>
+
       </div>
     );
 

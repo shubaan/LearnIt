@@ -545,23 +545,67 @@ var FireBaseTools = {
       });
     },
 
-      /**
-       * send messge
-       *
-       * @returns {Promise}
-       */
-      sendMessage: (pid, message) => {
-        if (!Date.now) {
-            Date.now = function() { return new Date().getTime(); }
-        }
-        let messageData = {
-          text: message
-        }
-        let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
-        firebaseDb.ref('/')
-        .child(messagePath + Date.now())
-        .set(messageData);
-      },
+    /**
+     * send messge
+     *
+     * @returns {Promise}
+     */
+    sendMessage: (pid, message) => {
+      if (!Date.now) {
+          Date.now = function() { return new Date().getTime(); }
+      }
+      let messageData = {
+        text: message
+      }
+      let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+      firebaseDb.ref('/')
+      .child(messagePath + Date.now())
+      .set(messageData);
+    },
+
+    /**
+     * save a line path that was drawn on a whiteboard
+     *
+     * @returns {Promise}
+     */
+    drawNewLine: (sid, linePath) => {
+      if (!Date.now) {
+          Date.now = function() { return new Date().getTime(); }
+      }
+      let whiteBoardPath = 'whiteboards/' + sid + '/lines/'
+      // Get a key for a new Post.
+      let key = firebaseDb.ref().child(whiteBoardPath).push().key;
+      // Save the new line path
+      firebaseDb.ref('/')
+      .child(whiteBoardPath + key)
+      .set(linePath);
+    },
+    /**
+     * Fetch messages in realtime
+     *
+     * @returns {Promise}
+     */
+    fetchWhiteBoard: (sid, draw, clear) => {
+      let whiteBoardPath = 'whiteboards/' + sid + '/'
+      let whiteBoardRef = firebaseDb.ref('/').child(whiteBoardPath + 'lines/');
+      whiteBoardRef.on("child_added", function(snapshot) {
+        var linePath = snapshot.val();
+        draw(linePath)
+      });
+      firebaseDb.ref('/').child(whiteBoardPath).on("child_removed", function(snapshot) {
+        clear()
+      });
+    },
+    /**
+     * delete whiteboard
+     *
+     * @returns {Promise}
+     */
+    deleteWhiteBoard: (sid) => {
+      let whiteBoardPath = 'whiteboards/' + sid + '/lines/'
+      let whiteBoardRef = firebaseDb.ref('/').child(whiteBoardPath);
+      whiteBoardRef.remove()
+    },
 };
 
 export default FireBaseTools;
