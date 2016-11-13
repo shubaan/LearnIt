@@ -10,7 +10,9 @@ class Live extends Component {
 
   constructor(props) {
     super(props);
-    this.peer = new Peer({key: key_value})
+    this.my_id = 12
+    this.other_id = 1212
+    this.peer = new Peer(this.my_id, {key: key_value})
   }
 
   start() {
@@ -21,37 +23,31 @@ class Live extends Component {
     var video_id
     this.peer.on('open', function(id) {
       console.log('My peer ID is: ' + id);
-      video_id = id
-      console.log("Video ID")
-      console.log(video_id)
     });
-    this.peer.on('call', this.onReceiveCall.bind(this));
+
+    this.peer.on('call', function(call) {
+      console.log(call)
+      navigator.getUserMedia = (
+        navigator.getUserMedia || navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia || navigator.msGetUserMedia
+      );
+      navigator.getUserMedia({audio:true, video:true}, function(stream) {
+        console.log("Answering");
+      }, function(err) {
+        console.log("Error On Receive")
+      });
+      call.on('stream', function(stream) {
+        var video = document.querySelector('video');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    });
+
     this.prepareSelfVideo();
-    console.log("Video ID");
-    console.log(this.video_id);
-    this.call(this.video_id);
+    this.call(this.other_id);
   }
 
   getMedia(options, success, error) {
     navigator.getUserMedia(options, success, error);
-  }
-
-  onReceiveCall(call) {
-    this.getMedia({audio: true, video: true}, (stream) => {
-      console.log("answering..");
-      call.answer(stream)
-    }, (err) => console.log(err));
-
-    call.on('stream', (stream) => {
-      var video = document.querySelector('video');
-      video.src = window.URL.createObjectURL(stream);
-    });
-  }
-
-  onReceiveStream(stream) {
-    console.log("streaming")
-    var video = document.querySelector('.video-call');
-    video.src = window.URL.createObjectURL(stream);
   }
 
   prepareSelfVideo() {
@@ -64,15 +60,14 @@ class Live extends Component {
   call(id) {
     this.getMedia({audio: true, video: true}, (stream) => {
         var call = this.peer.call(id, stream);
-        console.log("calling..");
-        call.on('stream', this.onReceiveStream(stream));
+        console.log("calling..."+id);
+        call.on('stream', function(stream) {
+          console.log("Streaming");
+          var video = document.querySelector('.video-call');
+          video.src = window.URL>createObjectURL(stream);
+        });
       }, (err) => console.log(err));
   }
-
-  componentWillUnmount() {
-    this.peer.disconnect();
-  }
-
 
   render() {
     var box = {
