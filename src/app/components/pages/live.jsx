@@ -4,10 +4,73 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 
+const key_value = 'uqi67zp0j54s4i';
+
 class Live extends Component {
 
   constructor(props) {
     super(props);
+    this.peer = new Peer({key: key_value})
+  }
+
+  start() {
+    navigator.getUserMedia = (
+      navigator.getUserMedia || navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia || navigator.msGetUserMedia
+    );
+    var video_id
+    this.peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
+      video_id = id
+      console.log("Video ID")
+      console.log(video_id)
+    });
+    this.peer.on('call', this.onReceiveCall.bind(this));
+    this.prepareSelfVideo();
+    console.log("Video ID");
+    console.log(this.video_id);
+    this.call(this.video_id);
+  }
+
+  getMedia(options, success, error) {
+    navigator.getUserMedia(options, success, error);
+  }
+
+  onReceiveCall(call) {
+    this.getMedia({audio: true, video: true}, (stream) => {
+      console.log("answering..");
+      call.answer(stream)
+    }, (err) => console.log(err));
+
+    call.on('stream', (stream) => {
+      var video = document.querySelector('video');
+      video.src = window.URL.createObjectURL(stream);
+    });
+  }
+
+  onReceiveStream(stream) {
+    console.log("streaming")
+    var video = document.querySelector('.video-call');
+    video.src = window.URL.createObjectURL(stream);
+  }
+
+  prepareSelfVideo() {
+    this.getMedia({audio: false, video: true}, (stream) => {
+        var video = document.querySelector('.video-self');
+        video.src = window.URL.createObjectURL(stream);
+      }, (err) => console.log(err));
+  }
+
+  call(id) {
+    this.getMedia({audio: true, video: true}, (stream) => {
+        var call = this.peer.call(id, stream);
+        console.log("calling..");
+        call.on('stream', this.onReceiveStream(stream));
+      }, (err) => console.log(err));
+  }
+
+  componentWillUnmount() {
+    this.peer.disconnect();
   }
 
 
@@ -18,38 +81,10 @@ class Live extends Component {
       display: 'inline-block',
       border: '1px solid black',
     }
-    var peer = new Peer({key: 'uqi67zp0j54s4i'});
     var video_self = (<video style={box} id="video-self" className="video-self" autoPlay></video>)
     var video_call = (<video style={box} id="video-call" className="video-call" autoPlay></video>)
-    var video_id;
-    peer.on('open', function(id) {
-      console.log('My peer ID is: ' + id);
-      video_id = id
-      console.log("Video ID")
-      console.log(video_id)
-    });
-    
-    var dataConnection = peer.connect(video_id)
-    console.log(dataConnection)
-    dataConnection.on('on', function(data){
-      console.log("Data Connected")
-    })
 
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    navigator.getUserMedia({video: true, audio: true}, function(stream) {
-      var call = peer.call(video_id, stream);
-      var video = document.getElementById('video-self');
-      dataConnection.send(stream);
-      video.src = window.URL ? window.URL.createObjectURL(stream) : stream;
-    }, function(err) {
-      console.log('Failed to get local stream' ,err);
-    });
-
-    peer.on('call', function(mediaConnection) {
-      var video = document.getElementById('video-call');
-      video.src = window.URL ? window.URL.createObjectURL(stream) : stream;
-    });
-    
+    this.start();
 
 
 
