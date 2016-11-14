@@ -16,7 +16,10 @@ import {
   FETCH_FIREBASE_IS_TUTOR,
   SAVE_FIREBASE_IS_TUTOR,
   FETCH_MESSAGES,
-  SEND_MESSAGE
+  SEND_MESSAGE,
+  FETCH_NEW_NOTIFICATION_NUMBER,
+  FETCH_NOTIFICATIONS,
+  SEND_NOTIFICATION
 } from './types';
 
 
@@ -140,7 +143,6 @@ export function saveIsTutor(isTutor) {
   }
 }
 
-
 export function fetchMessages(uid) {
   const request = FireBaseTools.fetchMessages(uid);
   return {
@@ -153,6 +155,30 @@ export function sendMessage(uid, message) {
   const request = FireBaseTools.sendMessage(uid, message);
   return {
     type: SEND_MESSAGE,
+    payload: request
+  }
+}
+
+export function fetchNewNotificationNumber() {
+  const request = FireBaseTools.fetchNewNotificationNumber();
+  return {
+    type: FETCH_NEW_NOTIFICATION_NUMBER,
+    payload: request
+  }
+}
+
+export function fetchNotifications() {
+  const request = FireBaseTools.fetchNotifications();
+  return {
+    type: FETCH_NOTIFICATIONS,
+    payload: request
+  }
+}
+
+export function sendNotification(recipient, message) {
+  const request = FireBaseTools.sendNotification(recipient, message);
+  return {
+    type: SEND_NOTIFICATION,
     payload: request
   }
 }

@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loginUser, logoutUser, fetchUser, loginWithProvider} from '../../actions/firebase_actions';
+import {loginUser, logoutUser, loginWithProvider, fetchNewNotificationNumber} from '../../actions/firebase_actions';
 import Snackbar from 'material-ui/Snackbar';
 
 
@@ -33,8 +33,10 @@ class UserLogin extends Component {
 
       if (data.payload.errorCode)
         this.setState({message: data.payload.errorMessage})
-      else
+      else {
+        this.props.fetchNewNotificationNumber();
         browserHistory.push('/');
+      }
 
     });
     // alert("login with provider");
@@ -48,9 +50,10 @@ class UserLogin extends Component {
           this.setState({message: data.payload.errorMessage})
           this.setState({open: true})
         }
-        else
+        else {
+          this.props.fetchNewNotificationNumber();
           browserHistory.push('/');
-
+        }
       }
     )
 
@@ -101,16 +104,6 @@ class UserLogin extends Component {
   };
 
   render() {
-    /*console.log("attempting to render login...");
-    if (this.props.currentUser && this.props.currentUser.uid) {
-      console.log("uh-oh. logging out for some reason");
-      this.props.logoutUser().then(data=> {
-        // reload props from reducer
-        console.log("??logged out??");
-        this.props.fetchUser();
-      });
-    }*/
-
     var loginDiv = {
       "text-align": "center",
       "width": "50%",
@@ -187,8 +180,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     loginUser,
     logoutUser,
-    fetchUser,
-    loginWithProvider
+    loginWithProvider,
+    fetchNewNotificationNumber
   }, dispatch);
 }
 

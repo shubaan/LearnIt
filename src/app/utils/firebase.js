@@ -606,6 +606,114 @@ var FireBaseTools = {
       let whiteBoardRef = firebaseDb.ref('/').child(whiteBoardPath);
       whiteBoardRef.remove()
     },
+
+  /**
+   * Fetch new Notification Number
+   *
+   * @returns {Promise}
+   */
+  fetchNewNotificationNumber: () => {
+    return new Promise((resolve, reject) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        console.log("fetching newNotificationNumber...");
+        firebaseDb.ref('/userData/' + user.uid).child('newNotificationNumber').on("value", function(snapshot){
+          let newNotificationNumber = snapshot.val();
+          console.log(newNotificationNumber);
+          resolve(newNotificationNumber);
+        });
+      } else {
+        console.log('User is not signed in');
+      }
+    }, error => {
+      reject(error);
+    })
+  },
+
+  /**
+   * Fetch user notifications
+   *
+   * @returns {Promise}
+   */
+  fetchNotifications: () => {
+    return new Promise((resolve, reject) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        firebaseDb.ref('/userData/' + user.uid).child('notifications').on("value", function(snapshot){
+          //set newNotificationNumber to 0
+          var onComplete = function(error) {
+            if (error) {
+              console.log('Synchronization failed');
+            } else {
+              console.log('New notification number updated');
+            }
+          };
+          firebaseDb.ref('/userData/' + user.uid).child('newNotificationNumber').set(0, onComplete);
+
+          //return notifications
+          let notifications = snapshot.val();
+          resolve(notifications);
+        });
+      } else {
+        console.log('User is not signed in');
+      }
+    }, error => {
+      reject(error);
+    })
+  },
+
+  /**
+   * Send a notification
+   -
+   * @param recipient
+   * @param message
+   */
+  sendNotification: (recipient, message) => {
+    //for browser compatibility
+    if (!Date.now) {
+      Date.now = function() { return new Date().getTime(); }
+    }
+
+    var user = firebaseAuth.currentUser;
+    if (user) {
+
+      var notification = {
+        senderId: user.uid,
+        senderName: user.displayName,
+        senderPhoto: user.photoURL,
+        type: "message",
+        message: message,
+        timestamp: Date.now()
+      };
+
+      var onComplete = function(error) {
+        if (error) {
+          console.log('Notification sending failed');
+        } else {
+          console.log('Notification sent');
+
+          //increment new message count
+          var ref = firebaseDb.ref('/userData/' + recipient).child('newNotificationNumber');
+          ref.transaction(function (current_value) {
+              return (current_value || 0) + 1;
+            }, function(error) {
+              if (error) {
+                console.log('Incrementing new notification count failed');
+              } else {
+                console.log('New notification count incremented');
+              }
+            }
+          );
+
+        }
+      };
+
+      var newMessageRef = firebaseDb.ref('/userData/' + recipient).child('notifications').push();
+      newMessageRef.set(notification, onComplete);
+    } else {
+      console.log('User is not signed in');
+    }
+  },
 };
 
 export default FireBaseTools;

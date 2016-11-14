@@ -2,15 +2,18 @@ import React, {Component} from 'react';
 import {browserHistory,Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchProfiles}  from '../../actions/firebase_actions';
+import {fetchProfiles, fetchNewNotificationNumber}  from '../../actions/firebase_actions';
+import FireBaseTools from '../../utils/firebase';
 import '../../css/tutor_profile.css';
 import '../../css/react-rater.css'
 import Rater from 'react-rater'
-
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
@@ -20,6 +23,15 @@ class TutorProfile extends Component {
     super(props);
     this.props.fetchProfiles();
     this.props.tutor;
+    this.state = {
+      messageOpen: false,
+      message: ""
+    }
+    this.timer = undefined;
+  }
+
+  componentWillUnMount() {
+    clearTimeout(this.timer);
   }
 
   getTutorID () {
@@ -37,6 +49,26 @@ class TutorProfile extends Component {
       browserHistory.push("/tutor_session?id="+this.getTutorID())
   }
 
+  handleMessageOpen() {
+    this.setState({messageOpen: true});
+  }
+
+  handleMessageClose() {
+    this.setState({messageOpen: false});
+  }
+
+  handleSendMessage() {
+    FireBaseTools.sendNotification(this.getTutorID(), this.state.message);
+    this.setState({messageOpen: false, message: ""});
+    this.timer = setTimeout(() => {this.props.fetchNewNotificationNumber();}, 500);
+  }
+
+  handleMessageChange(event) {
+    this.setState({
+      message: event.target.value,
+    });
+  };
+
   renderSubject(tutor) {
     var subjects = [];
     if (tutor.tutorInfo.english) {subjects.push(<li key="1">English</li>);}
@@ -49,6 +81,20 @@ class TutorProfile extends Component {
 
 
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleMessageClose.bind(this)}
+      />,
+      <FlatButton
+        label="Send"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleSendMessage.bind(this)}
+      />,
+    ];
+
     var id = this.getTutorID()
     var tutor = this.getProfile(this.props.profiles, id);
     if (!tutor) {
@@ -73,7 +119,7 @@ class TutorProfile extends Component {
           <img src={tutor.photoUrl} alt="Profile Image" id="tutor_img"/>
           <h1>{tutor.name}</h1>
           <div><Rater interactive={false} rating={tutor.tutorInfo.rating}/></div>
-          <RaisedButton label="Send A Message" style={button} onClick={this.handleSendMessageClick.bind(this)}/>
+          <RaisedButton label="Send A Message" style={button} onClick={this.handleMessageOpen.bind(this)}/>
         </Card>
         <div id="tutor_info">
           <Card id="tutor_bio">
@@ -106,6 +152,20 @@ class TutorProfile extends Component {
               <RaisedButton label="Request Session"/>
             </div>
           </Card>
+        <Dialog
+          title={"Send message to "+tutor.name}
+          actions={actions}
+          modal={false}
+          open={this.state.messageOpen}
+          onRequestClose={this.handleMessageClose.bind(this)} >
+          <TextField
+            value={this.state.message}
+            onChange={this.handleMessageChange.bind(this)}
+            floatingLabelText="Enter message here"
+            multiLine={true}
+            rows={3}
+            fullWidth={true} />
+        </Dialog>
       </div>
     );
 
@@ -114,7 +174,7 @@ class TutorProfile extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchProfiles}, dispatch);
+  return bindActionCreators({fetchProfiles, fetchNewNotificationNumber}, dispatch);
 }
 
 

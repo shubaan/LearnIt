@@ -3,7 +3,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, logoutUser}  from '../actions/firebase_actions';
+import {fetchUser, logoutUser, fetchNewNotificationNumber}  from '../actions/firebase_actions';
 
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -16,7 +16,8 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import NavigationIcon from 'material-ui/svg-icons/navigation/menu';
+import Badge from 'material-ui/Badge';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -98,6 +99,7 @@ class App extends Component {
 
     this.state = {open: false};
     this.props.fetchUser();
+    this.props.fetchNewNotificationNumber();
   }
 
   goToLogin() {
@@ -113,11 +115,9 @@ class App extends Component {
   }
 
   toggleDrawer() {
+    this.props.fetchNewNotificationNumber();
     this.setState({open: !this.state.open});
   }
-
-
-  handleClose = () => this.setState({open: false});
 
   goToNotifications() {
     browserHistory.push("/notifications")
@@ -184,7 +184,7 @@ class App extends Component {
         onRequestChange={(open) => this.setState({open})} >
           <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
           <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find a Tutor</MenuItem>
-          <MenuItem onTouchTap={this.goToNotifications.bind(this)}>Notifications</MenuItem>
+          <MenuItem onTouchTap={this.goToNotifications.bind(this)}>Notifications ({this.props.newNotificationNumber})</MenuItem>
           <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule Sessions</MenuItem>
           <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
       </Drawer>
@@ -192,12 +192,24 @@ class App extends Component {
     } else {
       drawer = "";
     }
+
+    var menuIcon = <IconButton><NavigationIcon /></IconButton>;
+    if (this.props.newNotificationNumber) {
+      if (this.props.newNotificationNumber > 0) {
+        menuIcon = (<IconButton style={{width: 72, height: 72, marginTop: -12}}>
+          <Badge badgeContent={this.props.newNotificationNumber} primary={true} badgeStyle={{top: 12, right: 12}}>
+            <NavigationIcon />
+          </Badge>
+        </IconButton>);
+      }
+    }
     return (
       <div>
         <AppBar
           style={appbarstyle}
           title="Learn It"
           onTitleTouchTap={this.handleTitleClick.bind(this)}
+          iconElementLeft={menuIcon}
           onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)}
           iconElementRight={this.renderUserMenu(this.props.currentUser)}
         />
@@ -215,11 +227,11 @@ App.childContextTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchUser, logoutUser}, dispatch);
+  return bindActionCreators({fetchUser, logoutUser, fetchNewNotificationNumber}, dispatch);
 }
 
 function mapStateToProps(state) {
-  return {currentUser: state.currentUser};
+  return {currentUser: state.currentUser, newNotificationNumber: state.newNotificationNumber};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

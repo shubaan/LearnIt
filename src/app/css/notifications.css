@@ -1,0 +1,17 @@
+#notifications {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+#notification_list {
+  padding: 5px 15px 10px 15px;
+  float: left;
+  width: 50%;
+  height: 600px;
+  overflow-y: auto;
+}
+
+#notification_details {
+  width: 45%;
+  float: right;
+}
