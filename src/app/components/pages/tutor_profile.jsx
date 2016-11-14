@@ -14,8 +14,17 @@ import TimePicker from 'material-ui/TimePicker';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import AutoComplete from 'material-ui/AutoComplete';
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
+
+const subjects = [
+  'Math',
+  'Science',
+  'English',
+  'Spanish',
+  'History'
+];
 
 class TutorProfile extends Component {
 
@@ -25,7 +34,13 @@ class TutorProfile extends Component {
     this.props.tutor;
     this.state = {
       messageOpen: false,
-      message: ""
+      message: "",
+      requestOpen: false,
+      requestDate: null,
+      startTime: null,
+      endTime: null,
+      subject: "",
+      description: "",
     }
     this.timer = undefined;
   }
@@ -69,6 +84,61 @@ class TutorProfile extends Component {
     });
   };
 
+  handleRequestOpen() {
+    this.setState({requestOpen: true});
+  }
+
+  handleRequestClose() {
+    this.setState({requestOpen: false});
+  }
+
+  handleSendRequest() {
+    if (!this.state.startTime || !this.state.endTime || !this.state.requestDate || this.state.subject=="")
+      return;
+    var from = new Date(this.state.requestDate.getFullYear(), this.state.requestDate.getMonth(),
+      this.state.requestDate.getDate(), this.state.startTime.getHours(), this.state.startTime.getMinutes()).getTime();
+    var to = new Date(this.state.requestDate.getFullYear(), this.state.requestDate.getMonth(),
+      this.state.requestDate.getDate(), this.state.endTime.getHours(), this.state.endTime.getMinutes()).getTime();
+    if (from>to)
+      return;
+    FireBaseTools.requestSession(this.getTutorID(), this.state.subject, this.state.description, from, to);
+    this.setState({requestOpen: false, description: ""});
+    this.timer = setTimeout(() => {this.props.fetchNewNotificationNumber();}, 500);
+  }
+
+  handleDateChange(event, date) {
+    console.log(date);
+    this.setState({
+      requestDate: date,
+    });
+  };
+
+  handleStartTimeChange(event, date) {
+    console.log(date);
+    this.setState({
+      startTime: date,
+    });
+  };
+
+  handleEndTimeChange(event, date) {
+    console.log(date);
+    this.setState({
+      endTime: date,
+    });
+  };
+
+  handleUpdateInput(value) {
+    this.setState({
+      subject: value,
+    });
+  };
+
+  handleDescriptionChange(event) {
+    this.setState({
+      description: event.target.value,
+    });
+  };
+
   renderSubject(tutor) {
     var subjects = [];
     if (tutor.tutorInfo.english) {subjects.push(<li key="1">English</li>);}
@@ -81,7 +151,7 @@ class TutorProfile extends Component {
 
 
   render() {
-    const actions = [
+    const messageActions = [
       <FlatButton
         label="Cancel"
         primary={true}
@@ -92,6 +162,20 @@ class TutorProfile extends Component {
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSendMessage.bind(this)}
+      />,
+    ];
+
+    const requestActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleRequestClose.bind(this)}
+      />,
+      <FlatButton
+        label="Send"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleSendRequest.bind(this)}
       />,
     ];
 
@@ -120,6 +204,7 @@ class TutorProfile extends Component {
           <h1>{tutor.name}</h1>
           <div><Rater interactive={false} rating={tutor.tutorInfo.rating}/></div>
           <RaisedButton label="Send A Message" style={button} onClick={this.handleMessageOpen.bind(this)}/>
+          <RaisedButton label="Request a tutoring session" primary={true} style={button} onClick={this.handleRequestOpen.bind(this)}/>
         </Card>
         <div id="tutor_info">
           <Card id="tutor_bio">
@@ -135,7 +220,7 @@ class TutorProfile extends Component {
             </ul>
           </Card>
         </div>
-          <Card id="session_card">
+          /*<Card id="session_card">
             <h3>Request a Session</h3>
             <div id="input_container">
               <div style={inputs}>
@@ -151,10 +236,10 @@ class TutorProfile extends Component {
             <div id="session_button">
               <RaisedButton label="Request Session"/>
             </div>
-          </Card>
+          </Card>*/
         <Dialog
-          title={"Send message to "+tutor.name}
-          actions={actions}
+          title={"Send a message to "+tutor.name}
+          actions={messageActions}
           modal={false}
           open={this.state.messageOpen}
           onRequestClose={this.handleMessageClose.bind(this)} >
@@ -162,6 +247,40 @@ class TutorProfile extends Component {
             value={this.state.message}
             onChange={this.handleMessageChange.bind(this)}
             floatingLabelText="Enter message here"
+            multiLine={true}
+            rows={3}
+            fullWidth={true} />
+        </Dialog>
+        <Dialog
+          title={"Request a tutoring session with "+tutor.name}
+          actions={requestActions}
+          modal={false}
+          open={this.state.requestOpen}
+          onRequestClose={this.handleRequestClose.bind(this)}
+          autoScrollBodyContent={true} >
+          <DatePicker
+            hintText="Select A Date"
+            value={this.state.requestDate}
+            onChange={this.handleDateChange.bind(this)}/>
+          <TimePicker
+            hintText="Select A Start Time"
+            value={this.state.startTime}
+            onChange={this.handleStartTimeChange.bind(this)}/>
+          <TimePicker
+            hintText="Select A End Time"
+            value={this.state.endTime}
+            onChange={this.handleEndTimeChange.bind(this)}/>
+          <AutoComplete
+            hintText="Select a subject"
+            filter={AutoComplete.caseInsensitiveFilter}
+            dataSource={subjects}
+            onNewRequest  ={this.handleUpdateInput.bind(this)}
+            onUpdateInput={this.handleUpdateInput.bind(this)}
+            openOnFocus={true}/>
+          <TextField
+            value={this.state.description}
+            onChange={this.handleDescriptionChange.bind(this)}
+            floatingLabelText="Enter any comments here"
             multiLine={true}
             rows={3}
             fullWidth={true} />

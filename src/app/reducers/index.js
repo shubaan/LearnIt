@@ -7,6 +7,7 @@ import FirebaseIsTutorReducer from './firebase_isTutor_reducer'
 import FirebaseMessagesReducer from './firebase_messages_reducer'
 import FirebaseNewNotificationNumberReducer from './firebase_newNotificationNumber_reducer'
 import FirebaseNotificationsReducer from './firebase_notifications_reducer'
+import FirebaseSessionsReducer from './firebase_sessions_reducer'
 
 const rootReducer = combineReducers({
   currentUser: FirebaseUserReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   messages: FirebaseMessagesReducer,
   newNotificationNumber: FirebaseNewNotificationNumberReducer,
   notifications: FirebaseNotificationsReducer,
+  sessions: FirebaseSessionsReducer,
 });
 
 export default rootReducer;

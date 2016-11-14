@@ -14,6 +14,8 @@ import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bu
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ActionEvent from 'material-ui/svg-icons/action/event'
 import ContentReply from 'material-ui/svg-icons/content/reply'
+import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
+import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
@@ -30,7 +32,8 @@ class Notifications extends Component {
       selectedIndex: 0,
       replyOpen: false,
       reply: "",
-      recipient: null
+      recipient: null,
+      session: null
     }
     this.timer = undefined;
   }
@@ -61,7 +64,15 @@ class Notifications extends Component {
     this.setState({
       reply: event.target.value,
     });
-  };
+  }
+
+  handleAccept(notification) {
+    FireBaseTools.acceptSession(notification.senderId, notification.request);
+  }
+
+  handleReject(notification) {
+    FireBaseTools.rejectSession(notification.senderId, notification.request);
+  }
 
   getCardHeader(notification) {
     var date = new Date(notification.timestamp);
@@ -92,6 +103,33 @@ class Notifications extends Component {
     }
   }
 
+  getCardText(notification) {
+    switch(notification.type){
+      case "message":
+        return <CardText>
+          {notification.message}
+        </CardText>;
+        break;
+      case "notification":
+        return <CardText>
+          {notification.message}
+        </CardText>;;
+        break;
+      case "request":
+        var date = new Date(notification.request.startTime);
+        var end = new Date(notification.request.endTime);
+        return <CardText>
+          <h3>{notification.message}</h3>
+          <p><b>Time: </b>On {date.toLocaleDateString()} from {date.toLocaleTimeString()} to {end.toLocaleTimeString()}</p>
+          <p><b>Subject: </b>{notification.request.subject}</p>
+          <p><b>Description: </b>{notification.request.description}</p>
+        </CardText>;
+        break;
+      default :
+        return <CardText />;
+    }
+  }
+
   getCardActions(notification) {
     switch(notification.type){
       case "message":
@@ -107,7 +145,20 @@ class Notifications extends Component {
         break;
       case "request":
         return <CardActions>
-          <FlatButton />
+          <FlatButton
+            label="Reply"
+            onTouchTap={this.handleReplyOpen.bind(this, notification.senderId)}
+            icon={<ContentReply />} />
+          <FlatButton
+            label="Accept Request"
+            primary={true}
+            onTouchTap={this.handleAccept.bind(this, notification)}
+            icon={<ContentAddCircle />} />
+          <FlatButton
+            label="Reject Request"
+            secondary={true}
+            onTouchTap={this.handleReject.bind(this, notification)}
+            icon={<ContentRemoveCircle />} />
         </CardActions>;
         break;
       default :
@@ -191,6 +242,7 @@ class Notifications extends Component {
                 value = {i}
                 primaryText={l.senderName}
                 secondaryText={l.message}
+                secondaryTextLines={1}
                 leftAvatar={<Avatar src={l.type=="notification" ? "http://i.imgur.com/xLGaGy8.png": l.senderPhoto} />}
                 rightIcon={getIcon(l.type)}
               />;
@@ -199,9 +251,7 @@ class Notifications extends Component {
         </Card>
         <Card id="notification_details">
           {this.getCardHeader(inbox[this.state.selectedIndex])}
-          <CardText>
-            {inbox[this.state.selectedIndex].message}
-          </CardText>
+          {this.getCardText(inbox[this.state.selectedIndex])}
           {this.getCardActions(inbox[this.state.selectedIndex])}
         </Card>
         <Dialog

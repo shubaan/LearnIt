@@ -19,7 +19,8 @@ import {
   SEND_MESSAGE,
   FETCH_NEW_NOTIFICATION_NUMBER,
   FETCH_NOTIFICATIONS,
-  SEND_NOTIFICATION
+  SEND_NOTIFICATION,
+  FETCH_SESSIONS
 } from './types';
 
 
@@ -179,6 +180,14 @@ export function sendNotification(recipient, message) {
   const request = FireBaseTools.sendNotification(recipient, message);
   return {
     type: SEND_NOTIFICATION,
+    payload: request
+  }
+}
+
+export function fetchSessions() {
+  const request = FireBaseTools.fetchSessions();
+  return {
+    type: FETCH_SESSIONS,
     payload: request
   }
 }

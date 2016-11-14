@@ -6,12 +6,12 @@
 #notification_list {
   padding: 5px 15px 10px 15px;
   float: left;
-  width: 50%;
+  width: 40%;
   height: 600px;
   overflow-y: auto;
 }
 
 #notification_details {
-  width: 45%;
+  width: 55%;
   float: right;
 }
