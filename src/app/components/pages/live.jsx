@@ -20,34 +20,32 @@ class Live extends Component {
       navigator.getUserMedia || navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
-    var video_id
-    this.peer.on('open', function(id) {
-      console.log('My peer ID is: ' + id);
-    });
 
-    this.peer.on('call', function(call) {
-      console.log(call)
-      navigator.getUserMedia = (
-        navigator.getUserMedia || navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia || navigator.msGetUserMedia
-      );
-      navigator.getUserMedia({audio:true, video:true}, function(stream) {
-        console.log("Answering");
-      }, function(err) {
-        console.log("Error On Receive")
-      });
-      call.on('stream', function(stream) {
-        var video = document.querySelector('video');
-        video.src = window.URL.createObjectURL(stream);
-      });
-    });
-
+    this.peer.on('open', (id) => console.log('Peer ID: ' + id));
+    this.peer.on('call', this.onReceiveCall.bind(this));
     this.prepareSelfVideo();
     this.call(this.other_id);
   }
 
   getMedia(options, success, error) {
     navigator.getUserMedia(options, success, error);
+  }
+
+  onReceiveCall(call) {
+    this.getMedia({audio: true, video: true}, (stream) => {
+      console.log("answering..");
+      call.answer(stream)
+    }, (err) => console.log(err));
+
+    call.on('stream', (stream) => {
+      var video = document.querySelector('video');
+      video.src = window.URL.createObjectURL(stream);
+    });
+  }
+
+  onReceiveStream(stream) {
+    var video = document.querySelector('.video-call');
+    video.src = window.URL.createObjectURL(stream);
   }
 
   prepareSelfVideo() {
@@ -61,12 +59,12 @@ class Live extends Component {
     this.getMedia({audio: true, video: true}, (stream) => {
         var call = this.peer.call(id, stream);
         console.log("calling..."+id);
-        call.on('stream', function(stream) {
-          console.log("Streaming");
-          var video = document.querySelector('.video-call');
-          video.src = window.URL>createObjectURL(stream);
-        });
+        call.on('stream', this.onReceiveStream);
       }, (err) => console.log(err));
+  }
+
+  componentWillUnmount() {
+    this.peer.disconnect();
   }
 
   render() {
