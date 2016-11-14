@@ -44,13 +44,13 @@ class Live extends Component {
   }
 
   onReceiveStream(stream) {
-    var video = document.querySelector('.video-call');
+    var video = document.getElementById('video-call');
     video.src = window.URL.createObjectURL(stream);
   }
 
   prepareSelfVideo() {
     this.getMedia({audio: false, video: true}, (stream) => {
-        var video = document.querySelector('.video-self');
+        var video = document.getElementById('video-self');
         video.src = window.URL.createObjectURL(stream);
       }, (err) => console.log(err));
   }
