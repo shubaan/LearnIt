@@ -47,7 +47,7 @@ class Live extends Component {
     })
 
     peer.on('call', function(call) {
-      navigator.getUserMedia({audio:true, video:false}, function(stream){
+      navigator.getUserMedia({audio:true, video:true}, function(stream){
 
         console.log("Answering");
         call.answer(stream);
