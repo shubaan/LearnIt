@@ -50,6 +50,7 @@ class Live extends Component {
       navigator.getUserMedia({audio:true, video:false}, function(stream){
 
         console.log("Answering");
+        call.answer(stream);
         console.log(call);
         call.on('stream', function(stream) {
           console.log("Other Stream");
@@ -57,7 +58,7 @@ class Live extends Component {
           var video = document.getElementById("video-call");
           video.src = window.URL.createObjectURL(stream);
         })
-        
+
       }, function(err) {
       
       });
