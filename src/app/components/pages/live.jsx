@@ -10,61 +10,53 @@ class Live extends Component {
 
   constructor(props) {
     super(props);
-    this.my_id = 12
-    this.other_id = 1212
+    this.my_id = "12"
+    this.other_id = "1212"
     this.peer = new Peer(this.my_id, {key: key_value})
   }
 
   start() {
-    navigator.getUserMedia = (
-      navigator.getUserMedia || navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia || navigator.msGetUserMedia
-    );
+    var peer = this.peer;
+    var other_id = this.other_id;
+    console.log(peer);
 
-    this.peer.on('open', (id) => console.log('Peer ID: ' + id));
-    this.peer.on('call', this.onReceiveCall.bind(this));
-    this.prepareSelfVideo();
-    this.call(this.other_id);
-  }
-
-  getMedia(options, success, error) {
-    navigator.getUserMedia(options, success, error);
-  }
-
-  onReceiveCall(call) {
-    this.getMedia({audio: true, video: true}, (stream) => {
-      console.log("answering..");
-      call.answer(stream)
-    }, (err) => console.log(err));
-
-    call.on('stream', (stream) => {
-      var video = document.querySelector('video');
-      video.src = window.URL.createObjectURL(stream);
+    peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
     });
-  }
 
-  onReceiveStream(stream) {
-    var video = document.getElementById('video-call');
-    video.src = window.URL.createObjectURL(stream);
-  }
+    navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  prepareSelfVideo() {
-    this.getMedia({audio: false, video: true}, (stream) => {
-        var video = document.getElementById('video-self');
+    //Sets up own camera
+    navigator.getUserMedia({audio:false, video:true}, function(stream) {
+      console.log("Streaming");
+      console.log(stream);
+      var video = document.getElementById("video-self");
+      video.src = window.URL.createObjectURL(stream);
+    }, function(err) {
+      console.log("Error loading camera");
+    })
+
+    navigator.getUserMedia({audio:true, video:true}, function(stream) {
+      console.log("Calling stream");
+      console.log(stream);
+      var call = peer.call(other_id, stream);
+      console.log("Calling connection");
+      console.log(call);
+    }, function(err) {
+      console.log("Error sending stream");
+    })
+
+    peer.on('call', function(call) {
+      console.log("Answering");
+      console.log(call);
+      call.on('stream', function(stream) {
+        console.log("Other Stream");
+        console.log(stream);
+        var video = document.getElementById("video-call");
         video.src = window.URL.createObjectURL(stream);
-      }, (err) => console.log(err));
-  }
+      })
+    })
 
-  call(id) {
-    this.getMedia({audio: true, video: true}, (stream) => {
-        var call = this.peer.call(id, stream);
-        console.log("calling..."+id);
-        call.on('stream', this.onReceiveStream);
-      }, (err) => console.log(err));
-  }
-
-  componentWillUnmount() {
-    this.peer.disconnect();
   }
 
   render() {
@@ -77,9 +69,7 @@ class Live extends Component {
     var video_self = (<video style={box} id="video-self" className="video-self" autoPlay></video>)
     var video_call = (<video style={box} id="video-call" className="video-call" autoPlay></video>)
 
-    this.start();
-
-
+    this.start()
 
     return ( 
       <div>
