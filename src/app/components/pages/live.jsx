@@ -36,7 +36,7 @@ class Live extends Component {
       console.log("Error loading camera");
     })
 
-    navigator.getUserMedia({audio:true, video:true}, function(stream) {
+    navigator.getUserMedia({audio:false, video:true}, function(stream) {
       console.log("Calling stream");
       console.log(stream);
       var call = peer.call(other_id, stream);
@@ -47,14 +47,20 @@ class Live extends Component {
     })
 
     peer.on('call', function(call) {
-      console.log("Answering");
-      console.log(call);
-      call.on('stream', function(stream) {
-        console.log("Other Stream");
-        console.log(stream);
-        var video = document.getElementById("video-call");
-        video.src = window.URL.createObjectURL(stream);
-      })
+      navigator.getUserMedia({audio:true, video:false}, function(stream){
+
+        console.log("Answering");
+        console.log(call);
+        call.on('stream', function(stream) {
+          console.log("Other Stream");
+          console.log(stream);
+          var video = document.getElementById("video-call");
+          video.src = window.URL.createObjectURL(stream);
+        })
+        
+      }, function(err) {
+      
+      });
     })
 
   }
