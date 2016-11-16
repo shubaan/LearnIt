@@ -197,6 +197,26 @@ class TutorProfile extends Component {
       marginRight: "10px",
     }
 
+    var session = (
+    <Card id="session_card">
+      <h3>Request a Session</h3>
+      <div id="input_container">
+      <div style={inputs}>
+      <DatePicker hintText="Select A Date" />
+      </div>
+      <div style={inputs}>
+      <TimePicker hintText="Select A Start Time" />
+      </div>
+      <div style={inputs}>
+      <TimePicker hintText="Select A End Time" />
+      </div>
+      </div>
+      <div id="session_button">
+      <RaisedButton label="Request Session"/>
+      </div>
+    </Card>
+    );
+
     return (
       <div id="tutor_container">
         <Card id="tutor_side">
@@ -220,23 +240,7 @@ class TutorProfile extends Component {
             </ul>
           </Card>
         </div>
-          /*<Card id="session_card">
-            <h3>Request a Session</h3>
-            <div id="input_container">
-              <div style={inputs}>
-                <DatePicker hintText="Select A Date" />
-              </div>
-              <div style={inputs}>
-                <TimePicker hintText="Select A Start Time" />
-              </div>
-              <div style={inputs}>
-                <TimePicker hintText="Select A End Time" />
-              </div>
-            </div>
-            <div id="session_button">
-              <RaisedButton label="Request Session"/>
-            </div>
-          </Card>*/
+
         <Dialog
           title={"Send a message to "+tutor.name}
           actions={messageActions}

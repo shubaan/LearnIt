@@ -7,7 +7,7 @@
 	float: left;
 	width: 300px;
 	text-align: center;
-	height: 450px;
+	height: 500px;
 }
 
 #tutor_img {
@@ -25,7 +25,7 @@
 #tutor_bio {
 	margin-bottom: 25px;
 	padding: 5px 15px 10px 15px;
-	height: 150px;
+	height: 200px;
 }
 
 #tutor_bio p {
