@@ -36,7 +36,7 @@ class Live extends Component {
       console.log("Error loading camera");
     })
 
-    navigator.getUserMedia({audio:false, video:true}, function(stream) {
+    navigator.getUserMedia({audio:true, video:true}, function(stream) {
       console.log("Calling stream");
       console.log(stream);
       var call = peer.call(other_id, stream);
