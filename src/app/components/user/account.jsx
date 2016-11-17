@@ -228,7 +228,6 @@ class UserAccount extends Component {
                   isSpanishChecked={this.isSpanishChecked}
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
-                  handleBioEdited={this.handleBioEdited}
                   /*paySlider={this.state.profile.payrate}
                   math={this.state.profile.math}
                   science={this.state.profile.science}

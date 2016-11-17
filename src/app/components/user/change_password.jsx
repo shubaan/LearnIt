@@ -26,6 +26,7 @@ class ChangePassword extends Component {
     if (password !== repeatPassword) {
       console.log("a")
       this.setState({
+        message: "Please password must match!",
         errorMessage: "Passwords do not match"
       })
     }
