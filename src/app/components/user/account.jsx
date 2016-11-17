@@ -228,9 +228,7 @@ class UserAccount extends Component {
                   isSpanishChecked={this.isSpanishChecked}
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
-{/*<<<<<<< e3632cad68498228f48aa4c82373b7e2356ecab5*/}
                   handleBioEdited={this.handleBioEdited}
-{/*=======*/}
                   /*paySlider={this.state.profile.payrate}
                   math={this.state.profile.math}
                   science={this.state.profile.science}
@@ -238,7 +236,6 @@ class UserAccount extends Component {
                   spanish={this.state.profile.spanish}
                   history={this.state.profile.history}
                   bio={this.state.profile.bio}/>*/
-{/*>>>>>>> everything is broken*/}
                   paySlider={this.state.tutorInfo.payrate}
                   math={this.state.tutorInfo.math}
                   science={this.state.tutorInfo.science}
