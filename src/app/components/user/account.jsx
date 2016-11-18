@@ -27,7 +27,8 @@ class UserAccount extends Component {
       tutorInfo: {},
       bio: '',
       name: '',
-      open: false
+      open: false,
+      paypalId: ''
     }
   }
 
@@ -77,6 +78,7 @@ class UserAccount extends Component {
       this.props.saveBio(this.state.bio);
       console.log(this.state.bio)
       console.log(this.state.tutorInfo.bio)
+      console.log(this.state.paypalId)
       this.setState({
         open: true,
       });
@@ -164,6 +166,10 @@ class UserAccount extends Component {
     this.setState({name: value});
   };
 
+  handlePayPalIdEdited = (event, value) => {
+    this.setState({paypalId: value});
+  }
+
   handleRequestClose = () => {
     this.setState({
       open: false,
@@ -228,6 +234,7 @@ class UserAccount extends Component {
                   isSpanishChecked={this.isSpanishChecked}
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
+                  handlePayPalIdEdited={this.handlePayPalIdEdited}
                   /*paySlider={this.state.profile.payrate}
                   math={this.state.profile.math}
                   science={this.state.profile.science}
@@ -240,7 +247,8 @@ class UserAccount extends Component {
                   science={this.state.tutorInfo.science}
                   english={this.state.tutorInfo.english}
                   spanish={this.state.tutorInfo.spanish}
-                  history={this.state.tutorInfo.history} />
+                  history={this.state.tutorInfo.history}
+                  paypalId={this.state.paypalId}/>
           </div>
       )
     } else tutorForm = (
