@@ -21,6 +21,7 @@ class UserRegister extends Component {
       emailError: '',
       password: '',
       passwordError: '',
+      bio: '',
       isTutor: false,
       paySlider: 50,
       math: false,
@@ -28,6 +29,7 @@ class UserRegister extends Component {
       english: false,
       spanish: false,
       history: false,
+      paypalId: ''
     }
   }
 
@@ -81,7 +83,8 @@ class UserRegister extends Component {
           name: this.state.name,
           email: this.state.email,
           password: this.state.password,
-          isTutor: this.state.isTutor
+          isTutor: this.state.isTutor,
+          bio: this.state.bio
         }
         if (user.isTutor) {
           user.math = this.state.math;
@@ -90,6 +93,7 @@ class UserRegister extends Component {
           user.spanish = this.state.spanish;
           user.history = this.state.history;
           user.payrate = this.state.paySlider;
+          user.paypalId = this.state.paypalId;
         }
         this.props.registerUser(user).then(data => {
             if (data.payload.errorCode)
@@ -159,6 +163,15 @@ class UserRegister extends Component {
     this.isValidPassword(p)
   };
 
+  handleBioChange = (event, value) => {
+    let p = value
+    console.log(p)
+    this.setState({bio: value});
+  };
+  handlePayPalIdChange = (event, value) => {
+    this.setState({paypalId: value});
+  }
+
   render() {
     if (this.props.currentUser && this.props.currentUser.uid) {
       this.props.logoutUser().then(data=> {
@@ -208,6 +221,7 @@ class UserRegister extends Component {
           isSpanishChecked={this.isSpanishChecked.bind(this)}
           isHistoryChecked={this.isHistoryChecked.bind(this)}
           handlePaySlider={this.handlePaySlider.bind(this)}
+          handlePayPalIdEdited={this.handlePayPalIdChange.bind(this)}
           paySlider={this.state.paySlider}
           math={this.state.math}
           science={this.state.science}
@@ -236,6 +250,13 @@ class UserRegister extends Component {
             floatingLabelText="Password"
             errorText={this.state.passwordError}
             type="password"/>
+          <br/>
+          <TextField
+            floatingLabelText="Edit Bio"
+            style={{textAlign: 'left'}}
+            multiLine={true}
+            onChange={this.handleBioChange}
+          />
           <br />
           <Checkbox
             ref="tutor" labelPosition="left"
