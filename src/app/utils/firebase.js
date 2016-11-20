@@ -227,6 +227,15 @@ var FireBaseTools = {
     })
   },
 
+  fetchProfile: (uid, callback) => {
+    let profilesRef =firebaseDb.ref('/').child('profiles/'+uid);
+    profilesRef.on("value", function(snapshot){
+      let profile = snapshot.val();
+      console.log(profile)
+      callback(profile);
+    });
+  },
+
   /**
    * Log the user in using email and password
    *
@@ -721,7 +730,8 @@ var FireBaseTools = {
    * @returns {Promise}
    */
   fetchSession: (sid, callback) => {
-    firebaseDb.ref('/sessions/').child('sid').on("value", function(snapshot){
+    console.log(sid)
+    firebaseDb.ref('/sessions/').child(sid).on("value", function(snapshot){
       let session = snapshot.val();
       callback(session);
     });
@@ -748,6 +758,29 @@ var FireBaseTools = {
       reject(error);
     })
   },
+    /**
+     * Fetch session ids of current user
+     *
+     * @returns {Promise}
+     */
+    fetchMySessions: (callback) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        //console.log('User is signed in');
+        firebaseDb.ref('/userData/' + user.uid).child('sessions').on("value", function(snapshot){
+          let sids = snapshot.val();
+          for (var sid in sids) {
+            firebaseDb.ref('/sessions/').child(sids[sid]).on("value", function(snapshot){
+              var session = snapshot.val();
+              session.sid = sids[sid]
+              callback(session)
+            });
+          }
+        });
+      } else {
+        //console.log('User is not signed in');
+      }
+    },
 
   /**
    * Request a new tutoring session

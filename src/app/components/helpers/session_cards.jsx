@@ -10,6 +10,7 @@ class SessionCard extends Component {
   constructor(props) {
     super(props);
     this.state = {shadow: 1};
+    this.goToSession = this.goToSession.bind(this)
   }
 
   onMouseOver() {
@@ -18,10 +19,14 @@ class SessionCard extends Component {
   onMouseOut() {
     this.setState({shadow: 1});
   }
+  //
+  // goToLive () {
+  //   browserHistory.push("/live");
+  // }
 
-  goToLive () {
-    browserHistory.push("/live");
-  }
+    goToSession () {
+      browserHistory.push("/tutor_session?id="+this.props.sid);
+    }
 
   render() {
 
@@ -67,7 +72,7 @@ class SessionCard extends Component {
 
 	return (
 		<Card style={cardStyle}
-          onClick={this.goToLive.bind(this)}
+          onClick={this.goToSession.bind(this)}
           onMouseOver={this.onMouseOver.bind(this)}
           onMouseOut={this.onMouseOut.bind(this)}
           zDepth={this.state.shadow}>

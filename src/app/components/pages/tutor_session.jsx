@@ -25,18 +25,22 @@ class TutorSession extends Component {
 
     this.state = {
       messages: [],
-      message: ""
+      message: "",
+      theirId: 0
     }
 
     this.insertMessageSorted = this.insertMessageSorted.bind(this);
     this.handleSendMessageClick = this.handleSendMessageClick.bind(this);
     this.fetchMyMessages = this.fetchMyMessages.bind(this);
     this.fetchTheirMessages = this.fetchTheirMessages.bind(this);
+    this.fetchTheirProfile = this.fetchTheirProfile.bind(this);
+    this.fetchMyProfile = this.fetchMyProfile.bind(this);
+    this.fetchSession = this.fetchSession.bind(this);
+    this.renderMessages = this.renderMessages.bind(this)
   }
 
   componentDidMount() {
-      FireBaseTools.fetchMyMessages(this.getTutorID(), this.fetchMyMessages);
-      FireBaseTools.fetchTheirMessages(this.getTutorID(), this.fetchTheirMessages);
+      FireBaseTools.fetchSession(this.getSessionID(), this.fetchSession)
   }
 
 
@@ -44,6 +48,26 @@ class TutorSession extends Component {
 
     var ml = document.getElementById("messageList");
     ml.scrollTop = ml.scrollHeight;
+  }
+
+  fetchSession(session) {
+    console.log(session)
+    var theirId = session.tutorId
+    if (this.props.currentUser.uid == theirId) {
+      console.log("I am the tutor")
+      theirId = session.studentId
+    } else {
+      console.log("I am the student")
+    }
+      console.log("theirid = " + theirId)
+    FireBaseTools.fetchMyMessages(theirId, this.fetchMyMessages);
+    FireBaseTools.fetchTheirMessages(theirId, this.fetchTheirMessages);
+    FireBaseTools.fetchProfile(theirId, this.fetchTheirProfile);
+    FireBaseTools.fetchProfile(this.props.currentUser.uid, this.fetchMyProfile);
+    this.setState({
+      session: session,
+      theirId: theirId
+    })
   }
 
   fetchMyMessages(message, time) {
@@ -61,22 +85,17 @@ class TutorSession extends Component {
       let m = {
         text: message,
         time: time,
-        uid: this.getTutorID()
+        uid: this.state.theirId
       }
       this.insertMessageSorted(m)
   }
-  //
-  // insertMessageSorted(m) {
-  //   let comparator = function(a, b) {
-  //     let d1 = a.time
-  //     let d2 = b.time
-  //     return d2.localeCompare(d2);
-  //   };
-  //   let tmp = this.state.messages
-  //   tmp.push(m)
-  //   tmp.sort(comparator)
-  //   this.setState({ messages: tmp })
-  // }
+
+  fetchTheirProfile(profile) {
+      this.setState({theirProfile: profile})
+  }
+  fetchMyProfile(profile) {
+      this.setState({myProfile: profile})
+  }
 
   insertMessageSorted(m) {
     let tmp = this.state.messages
@@ -86,15 +105,8 @@ class TutorSession extends Component {
     this.setState({ messages: tmp })
   }
 
-  getTutorID () {
+  getSessionID() {
     return window.location.search.substring(4)
-  }
-
-  getProfile (profiles, id) {
-    for (var p in profiles){
-      if (p == id)
-        return profiles[p];
-    }
   }
 
   handleSendMessageClick() {
@@ -104,7 +116,7 @@ class TutorSession extends Component {
     }
     else
     {
-    let uid = this.getTutorID()
+    let uid = this.state.theirId
     FireBaseTools.sendMessage(uid, this.state.message)
     this.setState({ message: "" })
     }
@@ -186,7 +198,7 @@ class TutorSession extends Component {
     let items = []
     for (var m in messages) {
       let isMe = messages[m].uid == this.props.currentUser.uid
-      let p = this.getProfile(this.props.profiles, messages[m].uid)
+      let p = this.state.theirProfile
       let user
       if (isMe) {
         user = (
@@ -219,8 +231,7 @@ class TutorSession extends Component {
 
   render() {
 
-    var id = this.getTutorID()
-    var tutor = this.getProfile(this.props.profiles, id);
+    var tutor = this.state.theirProfile;
     if (!tutor) {
       return (<h1>Error, User not Found</h1>);
     }
