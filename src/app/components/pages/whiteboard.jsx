@@ -178,6 +178,7 @@ class WhiteBoard extends React.Component {
         <ColorPallet color="pink" setColor={this.setColor}/>
         <ColorPallet color="black" setColor={this.setColor}/>
         <ColorPallet color="grey" setColor={this.setColor}/>
+        <ColorPallet color="white" setColor={this.setColor}/>
         <button onClick={this.resetCanvas.bind(this)}>Reset</button>
       </div>
     );
@@ -198,7 +199,8 @@ class ColorPallet extends React.Component {
       width: "40px",
       height: "40px",
       float: "left",
-      backgroundColor: this.props.color
+      backgroundColor: this.props.color,
+      border: "0.5px solid black",
     }
     return (
       <span style={palletStyle} onClick={this.setColor} />
