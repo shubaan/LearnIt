@@ -13,13 +13,16 @@ import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ActionEvent from 'material-ui/svg-icons/action/event'
+import ActionDone from 'material-ui/svg-icons/action/done'
 import ContentReply from 'material-ui/svg-icons/content/reply'
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
-import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle'
+import ContentClear from 'material-ui/svg-icons/content/clear'
+import ContentSend from 'material-ui/svg-icons/content/send'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
 let SelectableList = makeSelectable(List);
+
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 class Notifications extends Component {
 
@@ -31,7 +34,9 @@ class Notifications extends Component {
     this.state = {
       selectedIndex: 0,
       replyOpen: false,
+      messageOpen: false,
       reply: "",
+      message: "",
       recipient: null,
       session: null
     }
@@ -46,32 +51,58 @@ class Notifications extends Component {
     this.setState({selectedIndex: index});
   }
 
-  handleReplyOpen(recipient) {
-    this.setState({replyOpen: true, recipient: recipient});
+  handleReplyOpen(recipient, oldMessage) {
+    this.setState({
+      replyOpen: true,
+      recipient: recipient,
+      message: oldMessage
+    });
   }
 
   handleReplyClose() {
-    this.setState({replyOpen: false});
+    this.setState({replyOpen: false, message: ""});
   }
 
   handleReply() {
-    FireBaseTools.sendNotification(this.state.recipient, this.state.reply);
+    FireBaseTools.sendNotification(this.state.recipient, this.state.reply+"\n\n"+this.state.message);
     this.setState({replyOpen: false});
     this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
   }
 
-  handleChange(event) {
+  handleReplyChange(event) {
     this.setState({
       reply: event.target.value,
     });
   }
 
+  handleMessageOpen(recipient) {
+    this.setState({messageOpen: true, recipient: recipient});
+  }
+
+  handleMessageClose() {
+    this.setState({messageOpen: false});
+  }
+
+  handleMessage() {
+    FireBaseTools.sendNotification(this.state.recipient, this.state.message);
+    this.setState({messageOpen: false});
+    this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+  }
+
+  handleMessageChange(event) {
+    this.setState({
+      message: event.target.value,
+    });
+  }
+
   handleAccept(notification) {
-    FireBaseTools.acceptSession(notification.senderId, notification.request);
+    FireBaseTools.acceptSession(notification.senderId, notification.request, notification.key);
+    this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
   }
 
   handleReject(notification) {
-    FireBaseTools.rejectSession(notification.senderId, notification.request);
+    FireBaseTools.rejectSession(notification.senderId, notification.request, notification.key);
+    this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
   }
 
   getCardHeader(notification) {
@@ -107,12 +138,12 @@ class Notifications extends Component {
     switch(notification.type){
       case "message":
         return <CardText>
-          {notification.message}
+          <div id="withprewrap">{notification.message}</div>
         </CardText>;
         break;
       case "notification":
         return <CardText>
-          {notification.message}
+          <div id="withprewrap">{notification.message}</div>
         </CardText>;;
         break;
       case "request":
@@ -120,7 +151,7 @@ class Notifications extends Component {
         var end = new Date(notification.request.endTime);
         return <CardText>
           <h3>{notification.message}</h3>
-          <p><b>Time: </b>On {date.toLocaleDateString()} from {date.toLocaleTimeString()} to {end.toLocaleTimeString()}</p>
+          <p><b>Time: </b>On {days[date.getDay()]}, {date.toLocaleDateString()} from {date.toLocaleTimeString()} to {end.toLocaleTimeString()}</p>
           <p><b>Subject: </b>{notification.request.subject}</p>
           <p><b>Description: </b>{notification.request.description}</p>
         </CardText>;
@@ -133,10 +164,13 @@ class Notifications extends Component {
   getCardActions(notification) {
     switch(notification.type){
       case "message":
+        var date = new Date(notification.timestamp);
+        var oldMessage = "On "+days[date.getDay()]+", "+date.toLocaleDateString()+" at "+date.toLocaleTimeString()+", "+
+          notification.senderName+" wrote:\n>"+notification.message.replace(/\n/g, '\n>');
         return <CardActions>
           <FlatButton
             label="Reply"
-            onTouchTap={this.handleReplyOpen.bind(this, notification.senderId)}
+            onTouchTap={this.handleReplyOpen.bind(this, notification.senderId, oldMessage)}
             icon={<ContentReply />} />
         </CardActions>;
         break;
@@ -146,19 +180,21 @@ class Notifications extends Component {
       case "request":
         return <CardActions>
           <FlatButton
-            label="Reply"
-            onTouchTap={this.handleReplyOpen.bind(this, notification.senderId)}
-            icon={<ContentReply />} />
+            label="Message"
+            onTouchTap={this.handleMessageOpen.bind(this, notification.senderId)}
+            icon={<ContentSend />} />
           <FlatButton
-            label="Accept Request"
+            label="Accept"
             primary={true}
             onTouchTap={this.handleAccept.bind(this, notification)}
-            icon={<ContentAddCircle />} />
+            icon={<ActionDone />}
+            disabled={notification.answered ? true : false}/>
           <FlatButton
-            label="Reject Request"
+            label="Reject"
             secondary={true}
             onTouchTap={this.handleReject.bind(this, notification)}
-            icon={<ContentRemoveCircle />} />
+            icon={<ContentClear />}
+            disabled={notification.answered ? true : false}/>
         </CardActions>;
         break;
       default :
@@ -167,7 +203,7 @@ class Notifications extends Component {
   }
 
   render() {
-    const actions = [
+    const replyActions = [
       <FlatButton
         label="Cancel"
         primary={true}
@@ -178,6 +214,19 @@ class Notifications extends Component {
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleReply.bind(this)}
+      />,
+    ];
+    const messageActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleMessageClose.bind(this)}
+      />,
+      <FlatButton
+        label="Send"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleMessage.bind(this)}
       />,
     ];
 
@@ -198,7 +247,11 @@ class Notifications extends Component {
     };
 
     var obj = this.props.notifications ? this.props.notifications : {};
-    var inbox = Object.keys(obj).map(function (key) { return obj[key]; });
+    var inbox = Object.keys(obj).map(function (key) {
+      var p = obj[key];
+      p.key = key;
+      return p;
+    });
     inbox.reverse();
     if (inbox.length < 1) {
       inbox.push({
@@ -238,7 +291,7 @@ class Notifications extends Component {
             <Subheader>My Notifications</Subheader>
             { inbox.map(function(l, i){
               return <ListItem
-                key = {i}
+                key = {l.key}
                 value = {i}
                 primaryText={l.senderName}
                 secondaryText={l.message}
@@ -256,17 +309,31 @@ class Notifications extends Component {
         </Card>
         <Dialog
           title={"Reply to "+inbox[this.state.selectedIndex].senderName}
-          actions={actions}
+          actions={replyActions}
           modal={false}
           open={this.state.replyOpen}
           onRequestClose={this.handleReplyClose.bind(this)} >
           <TextField
             value={this.state.reply}
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleReplyChange.bind(this)}
             floatingLabelText="Enter message here"
             multiLine={true}
-            rows={3}
-            fullWidth={true} />
+            rows={2}
+            fullWidth={false} />
+        </Dialog>
+        <Dialog
+          title={"Send a message to "+inbox[this.state.selectedIndex].senderName}
+          actions={messageActions}
+          modal={false}
+          open={this.state.messageOpen}
+          onRequestClose={this.handleMessageClose.bind(this)} >
+          <TextField
+            value={this.state.message}
+            onChange={this.handleMessageChange.bind(this)}
+            floatingLabelText="Enter message here"
+            multiLine={true}
+            rows={2}
+            fullWidth={false} />
         </Dialog>
       </div>
     );

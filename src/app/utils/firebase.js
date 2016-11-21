@@ -845,7 +845,8 @@ var FireBaseTools = {
           endTime: to,
           subject: subject,
           description: description,
-          sessionId: sessionId
+          sessionId: sessionId,
+          answered: false
         }
       };
       var newRequestRef = firebaseDb.ref('/userData/' + tutor).child('notifications').push();
@@ -865,7 +866,7 @@ var FireBaseTools = {
    * Accept a new tutoring session
    *
    */
-  acceptSession: (student, request) => {
+  acceptSession: (student, request, notificationId) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function () {
@@ -894,6 +895,15 @@ var FireBaseTools = {
               console.log('Session updated');
             }
           });
+
+          //update request status
+          firebaseDb.ref('/userData/' + user.uid + '/notifications/').child(notificationId).update({answered: true}, function(error) {
+            if (error) {
+              console.log('Failed to update request');
+            } else {
+              console.log('Request updated');
+            }
+          });
         }
       };
       sessionRef.set(request.sessionId, onComplete);
@@ -903,7 +913,7 @@ var FireBaseTools = {
       var end = new Date(request.endTime);
       var notification = {
         senderId: user.uid,
-        senderName: user.displayName,
+        senderName: "LearnIt",
         senderPhoto: user.photoURL,
         type: "notification",
         message: user.displayName+" has accepted your tutoring request.\nYour session is scheduled for "+
@@ -928,7 +938,7 @@ var FireBaseTools = {
    * Reject a new tutoring session
    *
    */
-  rejectSession: (student, request) => {
+  rejectSession: (student, request, notificationId) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function () {
@@ -952,7 +962,7 @@ var FireBaseTools = {
           var date = new Date(request.startTime);
           var notification = {
             senderId: user.uid,
-            senderName: user.displayName,
+            senderName: "LearnIt",
             senderPhoto: user.photoURL,
             type: "notification",
             message: user.displayName+" has rejected your tutoring request for "+request.subject+" on "+date.toLocaleDateString(),
@@ -964,6 +974,15 @@ var FireBaseTools = {
               console.log('Failed to deliver rejection notification');
             } else {
               console.log('New tutoring rejection notification sent');
+            }
+          });
+
+          //update request status
+          firebaseDb.ref('/userData/' + user.uid + '/notifications/').child(notificationId).update({answered: true}, function(error) {
+            if (error) {
+              console.log('Failed to update request');
+            } else {
+              console.log('Request updated');
             }
           });
         }
