@@ -21,7 +21,6 @@ class Home extends Component {
   }
 
   onRecieveSessions(sessions) {
-    console.log(sessions)
     let s = this.state.sessions
     s.push(sessions)
     this.setState({ sessions: s })
@@ -35,8 +34,8 @@ class Home extends Component {
         <SessionCard
           key={index}
           sid={s.sid}
-          tutor={s.tutorId}
-          student={s.studentId}
+          tutorId={s.tutorId}
+          studentId={s.studentId}
           date={s.startTime}
           time={s.endTime} />
       )
@@ -58,9 +57,6 @@ class Home extends Component {
         width: '100%',
         textAlign: 'center',
       }
-
-      var img = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
-
       return (
 
         <div style={homeContainer}>

@@ -17,7 +17,6 @@ class WhiteBoard extends React.Component {
     this.handleOnMouseUp = this.handleOnMouseUp.bind(this)
     this.setColor = this.setColor.bind(this)
 
-    FireBaseTools.fetchWhiteBoard(this.props.sid, this.draw.bind(this), this.resetCanvas.bind(this))
   }
 
   componentDidMount() {
@@ -32,6 +31,26 @@ class WhiteBoard extends React.Component {
       context: ctx
     });
 
+    FireBaseTools.fetchWhiteBoard(this.props.sid, this.draw.bind(this), this.resetCanvas.bind(this))
+
+    this.refreshWhiteboard = this.refreshWhiteboard.bind(this)
+    this.refreshWhiteboard()
+  }
+
+  refreshWhiteboard() {
+        let path = {
+          x1: 0,
+          y1: 0,
+          x2: -1,
+          y2: -1,
+          color: "white",
+          size: 0
+        }
+        const that = this
+        setTimeout(function(){
+          that.draw(path)
+          FireBaseTools.drawNewLine(that.props.sid, path)
+        }, 100);
   }
 
   handleOnMouseDown(e) {

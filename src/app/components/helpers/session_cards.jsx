@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FireBaseTools from '../../utils/firebase';
 
 class SessionCard extends Component {
 
@@ -11,6 +12,20 @@ class SessionCard extends Component {
     super(props);
     this.state = {shadow: 1};
     this.goToSession = this.goToSession.bind(this)
+    this.fetchTutorProfile = this.fetchTutorProfile.bind(this)
+    this.fetchStudentProfile = this.fetchStudentProfile.bind(this)
+  }
+
+  componentDidMount() {
+    FireBaseTools.fetchProfile(this.props.tutorId, this.fetchTutorProfile);
+    FireBaseTools.fetchProfile(this.props.studentId, this.fetchStudentProfile);
+  }
+
+  fetchTutorProfile(profile) {
+      this.setState({tutorProfile: profile})
+  }
+  fetchStudentProfile(profile) {
+      this.setState({studentProfile: profile})
   }
 
   onMouseOver() {
@@ -24,9 +39,9 @@ class SessionCard extends Component {
   //   browserHistory.push("/live");
   // }
 
-    goToSession () {
-      browserHistory.push("/tutor_session?id="+this.props.sid);
-    }
+  goToSession () {
+    browserHistory.push("/tutor_session?id="+this.props.sid);
+  }
 
   render() {
 
@@ -70,6 +85,10 @@ class SessionCard extends Component {
 
     }
 
+    if (!this.state.tutorProfile || !this.state.studentProfile) {
+      return <div>Loading...</div>
+    }
+
 	return (
 		<Card style={cardStyle}
           onClick={this.goToSession.bind(this)}
@@ -77,16 +96,24 @@ class SessionCard extends Component {
           onMouseOut={this.onMouseOut.bind(this)}
           zDepth={this.state.shadow}>
 			<div style={cardHeader}>
-				<img style={imgStyle} src={this.props.tutorIMG} alt="Tutor Profile" />
-				<h4 style={title}>Tutor: {this.props.tutor}</h4>
+				<img style={imgStyle} src={this.state.tutorProfile.photoUrl} alt="Tutor Profile" />
+				<h4 style={title}>Tutor: {this.state.tutorProfile.name}</h4>
 			</div>
 			<div>
-	        	<p style={left}>Student: {this.props.student}</p>
-	        	<p style={right}>Time: {this.props.time}</p>
-	        </div>
-	        <div>
-	        	<p style={left}>Date: {this.props.date}</p>
-				<p style={right}>Cost: {this.props.cost}</p>
+      	<p style={left}>
+          Student: {this.state.studentProfile.name}
+        </p>
+      	<p style={right}>
+          Time: {this.props.time}
+        </p>
+      </div>
+      <div>
+      	<p style={left}>
+          Date: {this.props.date}
+        </p>
+				<p style={right}>
+          Cost: {this.state.tutorProfile.tutorInfo.payrate}
+        </p>
 			</div>
 		</Card>
 	);
