@@ -27,7 +27,8 @@ class UserAccount extends Component {
       tutorInfo: {},
       bio: '',
       name: '',
-      open: false
+      open: false,
+      paypalId: ''
     }
   }
 
@@ -75,6 +76,9 @@ class UserAccount extends Component {
       this.props.saveTutorInfo(this.state.tutorInfo);
       this.props.updateUser({displayName: this.state.name});
       this.props.saveBio(this.state.bio);
+      console.log(this.state.bio)
+      console.log(this.state.tutorInfo.bio)
+      console.log(this.state.paypalId)
       this.setState({
         open: true,
       });
@@ -162,10 +166,15 @@ class UserAccount extends Component {
     this.setState({name: value});
   };
 
+  handlePayPalIdEdited = (event, value) => {
+    this.setState({paypalId: value});
+  }
+
   handleRequestClose = () => {
     this.setState({
       open: false,
     });
+    browserHistory.push("/account")
   };
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
@@ -225,20 +234,26 @@ class UserAccount extends Component {
                   isSpanishChecked={this.isSpanishChecked}
                   isHistoryChecked={this.isHistoryChecked}
                   handlePaySlider={this.handlePaySlider}
-                  handleBioEdited={this.handleBioEdited}
+                  handlePayPalIdEdited={this.handlePayPalIdEdited}
+                  /*paySlider={this.state.profile.payrate}
+                  math={this.state.profile.math}
+                  science={this.state.profile.science}
+                  english={this.state.profile.english}
+                  spanish={this.state.profile.spanish}
+                  history={this.state.profile.history}
+                  bio={this.state.profile.bio}/>*/
                   paySlider={this.state.tutorInfo.payrate}
                   math={this.state.tutorInfo.math}
                   science={this.state.tutorInfo.science}
                   english={this.state.tutorInfo.english}
                   spanish={this.state.tutorInfo.spanish}
                   history={this.state.tutorInfo.history}
-                  bio={bio}/>
+                  paypalId={this.state.paypalId}/>
           </div>
       )
     } else tutorForm = (
         <div/>
     );
-
 
     return (
       <div style={profileDiv}>
@@ -250,11 +265,20 @@ class UserAccount extends Component {
                 <input type="file" style={styles.exampleImageInput}/>
             </FlatButton>
             <div>
+              <h3>About Me</h3>
                 <TextField
                   defaultValue={name}
                   floatingLabelText="Change User name"
                   onChange={this.handleUsernameEdited} />
             </div>
+            <TextField
+              floatingLabelText="Edit Bio"
+              style={{textAlign: 'left'}}
+              multiLine={true}
+              defaultValue={bio}
+              onChange={this.handleBioEdited}
+            />
+            <ChangePassword/>
             <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
@@ -262,7 +286,11 @@ class UserAccount extends Component {
                 onCheck={this.isTutorChecked}
                 checked={this.state.isTutor} />
             {tutorForm}
-            <RaisedButton label="Save" style={styles.submit} primary={true} onClick={this.onFormSubmit}/>
+            <RaisedButton
+              label="Save"
+              style={styles.submit}
+              primary={true}
+              onClick={this.onFormSubmit}/>
         </form>
         <Snackbar
             open={this.state.open}

@@ -227,6 +227,14 @@ var FireBaseTools = {
     })
   },
 
+  fetchProfile: (uid, callback) => {
+    let profilesRef =firebaseDb.ref('/').child('profiles/'+uid);
+    profilesRef.on("value", function(snapshot){
+      let profile = snapshot.val();
+      callback(profile);
+    });
+  },
+
   /**
    * Log the user in using email and password
    *
@@ -499,9 +507,9 @@ var FireBaseTools = {
      *
      * @returns {Promise}
      */
-    fetchMessages: (pid) => {
+    fetchMessages: (sid, pid) => {
       return new Promise((resolve, reject) => {
-        let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+        let messagePath = 'messages/' + sid + "/" + firebaseAuth.currentUser.uid + '/' + pid + '/'
         let messagesRef = firebaseDb.ref('/').child(messagePath);
         messagesRef.on("value", function(snapshot) {
           let messages = snapshot.val();
@@ -518,8 +526,8 @@ var FireBaseTools = {
      *
      * @returns {Promise}
      */
-    fetchMyMessages: (pid, callback) => {
-      let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+    fetchMyMessages: (sid, pid, callback) => {
+      let messagePath = 'messages/' + sid + "/" + firebaseAuth.currentUser.uid + '/' + pid + '/'
       let messagesRef = firebaseDb.ref('/').child(messagePath);
       messagesRef.on("child_added", function(snapshot) {
         let message = snapshot.val().text;
@@ -534,8 +542,8 @@ var FireBaseTools = {
      *
      * @returns {Promise}
      */
-    fetchTheirMessages: (pid, callback) => {
-      let messagePath = 'messages/' + pid + '/' + firebaseAuth.currentUser.uid + '/'
+    fetchTheirMessages: (sid, pid, callback) => {
+      let messagePath = 'messages/' + sid + "/" + pid + '/' + firebaseAuth.currentUser.uid + '/'
       console.log(messagePath)
       let messagesRef = firebaseDb.ref('/').child(messagePath);
       messagesRef.on("child_added", function(snapshot) {
@@ -550,14 +558,14 @@ var FireBaseTools = {
      *
      * @returns {Promise}
      */
-    sendMessage: (pid, message) => {
+    sendMessage: (sid, pid, message) => {
       if (!Date.now) {
           Date.now = function() { return new Date().getTime(); }
       }
       let messageData = {
         text: message
       }
-      let messagePath = 'messages/' + firebaseAuth.currentUser.uid + '/' + pid + '/'
+      let messagePath = 'messages/' + sid + "/" + firebaseAuth.currentUser.uid + '/' + pid + '/'
       firebaseDb.ref('/')
       .child(messagePath + Date.now())
       .set(messageData);
@@ -588,6 +596,13 @@ var FireBaseTools = {
     fetchWhiteBoard: (sid, draw, clear) => {
       let whiteBoardPath = 'whiteboards/' + sid + '/'
       let whiteBoardRef = firebaseDb.ref('/').child(whiteBoardPath + 'lines/');
+      whiteBoardRef.on("value", function(snapshot) {
+        var linePaths = snapshot.val();
+        for (var index in linePaths) {
+          let linePath = linePaths[index]
+          draw(linePath)
+        }
+      });
       whiteBoardRef.on("child_added", function(snapshot) {
         var linePath = snapshot.val();
         draw(linePath)
@@ -721,7 +736,8 @@ var FireBaseTools = {
    * @returns {Promise}
    */
   fetchSession: (sid, callback) => {
-    firebaseDb.ref('/sessions/').child('sid').on("value", function(snapshot){
+    console.log(sid)
+    firebaseDb.ref('/sessions/').child(sid).on("value", function(snapshot){
       let session = snapshot.val();
       callback(session);
     });
@@ -748,6 +764,29 @@ var FireBaseTools = {
       reject(error);
     })
   },
+    /**
+     * Fetch session ids of current user
+     *
+     * @returns {Promise}
+     */
+    fetchMySessions: (callback) => {
+      var user = firebaseAuth.currentUser;
+      if (user) {
+        //console.log('User is signed in');
+        firebaseDb.ref('/userData/' + user.uid).child('sessions').on("value", function(snapshot){
+          let sids = snapshot.val();
+          for (var sid in sids) {
+            firebaseDb.ref('/sessions/').child(sids[sid]).on("value", function(snapshot){
+              var session = snapshot.val();
+              session.sid = sids[sid]
+              callback(session)
+            });
+          }
+        });
+      } else {
+        //console.log('User is not signed in');
+      }
+    },
 
   /**
    * Request a new tutoring session

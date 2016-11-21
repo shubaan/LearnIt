@@ -5,15 +5,42 @@ import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 import SplashScreen from '../helpers/splash_screen'
 import SessionCard from '../helpers/session_cards'
+import FireBaseTools from '../../utils/firebase';
 
 class Home extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { sessions: [] }
+    this.onRecieveSessions = this.onRecieveSessions.bind(this)
   }
 
-  renderSessions(tutor, tutorIMG, student, date, time, cost) {
-    return <SessionCard tutor={tutor} tutorIMG={tutorIMG} student={student} date={date} time={time} cost={cost} />
+  componentDidMount()
+  {
+    FireBaseTools.fetchMySessions(this.onRecieveSessions)
+  }
+
+  onRecieveSessions(sessions) {
+    let s = this.state.sessions
+    s.push(sessions)
+    this.setState({ sessions: s })
+  }
+
+  renderSessions() {
+    var result = []
+    for (var index in this.state.sessions) {
+      let s = this.state.sessions[index]
+      result.push(
+        <SessionCard
+          key={index}
+          sid={s.sid}
+          tutorId={s.tutorId}
+          studentId={s.studentId}
+          date={s.startTime}
+          time={s.endTime} />
+      )
+    }
+    return <div>{result}</div>
   }
 
   render() {
@@ -30,17 +57,12 @@ class Home extends Component {
         width: '100%',
         textAlign: 'center',
       }
-
-      var img = "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png"
-
       return (
-        
+
         <div style={homeContainer}>
           <h2 style={homeTitle}>Upcoming Sessions:</h2>
           <div style={sessionContainer} >
-            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
-            {this.renderSessions('Matt', img, 'Shubaan', '2016-11-17', '12:11 PM', '$0')}
+            {this.renderSessions()}
           </div>
         </div>
       );

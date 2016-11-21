@@ -13,7 +13,6 @@ import TutorSession from './components/pages/tutor_session';
 import FindTutors from './components/pages/find_tutors';
 import Sessions from './components/pages/sessions';
 import ContactUs from './components/pages/contact_us';
-import FinishedContacting from './components/pages/finished_contacting';
 import Notifications from './components/pages/notifications';
 import Live from './components/pages/live';
 
@@ -31,7 +30,6 @@ export default (
     <Route path="/tutor_session" component={TutorSession}/>
     <Route path="/sessions" component={Sessions}/>
     <Route path="/help" component={ContactUs}/>
-    <Route path="/messagesent" component={FinishedContacting}/>
     <Route path="/tutor" component={Tutor}/>
     <Route path="/notifications" component={Notifications} />
     <Route path="/live" component={Live} />
