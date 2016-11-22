@@ -89,6 +89,9 @@ class SessionCard extends Component {
       return <div>Loading...</div>
     }
 
+    var date = new Date(this.props.time);
+    var cost = "$"+this.state.tutorProfile.tutorInfo.payrate+" per hour";
+
 	return (
 		<Card style={cardStyle}
           onClick={this.goToSession.bind(this)}
@@ -104,15 +107,15 @@ class SessionCard extends Component {
           Student: {this.state.studentProfile.name}
         </p>
       	<p style={right}>
-          Time: {this.props.time}
+          Time: {date.toLocaleTimeString()}
         </p>
       </div>
       <div>
       	<p style={left}>
-          Date: {this.props.date}
+          Date: {date.toLocaleDateString()}
         </p>
 				<p style={right}>
-          Cost: {this.state.tutorProfile.tutorInfo.payrate}
+          Cost: {cost}
         </p>
 			</div>
 		</Card>
