@@ -27,9 +27,11 @@ class Home extends Component {
   }
 
   renderSessions() {
-    var result = []
+    var result = [];
+    var now = (new Date()).getTime();
     for (var index in this.state.sessions) {
-      let s = this.state.sessions[index]
+      let s = this.state.sessions[index];
+      if (s.status != "completed" && s.status != "rejected" && s.endTime > now)
       result.push(
         <SessionCard
           key={index}
@@ -37,7 +39,12 @@ class Home extends Component {
           tutorId={s.tutorId}
           studentId={s.studentId}
           date={s.startTime}
-          time={s.endTime} />
+          endTime={s.endTime}
+          subject={s.subject}
+          description={s.description}
+          paymentStatus={s.paymentStatus}
+          status={s.startTime > now ? s.status : "LIVE"}
+        />
       )
     }
     return <div>{result}</div>
