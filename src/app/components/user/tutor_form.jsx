@@ -64,8 +64,9 @@ class TutorForm extends Component {
           value={this.props.paySlider}
           onChange={this.props.handlePaySlider}
         />
+        <h3>PayPal</h3>
         <TextField
-          floatingLabelText={"PayPal Button ID (work in progress)"}
+          floatingLabelText={"PayPal Email Address"}
           defaultValue={this.props.paypalId}
           onChange={this.props.handlePayPalIdEdited}
         />

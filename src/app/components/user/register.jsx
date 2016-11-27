@@ -29,7 +29,6 @@ class UserRegister extends Component {
       english: false,
       spanish: false,
       history: false,
-      paypalId: ''
     }
   }
 
@@ -227,7 +226,8 @@ class UserRegister extends Component {
           science={this.state.science}
           english={this.state.english}
           spanish={this.state.spanish}
-          history={this.state.history} />
+          history={this.state.history}
+          paypalId={this.state.paypalId}/>
       )
     } else tutorForm = <div />
 

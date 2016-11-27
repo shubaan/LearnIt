@@ -28,7 +28,6 @@ class UserAccount extends Component {
       bio: '',
       name: '',
       open: false,
-      paypalId: ''
     }
   }
 
@@ -54,6 +53,8 @@ class UserAccount extends Component {
       if (nextProps.bio) {
         this.setState({bio: nextProps.bio});
       }
+      //TODO load paypalId
+      //when you hit save, this.state.paypalId has data, but when you leave and come back, it is undefined again.
   }
 
   componentDidUpdate() {
@@ -76,6 +77,7 @@ class UserAccount extends Component {
       this.props.saveTutorInfo(this.state.tutorInfo);
       this.props.updateUser({displayName: this.state.name});
       this.props.saveBio(this.state.bio);
+      //TODO save paypalId
       console.log(this.state.bio)
       console.log(this.state.tutorInfo.bio)
       console.log(this.state.paypalId)
@@ -168,6 +170,7 @@ class UserAccount extends Component {
 
   handlePayPalIdEdited = (event, value) => {
     this.setState({paypalId: value});
+    console.log(this.state.paypalId) //TODO this.state.tutorInfo.paypalId?
   }
 
   handleRequestClose = () => {
@@ -221,6 +224,7 @@ class UserAccount extends Component {
     var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.props.currentUser.displayName)? this.props.currentUser.displayName : "");
     var bio = ((this.props.bio)? this.props.bio : this.state.bio);
+    //TODO paypalId??
 
     let tutorForm;
     /*if (this.state.profile.isTutor) {*/
@@ -248,7 +252,7 @@ class UserAccount extends Component {
                   english={this.state.tutorInfo.english}
                   spanish={this.state.tutorInfo.spanish}
                   history={this.state.tutorInfo.history}
-                  paypalId={this.state.paypalId}/>
+                  paypalId={this.state.paypalId/*TODO this.state.tutorInfo.paypalId??*/}/>
           </div>
       )
     } else tutorForm = (
