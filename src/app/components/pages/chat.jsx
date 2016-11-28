@@ -185,15 +185,16 @@ class Chat extends Component {
 
     let containerStyle = {
       float: "right",
-      width: "300px",
-      height: "100%",
-      padding: "10px"
+      width: "25%",
+      height: "500px",
+      padding: "10px",
+      marginTop: '-620px'
     }
 
     let messageStyle = {
       width: "100%",
       height: "500px",
-      overflow: "auto",
+      overflowY: "scroll",
       margin: "0px auto 0px auto",
     }
 
@@ -205,8 +206,7 @@ class Chat extends Component {
             fullWidth={true}
             value={this.state.message}
             onChange={this.handleMessageChange}
-          />
-          <RaisedButton label="Send" onClick={this.handleSendMessageClick} />
+          /><RaisedButton label="Send" onClick={this.handleSendMessageClick} />
         </div>
     );
 

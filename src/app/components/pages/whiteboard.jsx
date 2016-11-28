@@ -1,6 +1,8 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const PropTypes = React.PropTypes;
+import {Card} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 import FireBaseTools from '../../utils/firebase';
 
 class WhiteBoard extends React.Component {
@@ -9,7 +11,7 @@ class WhiteBoard extends React.Component {
 
     this.state = {
       color: "blue",
-      size: 5,
+      size: 12,
       lines: []
     }
     this.handleOnMouseDown = this.handleOnMouseDown.bind(this)
@@ -31,7 +33,7 @@ class WhiteBoard extends React.Component {
       context: ctx
     });
 
-    FireBaseTools.fetchWhiteBoard(this.props.sid, this.draw.bind(this), this.resetCanvas.bind(this))
+    FireBaseTools.fetchWhiteBoard(this.props.sid, this.drawBezierCurves.bind(this), this.resetCanvas.bind(this))
 
     this.refreshWhiteboard = this.refreshWhiteboard.bind(this)
     this.refreshWhiteboard()
@@ -113,9 +115,29 @@ class WhiteBoard extends React.Component {
     });
   }
 
+  drawBezierCurves(path) {
+    let p1 = { x: path.x1, y: path.y1 }
+    let p2 = { x: path.x2, y: path.y2 }
+
+    this.state.context.beginPath();
+    this.state.context.strokeStyle = path.color;
+    this.state.context.lineWidth = path.size;
+    this.state.context.moveTo(path.x1, path.y1);
+
+    var midPoint = {
+      x: p1.x + (p2.x - p1.x) / 2,
+      y: p1.y + (p2.y - p1.y) / 2
+    }
+    this.state.context.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+
+    this.state.context.lineTo(p2.x, p2.y);
+    this.state.context.stroke();
+  }
+
   draw(path) {
       if (path && this.state.context) {
         this.state.context.beginPath();
+        this.state.context.lineJoin = this.state.context.lineCap = 'round';
         this.state.context.strokeStyle = path.color;
         this.state.context.lineWidth = path.size;
         this.state.context.moveTo(path.x1, path.y1);
@@ -131,19 +153,6 @@ class WhiteBoard extends React.Component {
     FireBaseTools.deleteWhiteBoard(this.props.sid)
   }
 
-  getDefaultStyle() {
-    return {
-      backgroundColor: 'white',
-      cursor: 'pointer'
-    };
-  }
-
-  canvasStyle() {
-    let defaults =  this.getDefaultStyle();
-    let custom = this.props.canvasStyle;
-    return Object.assign({}, defaults, custom);
-  }
-
   isMobile() {
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       return true;
@@ -155,32 +164,100 @@ class WhiteBoard extends React.Component {
     this.setState({ color: color })
   }
 
+  increaseSize() {
+    let newSize = this.state.size + 10
+    if (newSize < 200)
+    {
+      this.setState({ size: newSize })
+      console.log(newSize)
+    }
+  }
+
+  decreaseSize() {
+    let newSize = this.state.size - 10
+    if (newSize > 0)
+    {
+      this.setState({ size: newSize })
+      console.log(newSize)
+    }
+  }
+
   render() {
+
+    let w = "600px"
+    let h = "500px"
+
+    let containerStyle = {
+      width: '666px',
+      height: '600px',
+      display: 'block'
+    }
+
+    let whiteBoardCardStyle = {
+        width: w,
+        height: h,
+        float: "left",
+        marginLeft: '5px'
+    }
+
+    let canvasStyle = {
+      width: "100%",
+      height: h,
+      backgroundColor: 'white',
+      cursor: 'pointer'
+    }
+    let palletStyle = {
+      width: "40px",
+      height: h,
+      overflowY: 'auto',
+      float: "left",
+      marginLeft: "20px"
+    }
+    let buttonsStyle = {
+      width: "100%",
+      float: "left",
+      marginTop: "5px",
+      marginLeft: "20px"
+    }
+
     return (
-      <div>
-        <canvas ref="canvas"
-          style = {this.canvasStyle()}
-          onMouseDown = {this.handleOnMouseDown}
-          onTouchStart = {this.handleOnMouseDown}
-          onMouseMove = {this.handleOnMouseMove}
-          onTouchMove = {this.handleOnMouseMove}
-          onMouseUp = {this.handleOnMouseUp}
-          onTouchEnd = {this.handleOnMouseUp}
-          onMouseLeave = {this.handleOnMouseUp}
-        />
-        <ColorPallet color="red" setColor={this.setColor}/>
-        <ColorPallet color="orange" setColor={this.setColor}/>
-        <ColorPallet color="yellow" setColor={this.setColor}/>
-        <ColorPallet color="green" setColor={this.setColor}/>
-        <ColorPallet color="teal" setColor={this.setColor}/>
-        <ColorPallet color="blue" setColor={this.setColor}/>
-        <ColorPallet color="purple" setColor={this.setColor}/>
-        <ColorPallet color="pink" setColor={this.setColor}/>
-        <ColorPallet color="black" setColor={this.setColor}/>
-        <ColorPallet color="grey" setColor={this.setColor}/>
-        <ColorPallet color="white" setColor={this.setColor}/>
-        <button onClick={this.resetCanvas.bind(this)}>Reset</button>
-      </div>
+      <div style={containerStyle}>
+          <Card style={palletStyle}>
+              <ColorPallet color="black" setColor={this.setColor}/>
+              <ColorPallet color="grey" setColor={this.setColor}/>
+              <ColorPallet color="white" setColor={this.setColor}/>
+              <ColorPallet color="red" setColor={this.setColor}/>
+              <ColorPallet color="salmon" setColor={this.setColor}/>
+              <ColorPallet color="orange" setColor={this.setColor}/>
+              <ColorPallet color="khaki" setColor={this.setColor}/>
+              <ColorPallet color="yellow" setColor={this.setColor}/>
+              <ColorPallet color="lime" setColor={this.setColor}/>
+              <ColorPallet color="green" setColor={this.setColor}/>
+              <ColorPallet color="teal" setColor={this.setColor}/>
+              <ColorPallet color="cyan" setColor={this.setColor}/>
+              <ColorPallet color="blue" setColor={this.setColor}/>
+              <ColorPallet color="indigo" setColor={this.setColor}/>
+              <ColorPallet color="purple" setColor={this.setColor}/>
+          </Card>
+          <Card style = {whiteBoardCardStyle}>
+              <canvas ref="canvas"
+                  style = {canvasStyle}
+                  onMouseDown = {this.handleOnMouseDown}
+                  onTouchStart = {this.handleOnMouseDown}
+                  onMouseMove = {this.handleOnMouseMove}
+                  onTouchMove = {this.handleOnMouseMove}
+                  onMouseUp = {this.handleOnMouseUp}
+                  onTouchEnd = {this.handleOnMouseUp}
+                  onMouseLeave = {this.handleOnMouseUp}
+              />
+          </Card>
+          <div style={buttonsStyle}>
+              <RaisedButton onClick={this.resetCanvas.bind(this)}>Reset</RaisedButton>{" "}
+              <RaisedButton onClick={this.decreaseSize.bind(this)}>-</RaisedButton>{" "}
+              <RaisedButton onClick={this.increaseSize.bind(this)}>+</RaisedButton>{" "}
+              <label>Size = {parseInt(this.state.size / 10)}</label>
+          </div>
+    </div>
     );
   }
 
@@ -200,10 +277,9 @@ class ColorPallet extends React.Component {
       height: "40px",
       float: "left",
       backgroundColor: this.props.color,
-      border: "0.5px solid black",
     }
     return (
-      <span style={palletStyle} onClick={this.setColor} />
+        <span style={palletStyle} onClick={this.setColor} />
     )
   }
 }
