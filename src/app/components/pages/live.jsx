@@ -31,7 +31,7 @@ class Live extends Component {
     setTimeout(function() {
       clearInterval(timer)
       console.log("Clearing")
-    }, 10000)
+    }, 20000)
     this.answer(peer, other_id);
   }
 
