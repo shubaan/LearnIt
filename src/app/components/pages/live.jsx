@@ -27,12 +27,15 @@ class Live extends Component {
     navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     this.setup(peer);
+    this.answer(peer, other_id);
     var timer = setInterval(this.call(peer,other_id), 1000)
+    console.log("Timer")
+    console.log(timer)
     setTimeout(function() {
+      console.log(timer)
       clearInterval(timer)
       console.log("Clearing")
     }, 20000)
-    this.answer(peer, other_id);
   }
 
   test(peer, other_id) {
