@@ -27,8 +27,13 @@ class Home extends Component {
   }
 
   renderSessions() {
+    //for browser compatibility
+    if (!Date.now) {
+      Date.now = function() { return new Date().getTime(); }
+    }
+
     var result = [];
-    var now = (new Date()).getTime();
+    var now = Date.now();
     for (var index in this.state.sessions) {
       let s = this.state.sessions[index];
       if (s.status != "completed" && s.status != "rejected" && s.endTime > now)
