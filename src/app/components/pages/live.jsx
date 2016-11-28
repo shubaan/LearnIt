@@ -27,8 +27,16 @@ class Live extends Component {
     navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     this.setup(peer);
-    this.call(peer, other_id);
+    var timer = setInterval(this.call(peer,other_id), 1000)
+    setTimeout(function() {
+      clearInterval(timer)
+      console.log("Clearing")
+    }, 10000)
     this.answer(peer, other_id);
+  }
+
+  test(peer, other_id) {
+    console.log("Test")
   }
 
   setup(peer) {
@@ -68,7 +76,6 @@ class Live extends Component {
           var video = document.getElementById("video-call");
           video.src = window.URL.createObjectURL(stream);
         })
-        this.call();
       }, function(err) {
       
       });
