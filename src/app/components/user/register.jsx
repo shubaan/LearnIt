@@ -29,6 +29,7 @@ class UserRegister extends Component {
       english: false,
       spanish: false,
       history: false,
+      paypalId: ''
     }
   }
 

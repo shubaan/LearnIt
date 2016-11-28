@@ -51,11 +51,6 @@ var FireBaseTools = {
             bio: defaultBio,
             photoUrl:defaultPhoto,
             tutorInfo: {
-              availability: {
-                weekly: '0',
-                exceptions: '0',
-                appointments: '0'
-              },
               math: false,
               science: false,
               english: false,
@@ -63,6 +58,7 @@ var FireBaseTools = {
               history: false,
               resume: 'link',
               payrate: 0,
+              paypalId: "",
               rating: 0,
               reviews: {}
             }
@@ -70,6 +66,7 @@ var FireBaseTools = {
           user.providerData.forEach(function (profile) {
             profileData.name = profile.displayName;
             profileData.photoUrl = profile.photoURL;
+            profileData.tutorInfo.paypalEmail = profile.email;
           });
           firebaseDb.ref('/profiles/' + firebaseAuth.currentUser.uid).set(profileData);
         } else {
@@ -112,11 +109,6 @@ var FireBaseTools = {
       bio: defaultBio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png",
       tutorInfo: {
-        availability: {
-          weekly: '0',
-          exceptions: '0',
-          appointments: '0'
-        },
         math: false,
         science: false,
         english: false,
@@ -124,6 +116,7 @@ var FireBaseTools = {
         history: false,
         resume: 'link',
         payrate: 0,
+        paypalId: user.email,
         rating: 0,
         reviews: {}
       }
@@ -135,6 +128,7 @@ var FireBaseTools = {
       profileData.tutorInfo.spanish = user.spanish;
       profileData.tutorInfo.history = user.history;
       profileData.tutorInfo.payrate = user.payrate;
+      profileData.tutorInfo.paypalId = user.paypalId;
     }
     //console.log(user);
     return firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).then(user => {
