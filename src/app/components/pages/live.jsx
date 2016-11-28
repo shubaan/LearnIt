@@ -26,12 +26,12 @@ class Live extends Component {
 
     navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-    this.setup();
-    this.call();
-    this.answer();
+    this.setup(peer);
+    this.call(peer, other_id);
+    this.answer(peer, other_id);
   }
 
-  setup() {
+  setup(peer) {
     //Sets up own camera
     navigator.getUserMedia({audio:false, video:true}, function(stream) {
       console.log("Streaming");
@@ -43,7 +43,7 @@ class Live extends Component {
     })
   }
 
-  call() {
+  call(peer, other_id) {
     navigator.getUserMedia({audio:true, video:true}, function(stream) {
       console.log("Calling stream");
       console.log(stream);
@@ -55,7 +55,7 @@ class Live extends Component {
     })
   }
 
-  answer() {
+  answer(peer, other_id) {
     peer.on('call', function(call) {
       navigator.getUserMedia({audio:true, video:true}, function(stream){
 
