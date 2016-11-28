@@ -65,24 +65,14 @@ class TutorSession extends Component {
       return (<h1>Loading Session...</h1>);
     }
 
-    let whiteBoardCardStyle = {
-        width: "700px",
-        height: "500px",
-        float: "left",
-        margin: "50px"
-    }
-
-    let canvasStyle = {
-      width: "700px",
-      height: "500px",
-    }
+      let containerStyle = {
+        width: '100%',
+      }
 
     return (
-      <div>
+      <div style={containerStyle}>
+        <WhiteBoard sid={this.getSessionID()} />
         <Chat theirId={this.state.theirId} sid={this.getSessionID()} />
-        <Card style={whiteBoardCardStyle}>
-          <WhiteBoard canvasStyle={canvasStyle} sid={this.getSessionID()} />
-        </Card>
       </div>
     );
 

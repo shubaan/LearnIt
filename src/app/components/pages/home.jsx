@@ -21,6 +21,7 @@ class Home extends Component {
   }
 
   onRecieveSessions(sessions) {
+    console.log(sessions)
     let s = this.state.sessions
     s.push(sessions)
     this.setState({ sessions: s })
