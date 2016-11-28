@@ -86,6 +86,10 @@ class TutorSession extends Component {
     return window.location.search.substring(4)
   }
 
+  getTheirName() {
+    return this.state.theirProfile.name ? this.state.theirProfile.name : "";
+  }
+
   handleComplete() {
     this.setState({openExit: false, ended: true});
     FireBaseTools.completeSession(this.getSessionID(), this.endSession.bind(this));
@@ -122,7 +126,7 @@ class TutorSession extends Component {
     this.setState({openAlert: false});
     var result = {
       success: true,
-      message: this.state.theirProfile.name+" ended the session"
+      message: this.getTheirName()+" ended the session"
     };
     this.endSession(result);
   };
@@ -207,35 +211,25 @@ class TutorSession extends Component {
       />,
     ];
 
-    let whiteBoardCardStyle = {
-        width: "700px",
-        height: "500px",
-        float: "left",
-        margin: "50px"
-    };
-
-    let canvasStyle = {
-      width: "700px",
-      height: "500px",
+    let containerStyle = {
+      width: '100%',
     };
 
     let buttonStyle = {
-      marginRight: "10px",
-      float: "right",
+      margin: "10px",
+      //float: "right",
     };
 
     return (
-      <div>
+      <div style={containerStyle}>
         <RaisedButton
           label="End Session"
           primary={true}
           disabled={this.state.session.status == "completed"}
           style={buttonStyle}
           onClick={this.handleOpenExit.bind(this)}/>
+        <WhiteBoard sid={this.getSessionID()} />
         <Chat theirId={this.state.theirId} sid={this.getSessionID()} />
-        <Card style={whiteBoardCardStyle}>
-          <WhiteBoard canvasStyle={canvasStyle} sid={this.getSessionID()} />
-        </Card>
         <Dialog
           title="End Session"
           actions={exitActions}
@@ -260,7 +254,7 @@ class TutorSession extends Component {
           open={this.state.openRate}
           onRequestClose={this.handleCloseRate.bind(this)}
         >
-          {"How do you rate "+this.state.theirProfile.name+" as a tutor?"}
+          {"How do you rate "+this.getTheirName()+" as a tutor?"}
           <p/>
           <Rater rating={this.state.rating} onRate={this.handleRate.bind(this)} />
           <span>{"  "+this.state.hoverRating+"/5"}</span>
