@@ -48,7 +48,7 @@ class SessionCard extends Component {
     var cardStyle = {
       display: 'inline-block',
       width: '375px',
-      height: '200px',
+      //height: '200px',
       margin: '15px',
     }
 
@@ -89,7 +89,8 @@ class SessionCard extends Component {
       return <div>Loading...</div>
     }
 
-    var date = new Date(this.props.time);
+    var date = new Date(this.props.date);
+    var endTime = new Date(this.props.endTime);
     var cost = "$"+this.state.tutorProfile.tutorInfo.payrate+" per hour";
 
 	return (
@@ -107,7 +108,7 @@ class SessionCard extends Component {
           Student: {this.state.studentProfile.name}
         </p>
       	<p style={right}>
-          Time: {date.toLocaleTimeString()}
+          Subject: {this.props.subject}
         </p>
       </div>
       <div>
@@ -118,6 +119,24 @@ class SessionCard extends Component {
           Cost: {cost}
         </p>
 			</div>
+      <div>
+        <p style={left}>
+          Time: {date.toLocaleTimeString()} to {endTime.toLocaleTimeString()}
+        </p>
+      </div>
+      <div>
+        <p style={left}>
+          Status: {this.props.status}
+        </p>
+        <p style={right}>
+          {this.props.paymentStatus ? this.props.paymentStatus : "unpaid"}
+        </p>
+      </div>
+      <div>
+        <p style={left}>
+          Description: {this.props.description}
+        </p>
+      </div>
 		</Card>
 	);
   }
