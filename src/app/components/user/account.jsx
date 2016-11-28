@@ -41,7 +41,7 @@ class UserAccount extends Component {
       if (nextProps.tutorInfo) {
         this.setState({tutorInfo: nextProps.tutorInfo});
       }
-      if ("bio: "+nextProps.bio) {
+      if (nextProps.bio) {
         this.setState({bio: nextProps.bio});
       }
   }
