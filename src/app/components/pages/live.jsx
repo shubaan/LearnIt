@@ -26,6 +26,12 @@ class Live extends Component {
 
     navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
+    this.setup();
+    this.call();
+    this.answer();
+  }
+
+  setup() {
     //Sets up own camera
     navigator.getUserMedia({audio:false, video:true}, function(stream) {
       console.log("Streaming");
@@ -35,7 +41,9 @@ class Live extends Component {
     }, function(err) {
       console.log("Error loading camera");
     })
+  }
 
+  call() {
     navigator.getUserMedia({audio:true, video:true}, function(stream) {
       console.log("Calling stream");
       console.log(stream);
@@ -45,7 +53,9 @@ class Live extends Component {
     }, function(err) {
       console.log("Error sending stream");
     })
+  }
 
+  answer() {
     peer.on('call', function(call) {
       navigator.getUserMedia({audio:true, video:true}, function(stream){
 
@@ -58,12 +68,11 @@ class Live extends Component {
           var video = document.getElementById("video-call");
           video.src = window.URL.createObjectURL(stream);
         })
-
+        this.call();
       }, function(err) {
       
       });
     })
-
   }
 
   render() {
