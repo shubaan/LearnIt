@@ -19,6 +19,11 @@ class TutorForm extends Component {
         maxWidth: 200
       },
     };
+    var slider = {
+      width: '300px',
+      margin: 'auto',
+    }
+
     return (
       <div>
         <h3>Tutor Subjects</h3>
@@ -58,6 +63,7 @@ class TutorForm extends Component {
           <span>${this.props.paySlider}/hour</span>
         </p>
         <Slider
+          style = {slider}
           min={0}
           max={100}
           step={1}
