@@ -19,6 +19,7 @@ class Live extends Component {
     var peer = this.peer;
     var other_id = this.other_id;
     console.log(peer);
+    console.log(other_id)
 
     peer.on('open', function(id) {
       console.log('My peer ID is: ' + id);
@@ -28,14 +29,8 @@ class Live extends Component {
 
     this.setup(peer);
     this.answer(peer, other_id);
-    var timer = setInterval(this.call(peer,other_id), 1000)
-    console.log("Timer")
-    console.log(timer)
-    setTimeout(function() {
-      console.log(timer)
-      clearInterval(timer)
-      console.log("Clearing")
-    }, 20000)
+    this.call(peer,other_id);
+    setTimeout(this.call(peer,other_id), 5000);
   }
 
   test(peer, other_id) {
