@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {browserHistory,Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Rater from 'react-rater'
 import {fetchProfiles, fetchNewNotificationNumber}  from '../../actions/firebase_actions';
 import FireBaseTools from '../../utils/firebase';
 import '../../css/tutor_profile.css';
 import '../../css/react-rater.css'
-import Rater from 'react-rater'
+
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
@@ -15,6 +16,9 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import AutoComplete from 'material-ui/AutoComplete';
+import {List, ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
@@ -185,9 +189,17 @@ class TutorProfile extends Component {
       return (<h1>Error, User not Found</h1>);
     }
 
+    var obj = tutor.tutorInfo.reviews ? tutor.tutorInfo.reviews : {};
+    var reviews = Object.keys(obj).map(function (key) {
+      var p = obj[key];
+      p.key = key;
+      return p;
+    });
+
     var button = {
       marginTop: "13px",
     };
+
     var inputs = {
       width: "33%",
       minWidth: "200px",
@@ -195,7 +207,7 @@ class TutorProfile extends Component {
       display: "inline-table",
       marginLeft: "10px",
       marginRight: "10px",
-    }
+    };
 
     var session = (
     <Card id="session_card">
@@ -222,9 +234,27 @@ class TutorProfile extends Component {
         <Card id="tutor_side">
           <img src={tutor.photoUrl} alt="Profile Image" id="tutor_img"/>
           <h1>{tutor.name}</h1>
-          <div><Rater interactive={false} rating={tutor.tutorInfo.rating}/></div>
+
           <RaisedButton label="Send A Message" style={button} onClick={this.handleMessageOpen.bind(this)}/>
           <RaisedButton label="Request a tutoring session" primary={true} style={button} onClick={this.handleRequestOpen.bind(this)}/>
+        </Card>
+        <Card id="review_container">
+          <h3>Student Reviews</h3>
+          <div id="average_rating">
+            <Rater interactive={false} rating={tutor.tutorInfo.rating}/>
+            <span style={{color: lightBlack}}>{" "+tutor.tutorInfo.rating+"/5"}</span><br/>
+            <span style={{color: grey400}}>({reviews.length} reviews)</span><br/>
+          </div>
+          <List>
+            { reviews.map(function(l, i){
+              return <ListItem
+                key = {l.key}
+                primaryText={l.name}
+                secondaryText={<p><span style={{color: darkBlack}}>{l.rating}/5</span> {l.comment}</p>}
+                leftAvatar={<Avatar src={l.photoUrl ? l.photoUrl : "http://i.imgur.com/xLGaGy8.png"} />}
+              />;
+            }) }
+          </List>
         </Card>
         <div id="tutor_info">
           <Card id="tutor_bio">

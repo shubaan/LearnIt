@@ -7,7 +7,7 @@
 	float: left;
 	width: 300px;
 	text-align: center;
-	height: 500px;
+	height: 600px;
 }
 
 #tutor_img {
@@ -17,25 +17,38 @@
 	margin-top: 30px;
 }
 
+#review_container {
+  float: left;
+  margin-left: 20px;
+  width: 360px;
+  padding: 5px 15px 15px 15px;
+  height: 600px;
+  overflow-y: auto;
+}
+
+#average_rating {
+  text-align: center;
+}
+
 #tutor_info {
-	margin-left: 320px;
+	margin-left: 700px;
 	padding: 0px 0px 20px 10px;
 }
 
 #tutor_bio {
 	margin-bottom: 25px;
 	padding: 5px 15px 10px 15px;
-	height: 200px;
+	height: 250px;
 }
 
 #tutor_bio p {
 	overflow-y: auto;
-	max-height: 138px;
+	max-height: 188px;
 }
 
 #tutor_details {
 	padding: 5px 15px 10px 15px;
-	height: 275px;
+	height: 325px;
 }
 
 h3 {
