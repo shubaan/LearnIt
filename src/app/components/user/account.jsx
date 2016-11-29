@@ -132,10 +132,23 @@ class UserAccount extends Component {
 
     var profileDiv = {
       "text-align": "center",
-      "width": "50%",
+      "width": "90%",
       "margin": "50px auto 30px auto",
-      "padding": "15px",
+      "padding": "5px 15px 20px 15px",
     };
+
+    var space = {
+      width: '100%',
+      marginBottom: '15px',
+    }
+
+    var container = {
+      width: '40%',
+      display: 'inline-block',
+      verticalAlign: 'top',
+      marginLeft: '15px',
+      marginRight: '15px',
+    }
 
     var formGroup = {
       "text-align": "left",
@@ -143,6 +156,8 @@ class UserAccount extends Component {
       "margin": "10px auto 10px auto",
       "padding": "5px",
     };
+
+
 
     const styles = {
       exampleImageInput: {
@@ -163,9 +178,12 @@ class UserAccount extends Component {
       margin: 'auto'
     };
 
-    /*var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
+    /*
+    var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.props.currentUser.displayName)? this.props.currentUser.displayName : "");
-    var bio = ((this.props.bio)? this.props.bio : this.state.bio);*/
+    var bio = ((this.props.bio)? this.props.bio : this.state.bio);
+    */
+
     var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.props.currentUser.displayName)? this.state.name : "");
     var bio = ((this.props.bio)? this.state.bio : "");
@@ -174,23 +192,23 @@ class UserAccount extends Component {
 
     if (this.state.isTutor) {
       tutorForm = (
-          <div>
-              <TutorForm
-                  isMathChecked={this.isMathChecked}
-                  isScienceChecked={this.isScienceChecked}
-                  isEnglishChecked={this.isEnglishChecked}
-                  isSpanishChecked={this.isSpanishChecked}
-                  isHistoryChecked={this.isHistoryChecked}
-                  handlePaySlider={this.handlePaySlider}
-                  handlePayPalIdEdited={this.handlePayPalIdEdited}
-                  paySlider={this.state.tutorInfo.payrate}
-                  math={this.state.tutorInfo.math}
-                  science={this.state.tutorInfo.science}
-                  english={this.state.tutorInfo.english}
-                  spanish={this.state.tutorInfo.spanish}
-                  history={this.state.tutorInfo.history}
-                  paypalId={this.state.tutorInfo.paypalId}/>
-          </div>
+        <div style={container}>
+          <TutorForm
+            isMathChecked={this.isMathChecked}
+            isScienceChecked={this.isScienceChecked}
+            isEnglishChecked={this.isEnglishChecked}
+            isSpanishChecked={this.isSpanishChecked}
+            isHistoryChecked={this.isHistoryChecked}
+            handlePaySlider={this.handlePaySlider}
+            handlePayPalIdEdited={this.handlePayPalIdEdited}
+            paySlider={this.state.tutorInfo.payrate}
+            math={this.state.tutorInfo.math}
+            science={this.state.tutorInfo.science}
+            english={this.state.tutorInfo.english}
+            spanish={this.state.tutorInfo.spanish}
+            history={this.state.tutorInfo.history}
+            paypalId={this.state.tutorInfo.paypalId}/>
+        </div>
       )
     } else tutorForm = (
         <div/>
@@ -200,38 +218,44 @@ class UserAccount extends Component {
       <div style={profileDiv}>
         <form id="frmProfile">
           <h2>Edit Profile Page</h2>
-            <img id="profile_img" src={pic} alt="Profile Image" width="150px" height="150px" />
-            <h3>{name}</h3>
-            <FlatButton label="Choose an Image" labelPosition="before">
-                <input type="file" style={styles.exampleImageInput}/>
-            </FlatButton>
-            <div>
-              <h3>About Me</h3>
+          <img id="profile_img" src={pic} alt="Profile Image" width="150px" height="150px" />
+          <h3>{name}</h3>
+          <FlatButton label="Choose an Image" labelPosition="before">
+            <input type="file" style={styles.exampleImageInput}/>
+          </FlatButton>
+          <div style={space} />
+          <div>
+            <div style={container}>
+              <div>
+                <h3>About Me</h3>
                 <TextField
                   value={name}
                   floatingLabelText="Change User name"
                   onChange={this.handleUsernameEdited} />
-            </div>
-            <TextField
-              floatingLabelText="Edit Bio"
-              style={{textAlign: 'left'}}
-              multiLine={true}
-              value={bio}
-              onChange={this.handleBioEdited}
-            />
-            <ChangePassword/>
-            <Checkbox
+              </div>
+              <TextField
+                floatingLabelText="Edit Bio"
+                style={{textAlign: 'left'}}
+                multiLine={true}
+                value={bio}
+                onChange={this.handleBioEdited} />
+              <ChangePassword/>
+              <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
                 style={stylesCheckbox}
                 onCheck={this.isTutorChecked}
                 checked={this.state.isTutor} />
+              <div style={space} />
+            </div>
             {tutorForm}
-            <RaisedButton
-              label="Save"
-              style={styles.submit}
-              primary={true}
-              onClick={this.onFormSubmit}/>
+          </div>
+          <div style={space} />
+          <RaisedButton
+          label="Save"
+          style={styles.submit}
+          primary={true}
+          onClick={this.onFormSubmit}/>
         </form>
         <Snackbar
             open={this.state.open}
