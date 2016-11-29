@@ -100,6 +100,21 @@ class App extends Component {
     this.state = {open: false};
     this.props.fetchUser();
     this.props.fetchNewNotificationNumber();
+
+    //this is a quick and dirty solution
+    this.updateNewNotificationNumber = this.updateNewNotificationNumber.bind(this);
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.updateNewNotificationNumber, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  updateNewNotificationNumber() {
+    this.props.fetchNewNotificationNumber();
   }
 
   goToLogin() {
