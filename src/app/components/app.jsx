@@ -102,6 +102,7 @@ class App extends Component {
     this.props.fetchNewNotificationNumber();
 
     //this is a quick and dirty solution
+    this.timer = setTimeout(() => {this.updateNewNotificationNumber();}, 1000);;
     this.updateNewNotificationNumber = this.updateNewNotificationNumber.bind(this);
   }
 
@@ -110,11 +111,12 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    clearTimeout(this.timer);
   }
 
   updateNewNotificationNumber() {
     this.props.fetchNewNotificationNumber();
+    this.timer = setTimeout(() => {this.updateNewNotificationNumber();}, 1000);
   }
 
   goToLogin() {
