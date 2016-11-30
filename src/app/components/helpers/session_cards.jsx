@@ -123,7 +123,7 @@ class SessionCard extends Component {
     }
 
     if (isTutor) {
-      if (this.props.session.paymentStatus == "unpaid") {
+      if (this.props.session.paymentStatus != "paid") {
         paymentRender = <div>
             You are owed {price} from the student.<br/>
             Have you been paid?<br/>
