@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "Connects students to tutors",
   "main": "index.js",
-  "repository": "https://github.com/shubaan/LearnIt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubaan/LearnIt.git"
+  },
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --config ./webpack/webpack-dev.config.js --watch --colors",
+    "dev": "webpack-dev-server --config ./webpack/webpack-dev.config.js --watch --colors",
     "build": "rm -rf dist && ./node_modules/.bin/webpack --config ./webpack/webpack-prod.config.js --colors",
     "start": "PORT=8080 pm2 start ./server.js",
-    "test": "./node_modules/.bin/eslint src && ./node_modules/.bin/mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
+    "test": "eslint src && ./node_modules/.bin/mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
-    "lint": "./node_modules/.bin/eslint src"
+    "lint": "eslint src"
   },
   "author": "Team Shubaan",
   "license": "UNLICENSED",
@@ -56,15 +59,22 @@
     "express": "^4.14.0",
     "firebase": "^3.4.0",
     "lodash": "^3.10.1",
-    "material-ui": "^0.16.0",
+    "material-ui": "^0.16.3",
     "pm2": "^2.0.12",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-rater": "^0.3.5",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.0-rc5",
-    "react-tap-event-plugin": "^1.0.0",
+    "react-tap-event-plugin": "^2.0.0",
     "redux": "^3.6.0",
     "redux-promise": "^0.5.3"
+  },
+  "bugs": {
+    "url": "https://github.com/shubaan/LearnIt/issues"
+  },
+  "homepage": "https://github.com/shubaan/LearnIt#readme",
+  "directories": {
+    "test": "test"
   }
 }
