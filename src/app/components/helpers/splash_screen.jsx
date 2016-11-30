@@ -98,7 +98,7 @@ class SplashScreen extends Component {
 
                             <div className="col-md-3 col-md-offset-1 col-sm-4">
                               <div>
-                                <img style={imageStyle} src="src/app/components/images/logo.png"></img>
+                                <img style={imageStyle} src="http://i.imgur.com/xLGaGy8.png"></img>
                               </div>
                             </div>
                           </div>
