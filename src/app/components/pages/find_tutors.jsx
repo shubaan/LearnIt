@@ -3,13 +3,10 @@ import {browserHistory,Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchProfiles}  from '../../actions/firebase_actions';
-import TextField from 'material-ui/TextField';
-import AutoComplete from 'material-ui/AutoComplete';
 import TutorCard from '../helpers/tutor_cards'
 
-import {List, ListItem} from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
-import Subheader from 'material-ui/Subheader';
+import TextField from 'material-ui/TextField';
+import AutoComplete from 'material-ui/AutoComplete';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 const SORTBY = {

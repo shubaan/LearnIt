@@ -5,12 +5,19 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchUser, updateUser, fetchBio, saveBio, fetchTutorInfo, saveTutorInfo, fetchIsTutor, saveIsTutor}  from '../../actions/firebase_actions';
 import ChangePassword from './change_password';
+import Rater from 'react-rater'
+import '../../css/react-rater.css'
+
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import TutorForm from './tutor_form';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
+import {List, ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {Card} from 'material-ui/Card'
 
 class UserAccount extends Component {
 
@@ -143,11 +150,22 @@ class UserAccount extends Component {
     }
 
     var container = {
-      width: '40%',
+      width: '30%',
       display: 'inline-block',
       verticalAlign: 'top',
       marginLeft: '15px',
       marginRight: '15px',
+    };
+
+    var reviewStyle = {
+      width: '30%',
+      display: 'inline-block',
+      verticalAlign: 'top',
+      marginLeft: '15px',
+      marginRight: '15px',
+      height: '600px',
+      overflowY: 'auto',
+      textAlign: 'left',
     }
 
     var formGroup = {
@@ -178,17 +196,18 @@ class UserAccount extends Component {
       margin: 'auto'
     };
 
-    /*
-    var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
-    var name = ((this.props.currentUser.displayName)? this.props.currentUser.displayName : "");
-    var bio = ((this.props.bio)? this.props.bio : this.state.bio);
-    */
+    var obj = this.state.tutorInfo.reviews ? this.state.tutorInfo.reviews : {};
+    var tutorReviews = Object.keys(obj).map(function (key) {
+      var p = obj[key];
+      p.key = key;
+      return p;
+    });
 
     var pic = ((this.props.currentUser.photoUrl)? this.props.currentUser.photoUrl : "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png");
     var name = ((this.props.currentUser.displayName)? this.state.name : "");
     var bio = ((this.props.bio)? this.state.bio : "");
 
-    let tutorForm;
+    let tutorForm, reviews;
 
     if (this.state.isTutor) {
       tutorForm = (
@@ -210,9 +229,32 @@ class UserAccount extends Component {
             paypalId={this.state.tutorInfo.paypalId}/>
         </div>
       )
-    } else tutorForm = (
+      reviews = <Card style={reviewStyle}>
+        <div style={{textAlign: 'center'}}>
+          <h3>Student Reviews</h3>
+          <Rater interactive={false} rating={this.state.tutorInfo.rating}/>
+          <span style={{color: lightBlack}}>{" "+this.state.tutorInfo.rating+"/5"}</span><br/>
+          <span style={{color: grey400}}>({tutorReviews.length} reviews)</span><br/>
+        </div>
+        <List>
+          { tutorReviews.map(function(l, i){
+            return <ListItem
+              key = {l.key}
+              primaryText={l.name}
+              secondaryText={<p><span style={{color: darkBlack}}>{l.rating}/5</span> {l.comment}</p>}
+              leftAvatar={<Avatar src={l.photoUrl ? l.photoUrl : "http://i.imgur.com/xLGaGy8.png"} />}
+            />;
+          }) }
+        </List>
+      </Card>;
+    } else {
+      tutorForm = (
         <div/>
-    );
+      );
+      reviews = (
+        <div/>
+      );
+    }
 
     return (
       <div style={profileDiv}>
@@ -240,6 +282,7 @@ class UserAccount extends Component {
                 value={bio}
                 onChange={this.handleBioEdited} />
               <ChangePassword/>
+              <div style={space} />
               <Checkbox
                 ref="tutor" labelPosition="left"
                 label="Would you like to become a tutor?"
@@ -249,6 +292,7 @@ class UserAccount extends Component {
               <div style={space} />
             </div>
             {tutorForm}
+            {reviews}
           </div>
           <div style={space} />
           <RaisedButton
