@@ -6,7 +6,6 @@ import {bindActionCreators} from 'redux';
 import {fetchMessages, sendMessage}  from '../../actions/firebase_actions';
 
 import TextField from 'material-ui/TextField';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -111,23 +110,23 @@ class TutorSession extends Component {
 
   handleOpenExit() {
     this.setState({openExit: true});
-  };
+  }
 
   handleCloseExit() {
     this.setState({openExit: false});
-  };
+  }
 
   handleCloseRate() {
     this.setState({openRate: false});
     browserHistory.push("/");
-  };
+  }
 
   handleCloseAlert() {
     this.setState({openAlert: false});
     var result = {
       success: true,
       message: this.getTheirName()+" ended the session"
-    };
+    }
     this.endSession(result);
   };
 
@@ -154,12 +153,12 @@ class TutorSession extends Component {
     this.setState({
       comment: event.target.value,
     });
-  };
+  }
 
   handleSubmitReview() {
     this.setState({openRate: false});
     FireBaseTools.rateSession(this.getSessionID(), this.state.theirId, this.state.rating, this.state.comment, this.endReview.bind(this));
-  };
+  }
 
   endReview(result) {
     //console.log("in end review");

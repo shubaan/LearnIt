@@ -770,7 +770,8 @@ var FireBaseTools = {
           for (var sid in sids) {
             firebaseDb.ref('/sessions/').child(sids[sid]).on("value", function(snapshot){
               var session = snapshot.val();
-              session.sid = sids[sid]
+              session.sid = snapshot.key;
+              //console.log(session.description+" "+snapshot.key);
               callback(session)
             });
           }
@@ -1096,6 +1097,139 @@ var FireBaseTools = {
         }
       };
       firebaseDb.ref('/sessions/').child(sessionId).update({rating: stars, comment: comment}, onComplete);
+    } else {
+      //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
+    }
+  },
+
+  /**
+   * Cancel a tutoring session
+   *
+   */
+  cancelSession: (sessionId, session, callback) => {
+    //for browser compatibility
+    if (!Date.now) {
+      Date.now = function () {
+        return new Date().getTime();
+      }
+    }
+
+    var user = firebaseAuth.currentUser;
+    var result = {
+      success: false,
+      message: ""
+    };
+    if (user) {
+      //console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Synchronization failed');
+          result.message = "Connection error";
+          callback(result);
+        } else {
+          //console.log('Session canceled: '+sessionId);
+          result.message = "Session canceled";
+          result.success = true;
+          callback(result);
+
+          //notify the other person
+          var date = new Date(session.startTime);
+          var role, otherId;
+          if (user.uid == session.tutorId) {
+            role = "tutor";
+            otherId = session.studentId;
+          } else {
+            role = "student";
+            otherId = session.tutorId;
+          }
+          var notification = {
+            senderId: user.uid,
+            senderName: "LearnIt",
+            senderPhoto: user.photoURL,
+            type: "notification",
+            message: "Your "+role+", "+user.displayName+" has canceled your tutoring session for "+session.subject+
+            " on "+date.toLocaleDateString(),
+            timestamp: Date.now(),
+          };
+          var notificationRef = firebaseDb.ref('/userData/' + otherId).child('notifications').push();
+          notificationRef.set(notification, function(error) {
+            if (error) {
+              //console.log('Failed to deliver cancellation notification');
+            } else {
+              //console.log('New session cancellation notification sent');
+            }
+          });
+        }
+      };
+      firebaseDb.ref('/sessions/').child(sessionId).update({ status: "canceled" }, onComplete);
+    } else {
+      //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
+    }
+  },
+
+  /**
+   * Pay for a tutoring session
+   *
+   */
+  payForSession: (sessionId, session, callback) => {
+    var user = firebaseAuth.currentUser;
+    var result = {
+      success: false,
+      message: ""
+    };
+    if (user) {
+      //console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Synchronization failed');
+          result.message = "Connection error";
+          callback(result);
+        } else {
+          //console.log('Payment status updated: '+sessionId);
+          result.message = "Payment status updated";
+          result.success = true;
+          callback(result);
+
+        }
+      };
+      firebaseDb.ref('/sessions/').child(sessionId).update({ paymentStatus: "pending" }, onComplete);
+    } else {
+      //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
+    }
+  },
+
+  /**
+   * Accept payment for a tutoring session
+   *
+   */
+  acceptPayForSession: (sessionId, session, callback) => {
+    var user = firebaseAuth.currentUser;
+    var result = {
+      success: false,
+      message: ""
+    };
+    if (user) {
+      //console.log('User is signed in');
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Synchronization failed');
+          result.message = "Connection error";
+          callback(result);
+        } else {
+          //console.log('Payment status updated: '+sessionId);
+          result.message = "Payment status updated";
+          result.success = true;
+          callback(result);
+
+        }
+      };
+      firebaseDb.ref('/sessions/').child(sessionId).update({ paymentStatus: "paid" }, onComplete);
     } else {
       //console.log('User is not signed in');
       result.message = "Connection error";

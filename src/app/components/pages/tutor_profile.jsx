@@ -8,7 +8,7 @@ import FireBaseTools from '../../utils/firebase';
 import '../../css/tutor_profile.css';
 import '../../css/react-rater.css'
 
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Card} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
@@ -111,21 +111,21 @@ class TutorProfile extends Component {
   }
 
   handleDateChange(event, date) {
-    console.log(date);
+    //console.log(date);
     this.setState({
       requestDate: date,
     });
   };
 
   handleStartTimeChange(event, date) {
-    console.log(date);
+    //console.log(date);
     this.setState({
       startTime: date,
     });
   };
 
   handleEndTimeChange(event, date) {
-    console.log(date);
+    //console.log(date);
     this.setState({
       endTime: date,
     });
@@ -152,7 +152,6 @@ class TutorProfile extends Component {
     if (tutor.tutorInfo.spanish) {subjects.push(<li key="5">Spanish</li>);}
     return subjects;
   }
-
 
   render() {
     const messageActions = [
@@ -264,13 +263,6 @@ class TutorProfile extends Component {
           <Card id="tutor_details">
             <h3>Cost</h3>
             <p>${tutor.tutorInfo.payrate} per hour</p>
-            {/*TODO: change 'value' to the user's paypal button id. We should probably move this, too.*/}
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-              <input type="hidden" name="cmd" value="_s-xclick" />
-              <input type="hidden" name="hosted_button_id" value="VGC8NHTNFS4SG" />
-              <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynow_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
-              <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-            </form>
             <h3>Subjects</h3>
             <ul>
               {this.renderSubject(tutor)}

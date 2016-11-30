@@ -2,23 +2,36 @@ import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Rater from 'react-rater'
+import '../../css/react-rater.css'
 import {fetchUser}  from '../../actions/firebase_actions';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FireBaseTools from '../../utils/firebase';
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import {grey400} from 'material-ui/styles/colors';
+
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 class SessionCard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {shadow: 1};
+    this.state = {
+      shadow: 1,
+      openCancel: false
+    };
+
+    this.props.fetchUser();
     this.goToSession = this.goToSession.bind(this)
     this.fetchTutorProfile = this.fetchTutorProfile.bind(this)
     this.fetchStudentProfile = this.fetchStudentProfile.bind(this)
   }
 
   componentDidMount() {
-    FireBaseTools.fetchProfile(this.props.tutorId, this.fetchTutorProfile);
-    FireBaseTools.fetchProfile(this.props.studentId, this.fetchStudentProfile);
+    FireBaseTools.fetchProfile(this.props.session.tutorId, this.fetchTutorProfile);
+    FireBaseTools.fetchProfile(this.props.session.studentId, this.fetchStudentProfile);
   }
 
   fetchTutorProfile(profile) {
@@ -40,105 +53,162 @@ class SessionCard extends Component {
   // }
 
   goToSession () {
-    browserHistory.push("/tutor_session?id="+this.props.sid);
+    browserHistory.push("/tutor_session?id="+this.props.session.sid);
+  }
+
+  handlePay() {
+    //console.log('paypal btn clicked');
+    FireBaseTools.payForSession(this.props.session.sid, this.props.session, this.showMessage.bind(this));
+  }
+
+  handleOpenCancel() {
+    //console.log(this.props.session.sid);
+    this.setState({openCancel: true});
+  }
+
+  handleCloseCancel() {
+    this.setState({openCancel: false});
+  }
+
+  handleCancel() {
+    this.setState({openCancel: false});
+    FireBaseTools.cancelSession(this.props.session.sid, this.props.session, this.showMessage.bind(this))
+  }
+
+  showMessage(result) {
+    console.log(result.message);
+  }
+
+  handleAcceptPayment() {
+    FireBaseTools.acceptPayForSession(this.props.session.sid, this.props.session, this.showMessage.bind(this))
   }
 
   render() {
+    const cancelActions = [
+      <FlatButton
+        label="No"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleCloseCancel.bind(this)}
+      />,
+      <FlatButton
+        label="Yes"
+        primary={true}
+        onTouchTap={this.handleCancel.bind(this)}
+      />,
+    ];
+
+    if (!this.state.tutorProfile || !this.state.studentProfile || !this.props.currentUser) {
+      return <div>Loading...</div>
+    }
 
     var cardStyle = {
       display: 'inline-block',
       width: '375px',
-      //height: '200px',
       margin: '15px',
     }
 
-    var cardHeader = {
-    	marginBottom: '5px',
+    var isTutor = (this.props.currentUser.uid == this.props.session.tutorId);
+    var other = isTutor ? this.state.studentProfile : this.state.tutorProfile;
+    var startTime = new Date(this.props.session.startTime);
+    var endTime = new Date(this.props.session.endTime);
+    var price = "$"+Math.round(this.state.tutorProfile.tutorInfo.payrate*(this.props.session.endTime-this.props.session.startTime)/(36000))/100.0;
+    var statusRender, paymentRender, ratingRender;
+
+    if (this.props.live) {
+      statusRender = <span style={{color: 'Lime', fontSize: '18pt'}}>LIVE</span>;
+    } else {
+      statusRender = this.props.session.status;
     }
 
-	  var imgStyle = {
-      width: '100px',
-      height: '100px',
-      borderRadius: '50%',
-      marginTop: '20px',
-      display: 'inline-block',
-      padding: '15px',
+    if (isTutor) {
+      if (this.props.session.paymentStatus == "unpaid") {
+        paymentRender = <div>
+            You are owed {price} from the student.<br/>
+            Have you been paid?<br/>
+            <RaisedButton
+              label="Yes"
+              onTouchTap={this.handleAcceptPayment.bind(this)}
+            />
+        </div>;
+      } else {
+        paymentRender = <div></div>;
+      }
+    } else {
+      if (this.props.session.paymentStatus != "paid") {
+        paymentRender = <div>
+          <p>You owe {price} to the tutor</p>
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" onTouchTap={this.handlePay.bind(this)}>
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value="VGC8NHTNFS4SG" />
+            <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynow_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+            <img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+          </form>
+        </div>;
+      } else {
+        paymentRender = <div></div>;
+      }
     }
 
-    var title = {
-    	display: 'inline-block',
-    	marginLeft: '20px',
-    	marginTop: '10px',
-    	marginBottom: '0px',
+    if (this.props.session.status == "completed") {
+      var who = isTutor ? "the student" : "you";
+      var comment = this.props.session.rating > 0 ? this.props.session.comment : "No rating given";
+      ratingRender = <div>
+        <br/><b>How {who} rated the session: </b><br/>
+        <Rater interactive={false} rating={this.props.session.rating}/><br/>
+        <span style={{color: grey400}}>{comment}</span>
+      </div>;
+    } else {
+      ratingRender = <div></div>;
     }
 
-    var left = {
-    	float: 'left',
-    	clear: 'left',
-    	marginLeft: '30px',
-    }
-
-    var right = {
-    	float: 'right',
-    	clear: 'right',
-    	marginRight: '30px',
-
-    }
-
-    if (!this.state.tutorProfile || !this.state.studentProfile) {
-      return <div>Loading...</div>
-    }
-
-    var date = new Date(this.props.date);
-    var endTime = new Date(this.props.endTime);
-    var cost = "$"+this.state.tutorProfile.tutorInfo.payrate+" per hour";
-
-	return (
-		<Card style={cardStyle}
-          onClick={this.goToSession.bind(this)}
-          onMouseOver={this.onMouseOver.bind(this)}
-          onMouseOut={this.onMouseOut.bind(this)}
-          zDepth={this.state.shadow}>
-			<div style={cardHeader}>
-				<img style={imgStyle} src={this.state.tutorProfile.photoUrl} alt="Tutor Profile" />
-				<h4 style={title}>Tutor: {this.state.tutorProfile.name}</h4>
-			</div>
-			<div>
-      	<p style={left}>
-          Student: {this.state.studentProfile.name}
-        </p>
-      	<p style={right}>
-          Subject: {this.props.subject}
-        </p>
+    return (
+      <div style={cardStyle}>
+        <Card
+            onMouseOver={this.onMouseOver.bind(this)}
+            onMouseOut={this.onMouseOut.bind(this)}
+            zDepth={this.state.shadow}>
+          <CardHeader
+            title={other.name}
+            subtitle={isTutor ? "Your student" : "Your tutor"}
+            avatar={other.photoUrl}
+          />
+          <CardText>
+            <p><b>Current Status: </b>{statusRender}</p>
+            <p><b>Time: </b>On {days[startTime.getDay()]}, {startTime.toLocaleDateString()}
+            <br/>From {startTime.toLocaleTimeString()} to {endTime.toLocaleTimeString()}</p>
+            <p><b>Subject: </b>{this.props.session.subject}</p>
+            <p><b>Description: </b>{this.props.session.description}</p>
+            <p><b>Payment Status: </b>{this.props.session.paymentStatus}<br/></p>
+            {paymentRender}
+            {ratingRender}
+          </CardText>
+          <CardActions>
+            <FlatButton
+              label="Start Session"
+              primary={true}
+              onTouchTap={this.goToSession.bind(this)}
+              disabled={this.props.session.status != "scheduled"}
+            />
+            <FlatButton
+              label="Cancel"
+              secondary={true}
+              onTouchTap={this.handleOpenCancel.bind(this)}
+              disabled={this.props.session.status != "scheduled"}
+            />
+          </CardActions>
+        </Card>
+        <Dialog
+          title="Cancel Session"
+          actions={cancelActions}
+          modal={false}
+          open={this.state.openCancel}
+          onRequestClose={this.handleCloseCancel.bind(this)}
+        >
+          Are you sure you want to cancel this tutoring session?
+        </Dialog>
       </div>
-      <div>
-      	<p style={left}>
-          Date: {date.toLocaleDateString()}
-        </p>
-				<p style={right}>
-          Cost: {cost}
-        </p>
-			</div>
-      <div>
-        <p style={left}>
-          Time: {date.toLocaleTimeString()} to {endTime.toLocaleTimeString()}
-        </p>
-      </div>
-      <div>
-        <p style={left}>
-          Status: {this.props.status}
-        </p>
-        <p style={right}>
-          {this.props.paymentStatus ? this.props.paymentStatus : "unpaid"}
-        </p>
-      </div>
-      <div>
-        <p style={left}>
-          Description: {this.props.description}
-        </p>
-      </div>
-		</Card>
-	);
+    );
   }
 }
 

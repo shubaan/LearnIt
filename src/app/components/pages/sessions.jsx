@@ -20,7 +20,13 @@ class Sessions extends Component {
 
   onRecieveSessions(sessions) {
     let s = this.state.sessions;
-    s.push(sessions);
+    var i = 0;
+    while (i < s.length) {
+      if (s[i].sid == sessions.sid)
+        break;
+      i++;
+    }
+    s[i] = sessions;
     this.setState({ sessions: s });
   }
 
@@ -32,24 +38,21 @@ class Sessions extends Component {
 
     var result = [];
     var now = Date.now();
-    for (var index in this.state.sessions) {
-      let s = this.state.sessions[index];
-      if (s.status == "completed" || s.status == "rejected" || s.endTime < now)
+    var sessions = this.state.sessions.slice().sort(function(a, b) {
+      return b.startTime-a.startTime;
+    });
+    sessions.forEach(function(s) {
+      if (s.status == "completed" || (s.status == "scheduled" && s.endTime < now)) {
         result.push(
           <SessionCard
-            key={index}
-            sid={s.sid}
-            tutorId={s.tutorId}
-            studentId={s.studentId}
-            date={s.startTime}
-            endTime={s.endTime}
-            subject={s.subject}
-            description={s.description}
-            paymentStatus={s.paymentStatus}
-            status={s.status}
+            key={s.sid}
+            session={s}
+            live={false}
+            past={true}
           />
         )
-    }
+      }
+    });
     return <div>{result}</div>
   }
 
@@ -65,7 +68,7 @@ class Sessions extends Component {
       var sessionContainer = {
         justifyContent: 'space-between',
         width: '100%',
-        textAlign: 'center',
+        //textAlign: 'center',
       }
       return (
 
