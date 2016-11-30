@@ -243,6 +243,7 @@ class UserAccount extends Component {
               key = {l.key}
               primaryText={l.name}
               secondaryText={<p><span style={{color: darkBlack}}>{l.rating}/5</span> {l.comment}</p>}
+              secondaryTextLines={2}
               leftAvatar={<Avatar src={l.photoUrl ? l.photoUrl : "http://i.imgur.com/xLGaGy8.png"} />}
             />;
           }) }
