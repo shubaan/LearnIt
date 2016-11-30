@@ -54,7 +54,10 @@ class Sessions extends Component {
         )
       }
     });
-    return <div>{result}</div>
+    if (result.length > 0)
+      return <div>{result}</div>
+    else
+      return <div><h3>You have no past sessions</h3></div>
   }
 
   render() {
