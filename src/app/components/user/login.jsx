@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loginUser, logoutUser, loginWithProvider, fetchNewNotificationNumber} from '../../actions/firebase_actions';
+import {loginUser, logoutUser, loginWithProvider} from '../../actions/firebase_actions';
 import Snackbar from 'material-ui/Snackbar';
 
 
@@ -27,14 +27,13 @@ class UserLogin extends Component {
   }
 
   loginWithProvider(provider) {
-    console.log("provider :", provider);
+    //console.log("provider :", provider);
     this.props.loginWithProvider(provider).then(data=> {
-      console.log("After login in provider : ", data);
+      //console.log("After login in provider : ", data);
 
       if (data.payload.errorCode)
         this.setState({message: data.payload.errorMessage})
       else {
-        this.props.fetchNewNotificationNumber();
         browserHistory.push('/');
       }
 
@@ -51,7 +50,6 @@ class UserLogin extends Component {
           this.setState({open: true})
         }
         else {
-          this.props.fetchNewNotificationNumber();
           browserHistory.push('/');
         }
       }
@@ -87,13 +85,13 @@ class UserLogin extends Component {
 
   handleEmailChange = (event) => {
     let e = event.target.value
-    console.log(e)
+    //console.log(e)
     this.isValidEmail(e)
   };
 
   handlePasswordChange = (event) => {
     let p = event.target.value
-    console.log(p)
+    //console.log(p)
     this.isValidPassword(p)
   };
 
@@ -181,7 +179,6 @@ function mapDispatchToProps(dispatch) {
     loginUser,
     logoutUser,
     loginWithProvider,
-    fetchNewNotificationNumber
   }, dispatch);
 }
 

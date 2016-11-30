@@ -45,11 +45,10 @@ class Home extends Component {
       return b.startTime-a.startTime;
     });
     sessions.forEach(function(s) {
-      let s = this.state.sessions[index];
       if (s.status == "scheduled" && s.endTime > now)
       result.push(
         <SessionCard
-          key={index}
+          key={s.sid}
           session={s}
           live = {s.startTime < now}
           past={false}

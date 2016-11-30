@@ -3,8 +3,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, logoutUser, fetchNewNotificationNumber}  from '../actions/firebase_actions';
-
+import {fetchUser, logoutUser}  from '../actions/firebase_actions';
+import FireBaseTools from '../utils/firebase';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
@@ -97,26 +97,26 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {open: false};
+    this.state = {
+      open: false,
+      newNotificationNumber: 0
+    };
     this.props.fetchUser();
-    this.props.fetchNewNotificationNumber();
 
-    //this is a quick and dirty solution
-    this.timer = setTimeout(() => {this.updateNewNotificationNumber();}, 1000);;
-    this.updateNewNotificationNumber = this.updateNewNotificationNumber.bind(this);
+    this.fetchNewNotificationNumber = this.fetchNewNotificationNumber.bind(this);
   }
 
   componentDidMount() {
-    this.timer = setInterval(this.updateNewNotificationNumber, 1000);
+    //console.log("fetching nnn");
+    FireBaseTools.fetchNewNotificationNumber(this.fetchNewNotificationNumber);
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.timer);
-  }
-
-  updateNewNotificationNumber() {
-    this.props.fetchNewNotificationNumber();
-    this.timer = setTimeout(() => {this.updateNewNotificationNumber();}, 1000);
+  fetchNewNotificationNumber(newNotificationNumber) {
+    //console.log("nnn fetched");
+    if (newNotificationNumber != this.state.newNotificationNumber) {
+      //console.log("nnn: "+newNotificationNumber);
+      this.setState({newNotificationNumber: newNotificationNumber});
+    }
   }
 
   goToLogin() {
@@ -132,12 +132,11 @@ class App extends Component {
   }
 
   toggleDrawer() {
-    this.props.fetchNewNotificationNumber();
     this.setState({open: !this.state.open});
   }
 
   goToNotifications() {
-    browserHistory.push("/notifications")
+    browserHistory.push("/notifications");
     this.setState({open: false});
   }
 
@@ -147,17 +146,17 @@ class App extends Component {
   }
 
   goToTutors() {
-    browserHistory.push("/tutors")
+    browserHistory.push("/tutors");
     this.setState({open: false});
   }
 
   goToSessions() {
-    browserHistory.push("/sessions")
+    browserHistory.push("/sessions");
     this.setState({open: false});
   }
 
   goToScheduling() {
-    browserHistory.push("/schedule")
+    browserHistory.push("/schedule");
     this.setState({open: false});
   }
 
@@ -189,7 +188,7 @@ class App extends Component {
     };
     let childrenstyle = {
       marginTop: '80px'
-    }
+    };
 
     let drawer;
     if (this.props.currentUser && this.props.currentUser.uid) {
@@ -201,7 +200,7 @@ class App extends Component {
         onRequestChange={(open) => this.setState({open})} >
           <MenuItem onTouchTap={this.goToAccount.bind(this)}>My Account</MenuItem>
           <MenuItem onTouchTap={this.goToTutors.bind(this)}>Find a Tutor</MenuItem>
-          <MenuItem onTouchTap={this.goToNotifications.bind(this)}>Notifications ({this.props.newNotificationNumber})</MenuItem>
+          <MenuItem onTouchTap={this.goToNotifications.bind(this)}>Notifications ({this.state.newNotificationNumber})</MenuItem>
           <MenuItem onTouchTap={this.goToScheduling.bind(this)}>Schedule Sessions</MenuItem>
           <MenuItem onTouchTap={this.goToSessions.bind(this)}>Past Sessions</MenuItem>
       </Drawer>
@@ -211,14 +210,16 @@ class App extends Component {
     }
 
     var menuIcon = <IconButton><NavigationIcon /></IconButton>;
-    if (this.props.newNotificationNumber) {
-      if (this.props.newNotificationNumber > 0) {
-        menuIcon = (<IconButton style={{width: 72, height: 72, marginTop: -12}}>
-          <Badge badgeContent={this.props.newNotificationNumber} primary={true} badgeStyle={{top: 12, right: 12}}>
-            <NavigationIcon />
-          </Badge>
-        </IconButton>);
-      }
+    if (this.state.newNotificationNumber > 0) {
+      menuIcon = (<IconButton style={{width: 72, height: 72, marginTop: -12}}>
+        <Badge
+          badgeContent={this.state.newNotificationNumber}
+          primary={true}
+          badgeStyle={{top: 16, right: 16, fontSize: 10, width: 20, height: 20,}}
+        >
+          <NavigationIcon />
+        </Badge>
+      </IconButton>);
     }
     return (
       <div>
@@ -244,11 +245,11 @@ App.childContextTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchUser, logoutUser, fetchNewNotificationNumber}, dispatch);
+  return bindActionCreators({fetchUser, logoutUser}, dispatch);
 }
 
 function mapStateToProps(state) {
-  return {currentUser: state.currentUser, newNotificationNumber: state.newNotificationNumber};
+  return {currentUser: state.currentUser};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -617,24 +617,22 @@ var FireBaseTools = {
   /**
    * Fetch new Notification Number
    *
-   * @returns {Promise}
+   *
    */
-  fetchNewNotificationNumber: () => {
-    return new Promise((resolve, reject) => {
-      var user = firebaseAuth.currentUser;
+  fetchNewNotificationNumber: (callback) => {
+    console.log('Fetching NewNotificationNumber...');
+    firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        //console.log("fetching newNotificationNumber...");
-        firebaseDb.ref('/userData/' + user.uid).child('newNotificationNumber').on("value", function(snapshot){
+        console.log('User is signed in');
+        firebaseDb.ref('/userData/' + user.uid).child('newNotificationNumber').on("value", function (snapshot) {
           let newNotificationNumber = snapshot.val();
-          //console.log(newNotificationNumber);
-          resolve(newNotificationNumber);
+          console.log('fb newNotificationNumber: ' + newNotificationNumber)
+          callback(newNotificationNumber);
         });
       } else {
-        //console.log('User is not signed in');
+        console.log('User is not signed in');
       }
-    }, error => {
-      reject(error);
-    })
+    });
   },
 
   /**
@@ -759,7 +757,6 @@ var FireBaseTools = {
     /**
      * Fetch session ids of current user
      *
-     * @returns {Promise}
      */
     fetchMySessions: (callback) => {
       var user = firebaseAuth.currentUser;
@@ -848,6 +845,19 @@ var FireBaseTools = {
           //console.log('Failed to deliver request');
         } else {
           //console.log('New tutoring request sent');
+
+          //increment new message count
+          var ref = firebaseDb.ref('/userData/' + tutor).child('newNotificationNumber');
+          ref.transaction(function (current_value) {
+              return (current_value || 0) + 1;
+            }, function(error) {
+              if (error) {
+                //console.log('Incrementing new notification count failed');
+              } else {
+                //console.log('New notification count incremented');
+              }
+            }
+          );
         }
       });
     } else {
@@ -920,6 +930,19 @@ var FireBaseTools = {
           //console.log('Failed to deliver response');
         } else {
           //console.log('New tutoring response sent');
+
+          //increment new message count
+          var ref = firebaseDb.ref('/userData/' + student).child('newNotificationNumber');
+          ref.transaction(function (current_value) {
+              return (current_value || 0) + 1;
+            }, function(error) {
+              if (error) {
+                //console.log('Incrementing new notification count failed');
+              } else {
+                //console.log('New notification count incremented');
+              }
+            }
+          );
         }
       });
     } else {
@@ -967,6 +990,19 @@ var FireBaseTools = {
               //console.log('Failed to deliver rejection notification');
             } else {
               //console.log('New tutoring rejection notification sent');
+
+              //increment new message count
+              var ref = firebaseDb.ref('/userData/' + student).child('newNotificationNumber');
+              ref.transaction(function (current_value) {
+                  return (current_value || 0) + 1;
+                }, function(error) {
+                  if (error) {
+                    //console.log('Incrementing new notification count failed');
+                  } else {
+                    //console.log('New notification count incremented');
+                  }
+                }
+              );
             }
           });
 
@@ -1159,6 +1195,19 @@ var FireBaseTools = {
               //console.log('Failed to deliver cancellation notification');
             } else {
               //console.log('New session cancellation notification sent');
+
+              //increment new message count
+              var ref = firebaseDb.ref('/userData/' + otherId).child('newNotificationNumber');
+              ref.transaction(function (current_value) {
+                  return (current_value || 0) + 1;
+                }, function(error) {
+                  if (error) {
+                    //console.log('Incrementing new notification count failed');
+                  } else {
+                    //console.log('New notification count incremented');
+                  }
+                }
+              );
             }
           });
         }

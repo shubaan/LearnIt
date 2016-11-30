@@ -3,7 +3,7 @@ import {browserHistory,Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Rater from 'react-rater'
-import {fetchProfiles, fetchNewNotificationNumber}  from '../../actions/firebase_actions';
+import {fetchProfiles}  from '../../actions/firebase_actions';
 import FireBaseTools from '../../utils/firebase';
 import '../../css/tutor_profile.css';
 import '../../css/react-rater.css'
@@ -46,11 +46,6 @@ class TutorProfile extends Component {
       subject: "",
       description: "",
     }
-    this.timer = undefined;
-  }
-
-  componentWillUnMount() {
-    clearTimeout(this.timer);
   }
 
   getTutorID () {
@@ -79,7 +74,6 @@ class TutorProfile extends Component {
   handleSendMessage() {
     FireBaseTools.sendNotification(this.getTutorID(), this.state.message);
     this.setState({messageOpen: false, message: ""});
-    this.timer = setTimeout(() => {this.props.fetchNewNotificationNumber();}, 500);
   }
 
   handleMessageChange(event) {
@@ -107,7 +101,6 @@ class TutorProfile extends Component {
       return;
     FireBaseTools.requestSession(this.getTutorID(), this.state.subject, this.state.description, from, to);
     this.setState({requestOpen: false, description: ""});
-    this.timer = setTimeout(() => {this.props.fetchNewNotificationNumber();}, 500);
   }
 
   handleDateChange(event, date) {
@@ -326,7 +319,7 @@ class TutorProfile extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchProfiles, fetchNewNotificationNumber}, dispatch);
+  return bindActionCreators({fetchProfiles}, dispatch);
 }
 
 

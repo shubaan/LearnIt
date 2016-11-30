@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, fetchNotifications, fetchNewNotificationNumber}  from '../../actions/firebase_actions';
+import {fetchUser, fetchNotifications}  from '../../actions/firebase_actions';
 import FireBaseTools from '../../utils/firebase';
 import '../../css/notifications.css';
 import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
@@ -30,7 +30,6 @@ class Notifications extends Component {
     super(props);
     this.props.fetchUser();
     this.props.fetchNotifications();
-    this.props.fetchNewNotificationNumber();
     this.state = {
       selectedIndex: 0,
       replyOpen: false,
@@ -341,7 +340,7 @@ class Notifications extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchUser, fetchNotifications, fetchNewNotificationNumber}, dispatch);
+  return bindActionCreators({fetchUser, fetchNotifications}, dispatch);
 }
 
 function mapStateToProps(state) {
