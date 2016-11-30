@@ -10,8 +10,8 @@ class Live extends Component {
 
   constructor(props) {
     super(props);
-    this.my_id = "12"
-    this.other_id = "1212"
+    this.my_id = "1212"
+    this.other_id = "12"
     this.peer = new Peer(this.my_id, {key: key_value})
   }
 
@@ -28,9 +28,11 @@ class Live extends Component {
     navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     this.setup(peer);
-    this.answer(peer, other_id);
     this.call(peer,other_id);
+    this.answer(peer, other_id);
     setTimeout(this.call(peer,other_id), 5000);
+    setTimeout(this.call(peer,other_id), 10000);
+    setTimeout(this.call(peer,other_id), 15000);
   }
 
   test(peer, other_id) {
