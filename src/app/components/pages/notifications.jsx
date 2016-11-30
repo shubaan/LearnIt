@@ -20,6 +20,7 @@ import ContentSend from 'material-ui/svg-icons/content/send'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 let SelectableList = makeSelectable(List);
 
@@ -38,7 +39,9 @@ class Notifications extends Component {
       reply: "",
       message: "",
       recipient: null,
-      session: null
+      session: null,
+      sbMessage: "",
+      sbOpen: false,
     }
     this.timer = undefined;
   }
@@ -64,9 +67,13 @@ class Notifications extends Component {
   }
 
   handleReply() {
-    FireBaseTools.sendNotification(this.state.recipient, this.state.reply+"\n\n"+this.state.message);
-    this.setState({replyOpen: false});
-    this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+    if (this.state.reply != "") {
+      FireBaseTools.sendNotification(this.state.recipient, this.state.reply+"\n\n"+this.state.message, this.showCallback.bind(this));
+      this.setState({replyOpen: false});
+      this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+    } else {
+      this.setState({sbOpen: true, sbMessage: "You must enter a message to send"});
+    }
   }
 
   handleReplyChange(event) {
@@ -84,9 +91,13 @@ class Notifications extends Component {
   }
 
   handleMessage() {
-    FireBaseTools.sendNotification(this.state.recipient, this.state.message);
-    this.setState({messageOpen: false});
-    this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+    if (this.state.message != "") {
+      FireBaseTools.sendNotification(this.state.recipient, this.state.message, this.showCallback.bind(this));
+      this.setState({messageOpen: false});
+      this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+    } else {
+      this.setState({sbOpen: true, sbMessage: "You must enter a message to send"});
+    }
   }
 
   handleMessageChange(event) {
@@ -96,13 +107,21 @@ class Notifications extends Component {
   }
 
   handleAccept(notification) {
-    FireBaseTools.acceptSession(notification.senderId, notification.request, notification.key);
+    FireBaseTools.acceptSession(notification.senderId, notification.request, notification.key, this.showCallback.bind(this));
     this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
   }
 
   handleReject(notification) {
-    FireBaseTools.rejectSession(notification.senderId, notification.request, notification.key);
+    FireBaseTools.rejectSession(notification.senderId, notification.request, notification.key, this.showCallback.bind(this));
     this.timer = setTimeout(() => {this.props.fetchNotifications();}, 500);
+  }
+
+  handleSnackbarClose() {
+    this.setState({sbOpen: false});
+  }
+
+  showCallback(result) {
+    this.setState({sbOpen: true, sbMessage: result.message});
   }
 
   getCardHeader(notification) {
@@ -339,6 +358,12 @@ class Notifications extends Component {
             rows={2}
             fullWidth={false} />
         </Dialog>
+        <Snackbar
+          open={this.state.sbOpen}
+          message={this.state.sbMessage}
+          autoHideDuration={3000}
+          onRequestClose={this.handleSnackbarClose.bind(this)}
+        />
       </div>
     );
   }

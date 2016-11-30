@@ -673,12 +673,16 @@ var FireBaseTools = {
    * @param recipient
    * @param message
    */
-  sendNotification: (recipient, message) => {
+  sendNotification: (recipient, message, callback) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function() { return new Date().getTime(); }
     }
 
+    var result = {
+      success: false,
+      message: ""
+    };
     var user = firebaseAuth.currentUser;
     if (user) {
 
@@ -694,8 +698,13 @@ var FireBaseTools = {
       var onComplete = function(error) {
         if (error) {
           //console.log('Notification sending failed');
+          result.message = "Connection error";
+          callback(result);
         } else {
           //console.log('Notification sent');
+          result.message = "Message sent";
+          result.success = true;
+          callback(result);
 
           //increment new message count
           var ref = firebaseDb.ref('/userData/' + recipient).child('newNotificationNumber');
@@ -717,6 +726,8 @@ var FireBaseTools = {
       newMessageRef.set(notification, onComplete);
     } else {
       //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
     }
   },
 
@@ -782,12 +793,16 @@ var FireBaseTools = {
    * Request a new tutoring session
    *
    */
-  requestSession: (tutor, subject, description, from, to) => {
+  requestSession: (tutor, subject, description, from, to, callback) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function() { return new Date().getTime(); }
     }
 
+    var result = {
+      success: false,
+      message: ""
+    };
     var user = firebaseAuth.currentUser;
     if (user) {
       var session = {
@@ -803,26 +818,7 @@ var FireBaseTools = {
 
       var newSessionRef = firebaseDb.ref('/').child('sessions').push();
       var sessionId = newSessionRef.key;
-      var onComplete = function(error) {
-        if (error) {
-          //console.log('Session creation failed');
-        } else {
-          //console.log('Session added');
 
-          //add session to current user's sessions
-          var ref = firebaseDb.ref('/userData/' + user.uid).child('sessions').push();
-          ref.set(sessionId, function(error) {
-            if (error) {
-              //console.log('Failed to deliver request');
-            } else {
-              //console.log('New tutoring request sent');
-            }
-          });
-        }
-      };
-      newSessionRef.set(session, onComplete);
-
-      //send message
       var request = {
         senderId: user.uid,
         senderName: user.displayName,
@@ -839,29 +835,63 @@ var FireBaseTools = {
           answered: false
         }
       };
-      var newRequestRef = firebaseDb.ref('/userData/' + tutor).child('notifications').push();
-      newRequestRef.set(request, function(error) {
-        if (error) {
-          //console.log('Failed to deliver request');
-        } else {
-          //console.log('New tutoring request sent');
 
-          //increment new message count
-          var ref = firebaseDb.ref('/userData/' + tutor).child('newNotificationNumber');
-          ref.transaction(function (current_value) {
-              return (current_value || 0) + 1;
-            }, function(error) {
-              if (error) {
-                //console.log('Incrementing new notification count failed');
-              } else {
-                //console.log('New notification count incremented');
-              }
+      var onComplete = function(error) {
+        if (error) {
+          //console.log('Session creation failed');
+          result.message = "Connection error";
+          callback(result);
+        } else {
+          //console.log('Session created');
+
+          //add session to current user's sessions
+          var ref = firebaseDb.ref('/userData/' + user.uid).child('sessions').push();
+          ref.set(sessionId, function(error) {
+            if (error) {
+              //console.log('Session added');
+              result.message = "Connection error";
+              callback(result);
+            } else {
+              //console.log('Session added');
+
+              //send request
+              var newRequestRef = firebaseDb.ref('/userData/' + tutor).child('notifications').push();
+              newRequestRef.set(request, function(error) {
+                if (error) {
+                  //console.log('Failed to deliver request');
+                  result.message = "Connection error";
+                  callback(result);
+                } else {
+                  //console.log('New tutoring request sent');
+                  result.message = "Tutoring session request sent";
+                  result.success = true;
+                  callback(result);
+
+                  //increment new message count
+                  var ref = firebaseDb.ref('/userData/' + tutor).child('newNotificationNumber');
+                  ref.transaction(function (current_value) {
+                      return (current_value || 0) + 1;
+                    }, function(error) {
+                      if (error) {
+                        //console.log('Incrementing new notification count failed');
+                      } else {
+                        //console.log('New notification count incremented');
+                      }
+                    }
+                  );
+                }
+              });
+
             }
-          );
+          });
         }
-      });
+      };
+      newSessionRef.set(session, onComplete);
+
     } else {
       //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
     }
   },
 
@@ -869,13 +899,18 @@ var FireBaseTools = {
    * Accept a new tutoring session
    *
    */
-  acceptSession: (student, request, notificationId) => {
+  acceptSession: (student, request, notificationId, callback) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function () {
         return new Date().getTime();
       }
     }
+
+    var result = {
+      success: false,
+      message: ""
+    };
 
     var user = firebaseAuth.currentUser;
     if (user) {
@@ -884,20 +919,10 @@ var FireBaseTools = {
       var onComplete = function(error) {
         if (error) {
           //console.log('Session creation failed');
+          result.message = "Connection error";
+          callback(result);
         } else {
           //console.log('Session added');
-
-          //update session status
-          var sessionUpdate = {
-            status: "scheduled"
-          };
-          firebaseDb.ref('/sessions/').child(request.sessionId).update(sessionUpdate, function(error) {
-            if (error) {
-              //console.log('Failed to update session');
-            } else {
-              //console.log('Session updated');
-            }
-          });
 
           //update request status
           firebaseDb.ref('/userData/' + user.uid + '/notifications/').child(notificationId).update({answered: true}, function(error) {
@@ -907,46 +932,70 @@ var FireBaseTools = {
               //console.log('Request updated');
             }
           });
+
+          //update session status
+          var sessionUpdate = {
+            status: "scheduled"
+          };
+          firebaseDb.ref('/sessions/').child(request.sessionId).update(sessionUpdate, function(error) {
+            if (error) {
+              //console.log('Failed to update session');
+              result.message = "Connection error";
+              callback(result);
+            } else {
+              //console.log('Session updated');
+
+              //send notification
+              var date = new Date(request.startTime);
+              var end = new Date(request.endTime);
+              var notification = {
+                senderId: user.uid,
+                senderName: "LearnIt",
+                senderPhoto: user.photoURL,
+                type: "notification",
+                message: user.displayName+" has accepted your tutoring request.\nYour session is scheduled for "+
+                date.toLocaleDateString()+" from "+date.toLocaleTimeString()+" to "+end.toLocaleTimeString()+
+                ".\nThe subject is "+request.subject+".",
+                timestamp: Date.now(),
+              };
+              var notificationRef = firebaseDb.ref('/userData/' + student).child('notifications').push();
+              notificationRef.set(notification, function(error) {
+                if (error) {
+                  //console.log('Failed to deliver response');
+                  result.message = "Connection error";
+                  callback(result);
+                } else {
+                  //console.log('New tutoring response sent');
+                  result.message = "Tutoring session accepted";
+                  result.success = true;
+                  callback(result);
+
+                  //increment new message count
+                  var ref = firebaseDb.ref('/userData/' + student).child('newNotificationNumber');
+                  ref.transaction(function (current_value) {
+                      return (current_value || 0) + 1;
+                    }, function(error) {
+                      if (error) {
+                        //console.log('Incrementing new notification count failed');
+                      } else {
+                        //console.log('New notification count incremented');
+                      }
+                    }
+                  );
+                }
+              });
+
+            }
+          });
+
         }
       };
       sessionRef.set(request.sessionId, onComplete);
 
-      //send notification
-      var date = new Date(request.startTime);
-      var end = new Date(request.endTime);
-      var notification = {
-        senderId: user.uid,
-        senderName: "LearnIt",
-        senderPhoto: user.photoURL,
-        type: "notification",
-        message: user.displayName+" has accepted your tutoring request.\nYour session is scheduled for "+
-        date.toLocaleDateString()+" from "+date.toLocaleTimeString()+" to "+end.toLocaleTimeString()+
-        ".\nThe subject is "+request.subject+".",
-        timestamp: Date.now(),
-      };
-      var notificationRef = firebaseDb.ref('/userData/' + student).child('notifications').push();
-      notificationRef.set(notification, function(error) {
-        if (error) {
-          //console.log('Failed to deliver response');
-        } else {
-          //console.log('New tutoring response sent');
-
-          //increment new message count
-          var ref = firebaseDb.ref('/userData/' + student).child('newNotificationNumber');
-          ref.transaction(function (current_value) {
-              return (current_value || 0) + 1;
-            }, function(error) {
-              if (error) {
-                //console.log('Incrementing new notification count failed');
-              } else {
-                //console.log('New notification count incremented');
-              }
-            }
-          );
-        }
-      });
     } else {
       //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
     }
   },
 
@@ -954,13 +1003,18 @@ var FireBaseTools = {
    * Reject a new tutoring session
    *
    */
-  rejectSession: (student, request, notificationId) => {
+  rejectSession: (student, request, notificationId, callback) => {
     //for browser compatibility
     if (!Date.now) {
       Date.now = function () {
         return new Date().getTime();
       }
     }
+
+    var result = {
+      success: false,
+      message: ""
+    };
 
     var user = firebaseAuth.currentUser;
     if (user) {
@@ -971,8 +1025,20 @@ var FireBaseTools = {
       var onComplete = function(error) {
         if (error) {
           //console.log('Session rejection failed');
+          result.message = "Connection error";
+          callback(result);
         } else {
           //console.log('Session rejected');
+
+
+          //update request status
+          firebaseDb.ref('/userData/' + user.uid + '/notifications/').child(notificationId).update({answered: true}, function(error) {
+            if (error) {
+              //console.log('Failed to update request');
+            } else {
+              //console.log('Request updated');
+            }
+          });
 
           //notify student
           var date = new Date(request.startTime);
@@ -988,8 +1054,13 @@ var FireBaseTools = {
           notificationRef.set(notification, function(error) {
             if (error) {
               //console.log('Failed to deliver rejection notification');
+              result.message = "Connection error";
+              callback(result);
             } else {
               //console.log('New tutoring rejection notification sent');
+              result.message = "Tutoring session rejected";
+              result.success = true;
+              callback(result);
 
               //increment new message count
               var ref = firebaseDb.ref('/userData/' + student).child('newNotificationNumber');
@@ -1006,19 +1077,13 @@ var FireBaseTools = {
             }
           });
 
-          //update request status
-          firebaseDb.ref('/userData/' + user.uid + '/notifications/').child(notificationId).update({answered: true}, function(error) {
-            if (error) {
-              //console.log('Failed to update request');
-            } else {
-              //console.log('Request updated');
-            }
-          });
         }
       };
       firebaseDb.ref('/sessions/').child(request.sessionId).update(sessionUpdate, onComplete);
     } else {
       //console.log('User is not signed in');
+      result.message = "Connection error";
+      callback(result);
     }
   },
 

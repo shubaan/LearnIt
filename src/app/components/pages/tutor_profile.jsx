@@ -20,6 +20,7 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import LinearProgress from 'material-ui/LinearProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
@@ -46,6 +47,8 @@ class TutorProfile extends Component {
       endTime: null,
       subject: "",
       description: "",
+      sbMessage: "",
+      sbOpen: false,
     }
   }
 
@@ -73,8 +76,12 @@ class TutorProfile extends Component {
   }
 
   handleSendMessage() {
-    FireBaseTools.sendNotification(this.getTutorID(), this.state.message);
-    this.setState({messageOpen: false, message: ""});
+    if (this.state.message != "") {
+      FireBaseTools.sendNotification(this.getTutorID(), this.state.message, this.showCallback.bind(this));
+      this.setState({messageOpen: false, message: ""});
+    } else {
+      this.setState({sbOpen: true, sbMessage: "You must enter a message to send"});
+    }
   }
 
   handleMessageChange(event) {
@@ -92,15 +99,19 @@ class TutorProfile extends Component {
   }
 
   handleSendRequest() {
-    if (!this.state.startTime || !this.state.endTime || !this.state.requestDate || this.state.subject=="")
+    if (!this.state.startTime || !this.state.endTime || !this.state.requestDate || this.state.subject=="") {
+      this.setState({sbOpen: true, sbMessage: "You have not filled the appropriate fields"});
       return;
+    }
     var from = new Date(this.state.requestDate.getFullYear(), this.state.requestDate.getMonth(),
       this.state.requestDate.getDate(), this.state.startTime.getHours(), this.state.startTime.getMinutes()).getTime();
     var to = new Date(this.state.requestDate.getFullYear(), this.state.requestDate.getMonth(),
       this.state.requestDate.getDate(), this.state.endTime.getHours(), this.state.endTime.getMinutes()).getTime();
-    if (from>to)
+    if (from>to) {
+      this.setState({sbOpen: true, sbMessage: "The start time cannot be before the end time"});
       return;
-    FireBaseTools.requestSession(this.getTutorID(), this.state.subject, this.state.description, from, to);
+    }
+    FireBaseTools.requestSession(this.getTutorID(), this.state.subject, this.state.description, from, to, this.showCallback.bind(this));
     this.setState({requestOpen: false, description: ""});
   }
 
@@ -145,6 +156,14 @@ class TutorProfile extends Component {
     if (tutor.tutorInfo.science) {subjects.push(<li key="4">Science</li>);}
     if (tutor.tutorInfo.spanish) {subjects.push(<li key="5">Spanish</li>);}
     return subjects;
+  }
+
+  handleSnackbarClose() {
+    this.setState({sbOpen: false});
+  }
+
+  showCallback(result) {
+    this.setState({sbOpen: true, sbMessage: result.message});
   }
 
   render() {
@@ -312,6 +331,12 @@ class TutorProfile extends Component {
             rows={3}
             fullWidth={true} />
         </Dialog>
+        <Snackbar
+          open={this.state.sbOpen}
+          message={this.state.sbMessage}
+          autoHideDuration={3000}
+          onRequestClose={this.handleSnackbarClose.bind(this)}
+        />
       </div>
     );
 
