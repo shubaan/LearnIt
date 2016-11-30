@@ -6,7 +6,7 @@ import Checkbox from 'material-ui/Checkbox';
 import {browserHistory} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchUser, logoutUser, registerUser} from '../../actions/firebase_actions';
+import {loginUser, fetchUser, logoutUser, registerUser} from '../../actions/firebase_actions';
 import TutorForm from './tutor_form';
 
 class UserRegister extends Component {
@@ -98,8 +98,10 @@ class UserRegister extends Component {
         this.props.registerUser(user).then(data => {
             if (data.payload.errorCode)
               this.setState({message: data.payload.errorMessage});
-            else
-              browserHistory.push('/account');
+            else {
+              console.log('registered');
+              browserHistory.push('/');
+            }
           }
         )
     }
@@ -276,7 +278,7 @@ class UserRegister extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchUser, logoutUser, registerUser
+    loginUser, fetchUser, logoutUser, registerUser
   }, dispatch);
 }
 

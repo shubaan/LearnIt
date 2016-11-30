@@ -106,7 +106,7 @@ var FireBaseTools = {
     let profileData = {
       name: user.name,
       isTutor: user.isTutor,
-      bio: defaultBio,
+      bio: user.bio,
       photoUrl: "http://www.fringuette.com/wp-content/uploads/2015/01/female-fill-circle-512.png",
       tutorInfo: {
         math: false,
