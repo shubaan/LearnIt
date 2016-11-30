@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {fetchUser, updateUser}  from '../../actions/firebase_actions';
 import Loading  from '../helpers/loading';
 import ChangePassword from './change_password';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class UserProfile extends Component {
 
@@ -41,7 +42,7 @@ class UserProfile extends Component {
 
   render() {
     if (!this.props.currentUser) {
-      return <Loading/>
+      return <LinearProgress mode="indeterminate" />;
     }
 
     var profileDiv = {

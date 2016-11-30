@@ -18,6 +18,7 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import {Card} from 'material-ui/Card'
+import LinearProgress from 'material-ui/LinearProgress';
 
 class UserAccount extends Component {
 
@@ -134,7 +135,7 @@ class UserAccount extends Component {
   };
   render() {
     if (!this.props.currentUser || !this.props.bio || !this.props.tutorInfo) {
-      return <div />
+      return <LinearProgress mode="indeterminate" />;
     }
 
     var profileDiv = {

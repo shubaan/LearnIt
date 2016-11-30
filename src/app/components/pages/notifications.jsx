@@ -19,6 +19,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear'
 import ContentSend from 'material-ui/svg-icons/content/send'
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import LinearProgress from 'material-ui/LinearProgress';
 
 let SelectableList = makeSelectable(List);
 
@@ -244,6 +245,10 @@ class Notifications extends Component {
           return <CommunicationChatBubble />;
       }
     };
+
+    if (!this.props.currentUser || !this.props.currentUser.uid) {
+      return <LinearProgress mode="indeterminate" />;
+    }
 
     var obj = this.props.notifications ? this.props.notifications : {};
     var inbox = Object.keys(obj).map(function (key) {

@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import '../../css/react-rater.css'
+import Rater from 'react-rater'
 import {fetchUser}  from '../../actions/firebase_actions';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import '../../css/react-rater.css'
-//import 'react-rater/lib/react-rater.css'
-import Rater from 'react-rater'
 
 class TutorCards extends Component {
 

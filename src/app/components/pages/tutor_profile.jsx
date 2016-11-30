@@ -19,6 +19,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import LinearProgress from 'material-ui/LinearProgress';
 
 //http://localhost:3000/tutor_profile?id=1hzTChuk5TXRRelDAgeJCmfu49T2
 
@@ -178,7 +179,7 @@ class TutorProfile extends Component {
     var id = this.getTutorID()
     var tutor = this.getProfile(this.props.profiles, id);
     if (!tutor) {
-      return (<h1>Error, User not Found</h1>);
+      return <LinearProgress mode="indeterminate" />;
     }
 
     var obj = tutor.tutorInfo.reviews ? tutor.tutorInfo.reviews : {};

@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {fetchUser}  from '../../actions/firebase_actions';
 import SessionCard from '../helpers/session_cards'
 import FireBaseTools from '../../utils/firebase';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class Sessions extends Component {
 
@@ -81,9 +82,7 @@ class Sessions extends Component {
       );
     } else {
       return (
-        <div style={homeContainer}>
-          <h2>You have no past sessions</h2>
-        </div>
+        <LinearProgress mode="indeterminate" />
       );
     }
   }

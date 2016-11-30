@@ -11,6 +11,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import {grey400} from 'material-ui/styles/colors';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
@@ -99,7 +100,7 @@ class SessionCard extends Component {
     ];
 
     if (!this.state.tutorProfile || !this.state.studentProfile || !this.props.currentUser) {
-      return <div>Loading...</div>
+      return <CircularProgress size={80} thickness={5} />;
     }
 
     var cardStyle = {

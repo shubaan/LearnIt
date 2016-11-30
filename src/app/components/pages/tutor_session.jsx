@@ -9,6 +9,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import LinearProgress from 'material-ui/LinearProgress';
 
 import Chat from './chat';
 import WhiteBoard from './whiteboard';
@@ -170,7 +171,7 @@ class TutorSession extends Component {
 
   render() {
     if (!this.state.theirId) {
-      return (<h1>Loading Session...</h1>);
+      return <LinearProgress mode="indeterminate" />;
     }
 
     const exitActions = [

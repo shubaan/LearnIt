@@ -620,17 +620,17 @@ var FireBaseTools = {
    *
    */
   fetchNewNotificationNumber: (callback) => {
-    console.log('Fetching NewNotificationNumber...');
+    //console.log('Fetching NewNotificationNumber...');
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log('User is signed in');
+        //console.log('User is signed in');
         firebaseDb.ref('/userData/' + user.uid).child('newNotificationNumber').on("value", function (snapshot) {
           let newNotificationNumber = snapshot.val();
-          console.log('fb newNotificationNumber: ' + newNotificationNumber)
+          //console.log('fb newNotificationNumber: ' + newNotificationNumber)
           callback(newNotificationNumber);
         });
       } else {
-        console.log('User is not signed in');
+        //console.log('User is not signed in');
       }
     });
   },

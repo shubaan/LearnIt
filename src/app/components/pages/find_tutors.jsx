@@ -8,6 +8,7 @@ import TutorCard from '../helpers/tutor_cards'
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import LinearProgress from 'material-ui/LinearProgress';
 
 const SORTBY = {
   NAME: 'name',
@@ -71,7 +72,7 @@ class FindTutors extends Component {
 
   render() {
     if (!this.props.currentUser || !this.props.currentUser.uid) {
-      browserHistory.push("/login")
+      return <LinearProgress mode="indeterminate" />;
     }
 
     let style = {
@@ -82,7 +83,7 @@ class FindTutors extends Component {
     var obj = this.props.profiles;
     //wait to get profiles from firebase
     if (!obj)
-      return <div></div>;
+      return <LinearProgress mode="indeterminate" />;
     var libraries = Object.keys(obj).map(function (key) {
       var p = obj[key];
       p.key = key;
