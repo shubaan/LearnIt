@@ -41,19 +41,19 @@ class SplashScreen extends Component {
                 <img style={imageStyle} src="http://i.imgur.com/xLGaGy8.png"></img>
                 <div style={textStyle}>
                     <h1>
-                        STEM Tutors at the click of a button
+                        Tutors at the click of a button
                     </h1>
                     <p>
-                        Welcome to <b>LearnIt</b>, where you can learn any science, technology, engineering, or math subject quickly and easily.
+                        Welcome to <b>LearnIt</b>, where you can learn any  subject quickly and easily.
                     </p>
                     <p>
                         With our experienced tutors, you can get professional help at your convenience.
                     </p>
                     <h2>
-                        Professional-level Tutors
+                        Professional-Level Tutors
                     </h2>
                     <p>
-                        You choose your own tutor! You can make sure they know their subjects by reviewing their resume personally.
+                        You choose your own tutor! You can look at reviews other students have given to help make your decision.
                     </p>
                     <p>
                         We encourage students to review their tutors after each session to make sure future students know what they are paying for.
@@ -69,16 +69,9 @@ class SplashScreen extends Component {
                         Interested in being a tutor?
                     </h2>
                     <p>
-                        You make your own rate and get paid directly from students:
+                        You make your own rate and get paid directly from students!
                     </p>
-                    <ul>
-                      <li>
-                        Upload a resume when creating an account so students know they can trust your knowledge.
-                      </li>
-                      <li>
-                        Create your availability schedule with our easy-to-use availability table, and students will be requesting tutoring sessions with you.
-                      </li>
-                    </ul>
+                    
                 </div>
                 <div style={buttonStyle}>
                     <p>
