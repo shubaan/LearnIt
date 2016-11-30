@@ -6,6 +6,7 @@ import {fetchUser}  from '../../actions/firebase_actions';
 import SessionCard from '../helpers/session_cards'
 import FireBaseTools from '../../utils/firebase';
 import LinearProgress from 'material-ui/LinearProgress';
+import {Card} from 'material-ui/Card';
 
 class Sessions extends Component {
 
@@ -37,6 +38,11 @@ class Sessions extends Component {
       Date.now = function() { return new Date().getTime(); }
     }
 
+    var noStyle = {
+      textAlign: 'center',
+      width: '500'
+    }
+
     var result = [];
     var now = Date.now();
     var sessions = this.state.sessions.slice().sort(function(a, b) {
@@ -57,7 +63,7 @@ class Sessions extends Component {
     if (result.length > 0)
       return <div>{result}</div>
     else
-      return <div><h3>You have no past sessions</h3></div>
+      return <Card style={noStyle}><h3>You have no past sessions</h3></Card>
   }
 
   render() {
@@ -68,6 +74,7 @@ class Sessions extends Component {
       var homeTitle = {
         margin: '0px',
         padding: '0px',
+        textAlign: 'center'
       }
       var sessionContainer = {
         justifyContent: 'space-between',
@@ -77,7 +84,7 @@ class Sessions extends Component {
       return (
 
         <div style={homeContainer}>
-          <h2 style={homeTitle}>Past Sessions:</h2>
+          <h2 style={homeTitle}>Past Sessions</h2>
           <div style={sessionContainer} >
             {this.renderSessions()}
           </div>

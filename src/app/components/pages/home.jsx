@@ -6,6 +6,7 @@ import {fetchUser}  from '../../actions/firebase_actions';
 import SplashScreen from '../helpers/splash_screen'
 import SessionCard from '../helpers/session_cards'
 import FireBaseTools from '../../utils/firebase';
+import {Card} from 'material-ui/Card';
 
 class Home extends Component {
 
@@ -38,7 +39,10 @@ class Home extends Component {
     if (!Date.now) {
       Date.now = function() { return new Date().getTime(); }
     }
-
+    var noStyle = {
+      textAlign: 'center',
+      width: '500'
+    }
     var result = [];
     var now = Date.now();
     var sessions = this.state.sessions.slice().sort(function(a, b) {
@@ -58,7 +62,7 @@ class Home extends Component {
     if (result.length > 0)
       return <div>{result}</div>
     else
-      return <div><h3>You have no upcoming sessions</h3></div>
+      return <Card style={noStyle}><h3>You have no upcoming sessions</h3></Card>
   }
 
   render() {
@@ -69,16 +73,21 @@ class Home extends Component {
       var homeTitle = {
         margin: '0px',
         padding: '0px',
+        textAlign: 'center'
       }
       var sessionContainer = {
         justifyContent: 'space-between',
         width: '100%',
         //textAlign: 'center',
       }
+      var titleStyle = {
+        width: '500px',
+        margin: '0px auto 0px auto'
+      }
       return (
 
         <div style={homeContainer}>
-          <h2 style={homeTitle}>Upcoming Sessions:</h2>
+          <h2 style={homeTitle}>Upcoming Sessions</h2>
           <div style={sessionContainer} >
             {this.renderSessions()}
           </div>
