@@ -41,7 +41,10 @@ class Home extends Component {
     }
     var noStyle = {
       textAlign: 'center',
-      width: '500'
+      width: '500',
+      marginTop: '5',
+      padding: '5',
+      marginLeft: 'calc(50% - 250px)'
     }
     var result = [];
     var now = Date.now();
